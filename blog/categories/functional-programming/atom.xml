@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Functional Programming | OnCode]]></title>
   <link href="http://fizwidget.github.io/blog/categories/functional-programming/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-03T17:43:09+09:30</updated>
+  <updated>2014-07-03T17:49:12+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -21,16 +21,16 @@
     <content type="html"><![CDATA[<p>A list made of functions. Not a list containing functions, and not a function that creates lists. A list that <em>is</em> functions. That probably doesn&rsquo;t make any sense, so let&rsquo;s jump straight into the code&hellip;</p>
 
 <p>``` python
-def make_node(value, next_node=None):
-  def list_node(operation):</p>
+def make_node(value, next=None):
+  def node(request):</p>
 
-<pre><code>if operation == "value":
+<pre><code>if request == "value":
   return value
-elif operation == "next":
-  return next_node
+elif request == "next":
+  return next
 </code></pre>
 
-<p>  return list_node
+<p>  return node
 ```</p>
 
 <p>Let&rsquo;s try it out&hellip;</p>
@@ -38,9 +38,9 @@ elif operation == "next":
 <p>``` python
 numbers = make_node(1, make_node(2, make_node(3)))</p>
 
-<p>numbers(&ldquo;value&rdquo;) # => 1
-numbers(&ldquo;next&rdquo;)(&ldquo;value&rdquo;) # => 2
-numbers(&ldquo;next&rdquo;)(&ldquo;next&rdquo;)(&ldquo;value&rdquo;) # => 3
+<p>numbers(&ldquo;value&rdquo;)                  # => 1
+numbers(&ldquo;next&rdquo;)(&ldquo;value&rdquo;)          # => 2
+numbers(&ldquo;next&rdquo;)(&ldquo;next&rdquo;)(&ldquo;value&rdquo;)  # => 3
 ```</p>
 ]]></content>
   </entry>
