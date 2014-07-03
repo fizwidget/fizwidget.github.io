@@ -4,7 +4,7 @@
   <title><![CDATA[OnCode]]></title>
   <link href="http://fizwidget.github.io/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-03T17:06:23+09:30</updated>
+  <updated>2014-07-03T17:12:40+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -20,10 +20,9 @@
     <id>http://fizwidget.github.io/blog/2014/07/03/a-list-made-of-functions</id>
     <content type="html"><![CDATA[<p>Sup.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">each</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">x</span> <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+<p>&#8220;` python</p>
 
+<p>&#8220;`</p>
 ]]></content>
   </entry>
   
