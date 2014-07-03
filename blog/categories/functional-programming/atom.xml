@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Functional Programming | OnCode]]></title>
+  <link href="http://fizwidget.github.io/blog/categories/functional-programming/atom.xml" rel="self"/>
+  <link href="http://fizwidget.github.io/"/>
+  <updated>2014-07-03T17:43:09+09:30</updated>
+  <id>http://fizwidget.github.io/</id>
+  <author>
+    <name><![CDATA[James Russell]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[A List Made of Functions]]></title>
+    <link href="http://fizwidget.github.io/blog/2014/07/03/a-list-made-of-functions/"/>
+    <updated>2014-07-03T16:59:34+09:30</updated>
+    <id>http://fizwidget.github.io/blog/2014/07/03/a-list-made-of-functions</id>
+    <content type="html"><![CDATA[<p>A list made of functions. Not a list containing functions, and not a function that creates lists. A list that <em>is</em> functions. That probably doesn&rsquo;t make any sense, so let&rsquo;s jump straight into the code&hellip;</p>
+
+<p>``` python
+def make_node(value, next_node=None):
+  def list_node(operation):</p>
+
+<pre><code>if operation == "value":
+  return value
+elif operation == "next":
+  return next_node
+</code></pre>
+
+<p>  return list_node
+```</p>
+
+<p>Let&rsquo;s try it out&hellip;</p>
+
+<p>``` python
+numbers = make_node(1, make_node(2, make_node(3)))</p>
+
+<p>numbers(&ldquo;value&rdquo;) # => 1
+numbers(&ldquo;next&rdquo;)(&ldquo;value&rdquo;) # => 2
+numbers(&ldquo;next&rdquo;)(&ldquo;next&rdquo;)(&ldquo;value&rdquo;) # => 3
+```</p>
+]]></content>
+  </entry>
+  
+</feed>

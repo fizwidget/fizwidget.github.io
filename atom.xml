@@ -4,7 +4,7 @@
   <title><![CDATA[OnCode]]></title>
   <link href="http://fizwidget.github.io/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-03T17:24:15+09:30</updated>
+  <updated>2014-07-03T17:43:09+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -44,17 +44,11 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
 </pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">numbers</span> <span class="o">=</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;value&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="c"># =&gt; 1</span>
-</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;next&quot;</span><span class="p">)(</span><span class="s">&quot;value&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="c"># =&gt; 2</span>
-</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;next&quot;</span><span class="p">)(</span><span class="s">&quot;next&quot;</span><span class="p">)(</span><span class="s">&quot;value&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="c"># =&gt; 3</span>
+</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;value&quot;</span><span class="p">)</span> <span class="c"># =&gt; 1</span>
+</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;next&quot;</span><span class="p">)(</span><span class="s">&quot;value&quot;</span><span class="p">)</span> <span class="c"># =&gt; 2</span>
+</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;next&quot;</span><span class="p">)(</span><span class="s">&quot;next&quot;</span><span class="p">)(</span><span class="s">&quot;value&quot;</span><span class="p">)</span> <span class="c"># =&gt; 3</span>
 </span></code></pre></td></tr></table></div></figure>
 
 ]]></content>
