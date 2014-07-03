@@ -103,17 +103,11 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">GET_VALUE</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span class='line'><span class="n">GET_NEXT_NODE</span> <span class="o">=</span> <span class="mi">1</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">def</span> <span class="nf">make_node</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">next_node</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">make_node</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">next_node</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 </span><span class='line'>  <span class="k">def</span> <span class="nf">list_node</span><span class="p">(</span><span class="n">operation</span><span class="p">):</span>
-</span><span class='line'>    <span class="k">if</span> <span class="n">operation</span> <span class="o">==</span> <span class="n">GET_VALUE</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">operation</span> <span class="o">==</span> <span class="s">&quot;value&quot;</span><span class="p">:</span>
 </span><span class='line'>      <span class="k">return</span> <span class="n">value</span>
-</span><span class='line'>    <span class="k">elif</span> <span class="n">operation</span> <span class="o">==</span> <span class="n">GET_NEXT_NODE</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">elif</span> <span class="n">operation</span> <span class="o">==</span> <span class="s">&quot;next&quot;</span><span class="p">:</span>
 </span><span class='line'>      <span class="k">return</span> <span class="n">next_node</span>
 </span><span class='line'>  <span class="k">return</span> <span class="n">list_node</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -126,11 +120,17 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
 </pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">nums</span> <span class="o">=</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">4</span><span class="p">))))</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="n">nums</span><span class="p">(</span><span class="n">GET_VALUE</span><span class="p">))</span> <span class="c"># =&gt; 1</span>
-</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="n">nums</span><span class="p">(</span><span class="n">GET_NEXT_NODE</span><span class="p">)(</span><span class="n">GET_VALUE</span><span class="p">))</span> <span class="c"># =&gt; 2</span>
-</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="n">nums</span><span class="p">(</span><span class="n">GET_NEXT_NODE</span><span class="p">)(</span><span class="n">GET_NEXT_NODE</span><span class="p">)(</span><span class="n">GET_VALUE</span><span class="p">))</span> <span class="c"># =&gt; 3</span>
+</span><span class='line'><span class="n">nums</span><span class="p">(</span><span class="s">&quot;value&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c"># =&gt; 1</span>
+</span><span class='line'><span class="n">nums</span><span class="p">(</span><span class="s">&quot;next&quot;</span><span class="p">)(</span><span class="s">&quot;value&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c"># =&gt; 2</span>
+</span><span class='line'><span class="n">nums</span><span class="p">(</span><span class="s">&quot;next&quot;</span><span class="p">)(</span><span class="s">&quot;next&quot;</span><span class="p">)(</span><span class="s">&quot;value&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c"># =&gt; 3</span>
 </span></code></pre></td></tr></table></div></figure>
 
 </div>
