@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>A List Made of Functions - OnCode</title>
+  <title>Functions - OnCode</title>
   <meta name="author" content="James Russell">
 
   
@@ -66,7 +66,7 @@
   
   <header>
     
-      <h1 class="entry-title">A List Made of Functions</h1>
+      <h1 class="entry-title">Functions</h1>
     
     
       <p class="meta">
@@ -117,9 +117,9 @@
 <span class='line-number'>5</span>
 </pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">numbers</span> <span class="o">=</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;value&quot;</span><span class="p">)</span>                            <span class="c"># =&gt; 1</span>
-</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;next_node&quot;</span><span class="p">)(</span><span class="s">&quot;value&quot;</span><span class="p">)</span>               <span class="c"># =&gt; 2</span>
-</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;next_node&quot;</span><span class="p">)(</span><span class="s">&quot;next_node&quot;</span><span class="p">)(</span><span class="s">&quot;value&quot;</span><span class="p">)</span>  <span class="c"># =&gt; 3</span>
+</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;value&quot;</span><span class="p">)</span> <span class="c"># =&gt; 1</span>
+</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;next_node&quot;</span><span class="p">)(</span><span class="s">&quot;value&quot;</span><span class="p">)</span> <span class="c"># =&gt; 2</span>
+</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;next_node&quot;</span><span class="p">)(</span><span class="s">&quot;next_node&quot;</span><span class="p">)(</span><span class="s">&quot;value&quot;</span><span class="p">)</span> <span class="c"># =&gt; 3</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -130,11 +130,13 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 </pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">print_list</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
-</span><span class='line'>  <span class="k">while</span> <span class="n">node</span><span class="p">:</span>
+</span><span class='line'>  <span class="k">if</span> <span class="n">node</span><span class="p">:</span>
 </span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="n">node</span><span class="p">(</span><span class="s">&quot;value&quot;</span><span class="p">))</span>
-</span><span class='line'>    <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="s">&quot;next_node&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">print_list</span><span class="p">(</span><span class="n">node</span><span class="p">(</span><span class="s">&quot;next_node&quot;</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
 
+
+<p>So, we can build data structures out of functions. Kinda pointless, but I think it does a pretty good job of explaining what closures are. It also hints at the fact that functions are really powerful. It turns out you can do pretty much <em>anything</em> with functions &ndash; the lambda calculus is a Turing complete language which consists of nothing but the application of anonymous functions. A programming language doesn&rsquo;t technically <em>need</em> to have the concept of numbers build into it &ndash; you can model numbers using functions (Church numerals).</p>
 </div>
 
 
@@ -183,6 +185,8 @@
     <p class="meta">
       
       
+        <a class="basic-alignment right" href="/blog/2014/07/03/ruby-or-python/" title="Next Post: Ruby or Python">Ruby or Python &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -202,7 +206,11 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/07/03/a-list-made-of-functions/">A List Made of Functions</a>
+        <a href="/blog/2014/07/03/ruby-or-python/">Ruby or Python</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/03/a-list-made-of-functions/">Functions</a>
       </li>
     
   </ul>

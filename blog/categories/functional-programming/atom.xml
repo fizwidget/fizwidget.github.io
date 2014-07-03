@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Functional Programming | OnCode]]></title>
   <link href="http://fizwidget.github.io/blog/categories/functional-programming/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-03T17:53:01+09:30</updated>
+  <updated>2014-07-03T22:13:54+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[A List Made of Functions]]></title>
+    <title type="html"><![CDATA[Functions]]></title>
     <link href="http://fizwidget.github.io/blog/2014/07/03/a-list-made-of-functions/"/>
     <updated>2014-07-03T16:59:34+09:30</updated>
     <id>http://fizwidget.github.io/blog/2014/07/03/a-list-made-of-functions</id>
@@ -38,20 +38,22 @@ elif request == "next_node":
 <p>``` python
 numbers = make_node(1, make_node(2, make_node(3)))</p>
 
-<p>numbers(&ldquo;value&rdquo;)                            # => 1
-numbers(&ldquo;next_node&rdquo;)(&ldquo;value&rdquo;)               # => 2
-numbers(&ldquo;next_node&rdquo;)(&ldquo;next_node&rdquo;)(&ldquo;value&rdquo;)  # => 3
+<p>numbers(&ldquo;value&rdquo;) # => 1
+numbers(&ldquo;next_node&rdquo;)(&ldquo;value&rdquo;) # => 2
+numbers(&ldquo;next_node&rdquo;)(&ldquo;next_node&rdquo;)(&ldquo;value&rdquo;) # => 3
 ```</p>
 
 <p>``` python
 def print_list(node):
-  while node:</p>
+  if node:</p>
 
 <pre><code>print(node("value"))
-node = node("next_node")
+print_list(node("next_node"))
 </code></pre>
 
 <p>```</p>
+
+<p>So, we can build data structures out of functions. Kinda pointless, but I think it does a pretty good job of explaining what closures are. It also hints at the fact that functions are really powerful. It turns out you can do pretty much <em>anything</em> with functions &ndash; the lambda calculus is a Turing complete language which consists of nothing but the application of anonymous functions. A programming language doesn&rsquo;t technically <em>need</em> to have the concept of numbers build into it &ndash; you can model numbers using functions (Church numerals).</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[OnCode]]></title>
   <link href="http://fizwidget.github.io/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-03T17:53:01+09:30</updated>
+  <updated>2014-07-03T22:13:54+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -14,7 +14,56 @@
 
   
   <entry>
-    <title type="html"><![CDATA[A List Made of Functions]]></title>
+    <title type="html"><![CDATA[Ruby or Python]]></title>
+    <link href="http://fizwidget.github.io/blog/2014/07/03/ruby-or-python/"/>
+    <updated>2014-07-03T22:10:23+09:30</updated>
+    <id>http://fizwidget.github.io/blog/2014/07/03/ruby-or-python</id>
+    <content type="html"><![CDATA[<p>Python and Ruby are both awesome languages. Given the choice though, I&rsquo;ll usually go with Ruby. Why? Because&hellip;</p>
+
+<h1>Ruby is consistently object oriented</h1>
+
+<p>Pretty much everything we do involves calling a method on an object:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">-</span><span class="mi">4</span><span class="o">.</span><span class="n">abs</span>              <span class="c1"># =&gt; 4</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">length</span>    <span class="c1"># =&gt; 3</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">reverse</span>   <span class="c1"># =&gt; [3, 2, 1]</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">reverse!</span>  <span class="c1"># Modifies list in-place.</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">max</span>       <span class="c1"># =&gt; 3</span>
+</span><span class='line'><span class="s2">&quot;bar&quot;</span><span class="o">.</span><span class="n">capitalize</span>    <span class="c1"># =&gt; &quot;Bar&quot;</span>
+</span><span class='line'><span class="no">File</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>     <span class="c1"># =&gt; File object.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In Python though, our code is a somewhat arbitrary mixture of method calls and function calls:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="nb">abs</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span>             <span class="c"># =&gt; 4</span>
+</span><span class='line'><span class="nb">len</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>      <span class="c"># =&gt; 3</span>
+</span><span class='line'><span class="nb">reversed</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="c"># =&gt; [3, 2, 1]</span>
+</span><span class='line'><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span> <span class="c"># Modifies list in-place.</span>
+</span><span class='line'><span class="nb">max</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>      <span class="c"># =&gt; 3</span>
+</span><span class='line'><span class="s">&quot;bar&quot;</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>  <span class="c"># =&gt; &quot;Bar&quot;</span>
+</span><span class='line'><span class="nb">open</span><span class="p">(</span><span class="s">&quot;foo&quot;</span><span class="p">)</span>         <span class="c"># =&gt; File object.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Functions]]></title>
     <link href="http://fizwidget.github.io/blog/2014/07/03/a-list-made-of-functions/"/>
     <updated>2014-07-03T16:59:34+09:30</updated>
     <id>http://fizwidget.github.io/blog/2014/07/03/a-list-made-of-functions</id>
@@ -46,9 +95,9 @@
 <span class='line-number'>5</span>
 </pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">numbers</span> <span class="o">=</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;value&quot;</span><span class="p">)</span>                            <span class="c"># =&gt; 1</span>
-</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;next_node&quot;</span><span class="p">)(</span><span class="s">&quot;value&quot;</span><span class="p">)</span>               <span class="c"># =&gt; 2</span>
-</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;next_node&quot;</span><span class="p">)(</span><span class="s">&quot;next_node&quot;</span><span class="p">)(</span><span class="s">&quot;value&quot;</span><span class="p">)</span>  <span class="c"># =&gt; 3</span>
+</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;value&quot;</span><span class="p">)</span> <span class="c"># =&gt; 1</span>
+</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;next_node&quot;</span><span class="p">)(</span><span class="s">&quot;value&quot;</span><span class="p">)</span> <span class="c"># =&gt; 2</span>
+</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;next_node&quot;</span><span class="p">)(</span><span class="s">&quot;next_node&quot;</span><span class="p">)(</span><span class="s">&quot;value&quot;</span><span class="p">)</span> <span class="c"># =&gt; 3</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -59,11 +108,13 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 </pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">print_list</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
-</span><span class='line'>  <span class="k">while</span> <span class="n">node</span><span class="p">:</span>
+</span><span class='line'>  <span class="k">if</span> <span class="n">node</span><span class="p">:</span>
 </span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="n">node</span><span class="p">(</span><span class="s">&quot;value&quot;</span><span class="p">))</span>
-</span><span class='line'>    <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="s">&quot;next_node&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">print_list</span><span class="p">(</span><span class="n">node</span><span class="p">(</span><span class="s">&quot;next_node&quot;</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
 
+
+<p>So, we can build data structures out of functions. Kinda pointless, but I think it does a pretty good job of explaining what closures are. It also hints at the fact that functions are really powerful. It turns out you can do pretty much <em>anything</em> with functions &ndash; the lambda calculus is a Turing complete language which consists of nothing but the application of anonymous functions. A programming language doesn&rsquo;t technically <em>need</em> to have the concept of numbers build into it &ndash; you can model numbers using functions (Church numerals).</p>
 ]]></content>
   </entry>
   
