@@ -4,7 +4,7 @@
   <title><![CDATA[OnCode]]></title>
   <link href="http://fizwidget.github.io/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-03T17:16:03+09:30</updated>
+  <updated>2014-07-03T17:17:59+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -18,12 +18,43 @@
     <link href="http://fizwidget.github.io/blog/2014/07/03/a-list-made-of-functions/"/>
     <updated>2014-07-03T16:59:34+09:30</updated>
     <id>http://fizwidget.github.io/blog/2014/07/03/a-list-made-of-functions</id>
-    <content type="html"><![CDATA[<p>Sup.</p>
+    <content type="html"><![CDATA[<p>A list made of functions. Not a list containing functions, and not a function that creates lists. A list that /is/ functions. That probably doesn&rsquo;t make any sense, so let&rsquo;s jump straight into the code&hellip;</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span>
-</span><span class='line'>  <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">GET_VALUE</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'><span class="n">GET_NEXT_NODE</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">make_node</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">next_node</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">list_node</span><span class="p">(</span><span class="n">operation</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">operation</span> <span class="o">==</span> <span class="n">GET_VALUE</span><span class="p">:</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">value</span>
+</span><span class='line'>    <span class="k">elif</span> <span class="n">operation</span> <span class="o">==</span> <span class="n">GET_NEXT_NODE</span><span class="p">:</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">next_node</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">list_node</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Let&rsquo;s try it out&hellip;</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">nums</span> <span class="o">=</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">4</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="n">nums</span><span class="p">(</span><span class="n">GET_VALUE</span><span class="p">))</span> <span class="c"># =&gt; 1</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="n">nums</span><span class="p">(</span><span class="n">GET_NEXT_NODE</span><span class="p">)(</span><span class="n">GET_VALUE</span><span class="p">))</span> <span class="c"># =&gt; 2</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="n">nums</span><span class="p">(</span><span class="n">GET_NEXT_NODE</span><span class="p">)(</span><span class="n">GET_NEXT_NODE</span><span class="p">)(</span><span class="n">GET_VALUE</span><span class="p">))</span> <span class="c"># =&gt; 3</span>
 </span></code></pre></td></tr></table></div></figure>
 
 ]]></content>
