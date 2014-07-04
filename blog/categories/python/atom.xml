@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Python | OnCode]]></title>
+  <link href="http://fizwidget.github.io/blog/categories/python/atom.xml" rel="self"/>
+  <link href="http://fizwidget.github.io/"/>
+  <updated>2014-07-04T21:11:31+09:30</updated>
+  <id>http://fizwidget.github.io/</id>
+  <author>
+    <name><![CDATA[James Russell]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Why Ruby Is Awesome]]></title>
+    <link href="http://fizwidget.github.io/blog/2014/07/03/ruby-or-python/"/>
+    <updated>2014-07-03T22:10:23+09:30</updated>
+    <id>http://fizwidget.github.io/blog/2014/07/03/ruby-or-python</id>
+    <content type="html"><![CDATA[<p>Python and Ruby are the two main contenders in the high-level, general-purpose, dynamic language category. They&rsquo;re both awesome, but given the choice I&rsquo;ll generally go with Ruby. This is my attempt at explaining why.</p>
+
+<h2>Ruby is consistently object-oriented</h2>
+
+<p>Pretty much everything we do in Ruby involves calling methods:</p>
+
+<p><code>ruby
+-42.abs             # =&gt; 42
+[1, 2, 3].length    # =&gt; 3
+[1, 2, 3].reverse   # =&gt; [3, 2, 1]
+[1, 2, 3].reverse!  # Reverses list in-place.
+[1, 2, 3].min       # =&gt; 1
+"foo".capitalize    # =&gt; "Foo"
+File.new("bar")     # =&gt; File object
+file.close          # Closes file object.
+</code>
+In Python though, we use a weird mixture of methods and functions:</p>
+
+<p><code>python
+abs(-42)            # =&gt; 42
+len([1, 2, 3])      # =&gt; 3
+reversed([1, 2, 3]) # =&gt; [3, 2, 1]
+[1, 2, 3].reverse() # Reverses list in-place.
+min([1, 2, 3])      # =&gt; 1
+"foo".capitalize()  # =&gt; "Foo"
+open("bar")         # =&gt; File object
+file.close()        # Closes file object.
+</code></p>
+
+<p>One of the benefits of Ruby&rsquo;s consistent use of OOP is that we can always read code left-to-right:</p>
+
+<p><code>ruby
+"world hello".split.reverse.join(' ') # =&gt; "hello world"
+</code>
+But in Python, we have to read some parts left-to-right and others inside-out (yuk):</p>
+
+<p><code>python
+' '.join(reversed("world hello".split())) # =&gt; "hello world"
+</code></p>
+
+<h2>Ruby&rsquo;s blocks are pure awesome</h2>
+
+<p>One of Ruby&rsquo;s best features is the really nice syntax it has for passing anonymous functions (&ldquo;blocks&rdquo;) as arguments to methods. Blocks are like Python&rsquo;s lambda expressions, only more elegant, more powerful, and more commonly used.</p>
+
+<p>Blocks allow us to perform many different tasks using a simple, uniform syntax. For example:</p>
+
+<p><code>ruby
+[1, 2, 3].each   { |x| puts x }       # Iteration using blocks.
+File.open('n')   { |f| puts f.read }  # Automatic resource management using blocks.
+[1, 2, 3].select { |x| x &gt; 2 }        # List processing using blocks.
+data.sort_by     { |x| x[1] }         # Sorting using blocks.
+files.lazy.map   { |f| Image.new(f) } # Lazy-loading using blocks.
+</code></p>
+
+<p>In Python, we use no fewer than five different language constructs to perform the same tasks:</p>
+
+<p><code>python
+for x in [1, 2, 3]: print(x)          # Iteration using 'for'.
+with f as open('n'): print(f.read())  # Automatic resource management using 'with'.
+[x for x in [1, 2, 3] if x &gt; 2]       # List processing using list comprehensions.
+sorted(data, key=lambda x: x[1])      # Sorting using 'lambda'.
+(Image(f) for f in files)             # Lazy-loading using generator expressions.
+</code></p>
+
+<p>I&rsquo;ll take one flexible construct over many specific constructs any day.</p>
+
+<h2>Clearer code</h2>
+
+<p>In Ruby, <code>false</code> and <code>nil</code> are the only values that evaluate to false. This means we have to explicitly ask objects questions:</p>
+
+<p><code>ruby
+if some_collection.empty?
+  # Obvious meaning is obvious.
+end
+</code></p>
+
+<p>In Python though, pretty much everything with a length/size/magnitude of zero evaluates to false. This isn&rsquo;t just a quirk of the language, it&rsquo;s promoted as the &ldquo;Pythonic&rdquo; way of doing things.</p>
+
+<p>``` python
+if not some_collection:</p>
+
+<pre><code># Whatever happened to "explicit is better than implicit"??
+</code></pre>
+
+<p>```</p>
+
+<p>Ruby&rsquo;s approach is both more readable and less error-prone.</p>
+
+<h2>Private parts</h2>
+
+<p>In Ruby, instance variables are private by default. This encourages proper encapsulation of implementation details.</p>
+
+<p>``` ruby
+class Foo
+  def initialize</p>
+
+<pre><code>@secret = 42
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>Foo.new.secret # => Error!
+```</p>
+
+<p>In Python though, everything defaults to public. This means we&rsquo;re more likely to end up with dependencies on implementation details.</p>
+
+<p>``` python
+class Foo:
+  def <strong>init</strong>(self):</p>
+
+<pre><code>  self.not_so_secret = 42
+</code></pre>
+
+<p>Foo().not_so_secret # => 42
+```</p>
+
+<h2>Ruby is pretty</h2>
+
+<p>OK, I&rsquo;ll admit this is ever so slightly subjective. Having said that, compare this:</p>
+
+<p>``` ruby
+class Person
+  def initialize(age)</p>
+
+<pre><code>@age = age
+</code></pre>
+
+<p>  end</p>
+
+<p>  def to_s</p>
+
+<pre><code>"Person is #{@age} years old."
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>person = Person.new(34)
+puts person</p>
+
+<p>```</p>
+
+<p>To this:</p>
+
+<p>``` python
+class Person(object):
+  def <strong>init</strong>(self, age):</p>
+
+<pre><code>self.age = age
+</code></pre>
+
+<p>  def <strong>str</strong>(self):</p>
+
+<pre><code>return "Person is {} years old.".format(self.age)
+</code></pre>
+
+<p>person = Person(34)
+print(person)
+```</p>
+
+<p>The Ruby code feels less &ldquo;noisy&rdquo; to me &ndash; it has fewer parentheses, colons, and underscores, and it doesn&rsquo;t need to specify <code>object</code>, <code>self</code>, or <code>return</code>.</p>
+
+<h2>Conclusion</h2>
+
+<p>So yay for Ruby? Admittedly this was a rather one sided comparison &ndash; Ruby has plenty of issues that I neglected to mention. Perhaps that&rsquo;ll be the topic of a future post.</p>
+]]></content>
+  </entry>
+  
+</feed>

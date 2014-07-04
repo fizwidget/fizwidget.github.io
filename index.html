@@ -9,7 +9,7 @@
   <meta name="author" content="James Russell">
 
   
-  <meta name="description" content="Python and Ruby are both awesome languages. Given the choice though, I&rsquo;ll usually go with Ruby. Why? Because&hellip; Ruby is consistently &hellip;">
+  <meta name="description" content="Python and Ruby are the two main contenders in the high-level, general-purpose, dynamic language category. They&rsquo;re both awesome, but given the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -37,6 +37,8 @@
 <body   >
   <header role="banner"><hgroup>
   <h1><a href="/">OnCode</a></h1>
+  
+    <h2>Miscellaneous thoughts on programming and CS</h2>
   
 </hgroup>
 
@@ -69,7 +71,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/07/03/ruby-or-python/">Ruby or Python</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/07/03/ruby-or-python/">Why Ruby Is Awesome</a></h1>
     
     
       <p class="meta">
@@ -92,11 +94,11 @@
   </header>
 
 
-  <div class="entry-content"><p>Python and Ruby are both awesome languages. Given the choice though, I&rsquo;ll usually go with Ruby. Why? Because&hellip;</p>
+  <div class="entry-content"><p>Python and Ruby are the two main contenders in the high-level, general-purpose, dynamic language category. They&rsquo;re both awesome, but given the choice I&rsquo;ll generally go with Ruby. This is my attempt at explaining why.</p>
 
-<h1>Ruby is consistently object oriented</h1>
+<h2>Ruby is consistently object-oriented</h2>
 
-<p>Pretty much everything we do involves calling a method on an object:</p>
+<p>Pretty much everything we do in Ruby involves calling methods:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -105,17 +107,19 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">-</span><span class="mi">4</span><span class="o">.</span><span class="n">abs</span>              <span class="c1"># =&gt; 4</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">-</span><span class="mi">42</span><span class="o">.</span><span class="n">abs</span>             <span class="c1"># =&gt; 42</span>
 </span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">length</span>    <span class="c1"># =&gt; 3</span>
 </span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">reverse</span>   <span class="c1"># =&gt; [3, 2, 1]</span>
-</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">reverse!</span>  <span class="c1"># Modifies list in-place.</span>
-</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">max</span>       <span class="c1"># =&gt; 3</span>
-</span><span class='line'><span class="s2">&quot;bar&quot;</span><span class="o">.</span><span class="n">capitalize</span>    <span class="c1"># =&gt; &quot;Bar&quot;</span>
-</span><span class='line'><span class="no">File</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>     <span class="c1"># =&gt; File object.</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">reverse!</span>  <span class="c1"># Reverses list in-place.</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">min</span>       <span class="c1"># =&gt; 1</span>
+</span><span class='line'><span class="s2">&quot;foo&quot;</span><span class="o">.</span><span class="n">capitalize</span>    <span class="c1"># =&gt; &quot;Foo&quot;</span>
+</span><span class='line'><span class="no">File</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">)</span>     <span class="c1"># =&gt; File object</span>
+</span><span class='line'><span class="n">file</span><span class="o">.</span><span class="n">close</span>          <span class="c1"># Closes file object.</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>In Python though, our code is a somewhat arbitrary mixture of method calls and function calls:</p>
+<p>In Python though, we use a weird mixture of methods and functions:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -124,15 +128,187 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="nb">abs</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span>             <span class="c"># =&gt; 4</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="nb">abs</span><span class="p">(</span><span class="o">-</span><span class="mi">42</span><span class="p">)</span>            <span class="c"># =&gt; 42</span>
 </span><span class='line'><span class="nb">len</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>      <span class="c"># =&gt; 3</span>
 </span><span class='line'><span class="nb">reversed</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="c"># =&gt; [3, 2, 1]</span>
-</span><span class='line'><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span> <span class="c"># Modifies list in-place.</span>
-</span><span class='line'><span class="nb">max</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>      <span class="c"># =&gt; 3</span>
-</span><span class='line'><span class="s">&quot;bar&quot;</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>  <span class="c"># =&gt; &quot;Bar&quot;</span>
-</span><span class='line'><span class="nb">open</span><span class="p">(</span><span class="s">&quot;foo&quot;</span><span class="p">)</span>         <span class="c"># =&gt; File object.</span>
+</span><span class='line'><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span> <span class="c"># Reverses list in-place.</span>
+</span><span class='line'><span class="nb">min</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>      <span class="c"># =&gt; 1</span>
+</span><span class='line'><span class="s">&quot;foo&quot;</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>  <span class="c"># =&gt; &quot;Foo&quot;</span>
+</span><span class='line'><span class="nb">open</span><span class="p">(</span><span class="s">&quot;bar&quot;</span><span class="p">)</span>         <span class="c"># =&gt; File object</span>
+</span><span class='line'><span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>        <span class="c"># Closes file object.</span>
 </span></code></pre></td></tr></table></div></figure>
 
+
+<p>One of the benefits of Ruby&rsquo;s consistent use of OOP is that we can always read code left-to-right:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="s2">&quot;world hello&quot;</span><span class="o">.</span><span class="n">split</span><span class="o">.</span><span class="n">reverse</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span> <span class="c1"># =&gt; &quot;hello world&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But in Python, we have to read some parts left-to-right and others inside-out (yuk):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="s">&quot;world hello&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span> <span class="c"># =&gt; &quot;hello world&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Ruby&rsquo;s blocks are pure awesome</h2>
+
+<p>One of Ruby&rsquo;s best features is the really nice syntax it has for passing anonymous functions (&ldquo;blocks&rdquo;) as arguments to methods. Blocks are like Python&rsquo;s lambda expressions, only more elegant, more powerful, and more commonly used.</p>
+
+<p>Blocks allow us to perform many different tasks using a simple, uniform syntax. For example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">each</span>   <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">x</span> <span class="p">}</span>       <span class="c1"># Iteration using blocks.</span>
+</span><span class='line'><span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">)</span>   <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span> <span class="p">}</span>  <span class="c1"># Automatic resource management using blocks.</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="p">}</span>        <span class="c1"># List processing using blocks.</span>
+</span><span class='line'><span class="n">data</span><span class="o">.</span><span class="n">sort_by</span>     <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="p">}</span>         <span class="c1"># Sorting using blocks.</span>
+</span><span class='line'><span class="n">files</span><span class="o">.</span><span class="n">lazy</span><span class="o">.</span><span class="n">map</span>   <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="no">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="p">}</span> <span class="c1"># Lazy-loading using blocks.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In Python, we use no fewer than five different language constructs to perform the same tasks:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span> <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>          <span class="c"># Iteration using &#39;for&#39;.</span>
+</span><span class='line'><span class="k">with</span> <span class="n">f</span> <span class="k">as</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;n&#39;</span><span class="p">):</span> <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>  <span class="c"># Automatic resource management using &#39;with&#39;.</span>
+</span><span class='line'><span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">]</span>       <span class="c"># List processing using list comprehensions.</span>
+</span><span class='line'><span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>      <span class="c"># Sorting using &#39;lambda&#39;.</span>
+</span><span class='line'><span class="p">(</span><span class="n">Image</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">)</span>             <span class="c"># Lazy-loading using generator expressions.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I&rsquo;ll take one flexible construct over many specific constructs any day.</p>
+
+<h2>Clearer code</h2>
+
+<p>In Ruby, <code>false</code> and <code>nil</code> are the only values that evaluate to false. This means we have to explicitly ask objects questions:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">if</span> <span class="n">some_collection</span><span class="o">.</span><span class="n">empty?</span>
+</span><span class='line'>  <span class="c1"># Obvious meaning is obvious.</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In Python though, pretty much everything with a length/size/magnitude of zero evaluates to false. This isn&rsquo;t just a quirk of the language, it&rsquo;s promoted as the &ldquo;Pythonic&rdquo; way of doing things.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">if</span> <span class="ow">not</span> <span class="n">some_collection</span><span class="p">:</span>
+</span><span class='line'>    <span class="c"># Whatever happened to &quot;explicit is better than implicit&quot;??</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ruby&rsquo;s approach is both more readable and less error-prone.</p>
+
+<h2>Private parts</h2>
+
+<p>In Ruby, instance variables are private by default. This encourages proper encapsulation of implementation details.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
+</span><span class='line'>    <span class="vi">@secret</span> <span class="o">=</span> <span class="mi">42</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Foo</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">secret</span> <span class="c1"># =&gt; Error!</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In Python though, everything defaults to public. This means we&rsquo;re more likely to end up with dependencies on implementation details.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class='line'>      <span class="bp">self</span><span class="o">.</span><span class="n">not_so_secret</span> <span class="o">=</span> <span class="mi">42</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Foo</span><span class="p">()</span><span class="o">.</span><span class="n">not_so_secret</span> <span class="c"># =&gt; 42</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Ruby is pretty</h2>
+
+<p>OK, I&rsquo;ll admit this is ever so slightly subjective. Having said that, compare this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Person</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">age</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@age</span> <span class="o">=</span> <span class="n">age</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">to_s</span>
+</span><span class='line'>    <span class="s2">&quot;Person is </span><span class="si">#{</span><span class="vi">@age</span><span class="si">}</span><span class="s2"> years old.&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">person</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">34</span><span class="p">)</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">person</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">age</span><span class="p">):</span>
+</span><span class='line'>    <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s">&quot;Person is {} years old.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">34</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The Ruby code feels less &ldquo;noisy&rdquo; to me &ndash; it has fewer parentheses, colons, and underscores, and it doesn&rsquo;t need to specify <code>object</code>, <code>self</code>, or <code>return</code>.</p>
+
+<h2>Conclusion</h2>
+
+<p>So yay for Ruby? Admittedly this was a rather one sided comparison &ndash; Ruby has plenty of issues that I neglected to mention. Perhaps that&rsquo;ll be the topic of a future post.</p>
 </div>
   
   
@@ -145,7 +321,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/07/03/a-list-made-of-functions/">Functions</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/07/03/a-list-made-of-functions/">Functions Are Weird</a></h1>
     
     
       <p class="meta">
@@ -168,7 +344,13 @@
   </header>
 
 
-  <div class="entry-content"><p>A list made of functions. Not a list containing functions, and not a function that creates lists. A list that <em>is</em> functions. That probably doesn&rsquo;t make any sense, so let&rsquo;s jump straight into the code&hellip;</p>
+  <div class="entry-content"><p>Imagine we&rsquo;re using a programming language that doesn&rsquo;t give us any way of defining data structures. No arrays, no structs, no objects, no classes. Nothing. All we can do is define and call functions.</p>
+
+<p>We need to work with a collection of items. Are we screwed?</p>
+
+<h2>A list made of functions</h2>
+
+<p>Turns out the answer is no. We can create linked lists, quite literally, out of functions. Let&rsquo;s jump straight into some code:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -177,45 +359,70 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">make_node</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">next_node</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">node</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-</span><span class='line'>    <span class="k">if</span> <span class="n">request</span> <span class="o">==</span> <span class="s">&quot;value&quot;</span><span class="p">:</span>
-</span><span class='line'>      <span class="k">return</span> <span class="n">value</span>
-</span><span class='line'>    <span class="k">elif</span> <span class="n">request</span> <span class="o">==</span> <span class="s">&quot;next_node&quot;</span><span class="p">:</span>
-</span><span class='line'>      <span class="k">return</span> <span class="n">next_node</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">make_list</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">tail</span><span class="p">):</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">node</span><span class="p">(</span><span class="n">operation</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">operation</span> <span class="o">==</span> <span class="s">&quot;head&quot;</span><span class="p">:</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">head</span>
+</span><span class='line'>    <span class="k">elif</span> <span class="n">operation</span> <span class="o">==</span> <span class="s">&quot;tail&quot;</span><span class="p">:</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">tail</span>
 </span><span class='line'>  <span class="k">return</span> <span class="n">node</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Let&rsquo;s try it out&hellip;</p>
+<p>The <code>make_list</code> function accepts a <code>head</code> (the data item we want to store), and a <code>tail</code> (the rest of the linked list). We can use it to construct the list <code>[1, 2, 3]</code> as follows:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">items</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="bp">None</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When we call <code>make_list</code>, it defines and returns function called <code>node</code>. The <code>node</code> function accepts a single parameter and returns the head or the tail based on its value.</p>
+
+<p>Let&rsquo;s test it out:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">numbers</span> <span class="o">=</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;value&quot;</span><span class="p">)</span> <span class="c"># =&gt; 1</span>
-</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;next_node&quot;</span><span class="p">)(</span><span class="s">&quot;value&quot;</span><span class="p">)</span> <span class="c"># =&gt; 2</span>
-</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;next_node&quot;</span><span class="p">)(</span><span class="s">&quot;next_node&quot;</span><span class="p">)(</span><span class="s">&quot;value&quot;</span><span class="p">)</span> <span class="c"># =&gt; 3</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>                 <span class="c"># =&gt; 1</span>
+</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span>                 <span class="c"># =&gt; &lt;function node at 0x107a82b18&gt;</span>
+</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>         <span class="c"># =&gt; 2</span>
+</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;head&quot;</span><span class="p">)</span> <span class="c"># =&gt; 3</span>
+</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span> <span class="c"># =&gt; None</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-
+<p>Neat! That&rsquo;s a bit tedious though, so let&rsquo;s write a function to print the list:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">print_list</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
-</span><span class='line'>  <span class="k">if</span> <span class="n">node</span><span class="p">:</span>
-</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="n">node</span><span class="p">(</span><span class="s">&quot;value&quot;</span><span class="p">))</span>
-</span><span class='line'>    <span class="n">print_list</span><span class="p">(</span><span class="n">node</span><span class="p">(</span><span class="s">&quot;next_node&quot;</span><span class="p">))</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">print_list</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+</span><span class='line'>  <span class="k">if</span> <span class="n">items</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="n">items</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">))</span>
+</span><span class='line'>    <span class="n">print_list</span><span class="p">(</span><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">print_list</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="c"># Output: 1 2 3</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>So, we can build data structures out of functions. Kinda pointless, but I think it does a pretty good job of explaining what closures are. It also hints at the fact that functions are really powerful. It turns out you can do pretty much <em>anything</em> with functions &ndash; the lambda calculus is a Turing complete language which consists of nothing but the application of anonymous functions. A programming language doesn&rsquo;t technically <em>need</em> to have the concept of numbers build into it &ndash; you can model numbers using functions (Church numerals).</p>
+<h2>Closures</h2>
+
+<p>A closure is a function that can access the variables from the scope in which it was created. We can see an example of this in the code above: the <code>node</code> function accesses <code>head</code> and <code>tail</code>, which were passed into <code>make_list</code>. Each time we call <code>make_list</code>, a new instance of <code>node</code> is returned that references the new <code>head</code> and <code>tail</code> arguments.</p>
+
+<p>Our list is nothing more than a chain of nested closures. When we call the outermost closure and pass it <code>"tail"</code> as an argument, it returns the next closure in the chain (i.e. the next node in the list).</p>
+
+<h2>Conclusion</h2>
+
+<p>We&rsquo;ve really just scratched the surface here &ndash; it&rsquo;s not hard to see that similar techniques could be used to define more complex data structures. We could even use functions to define <em>numbers</em> by representing the nth integer as a series of n nested functions.</p>
+
+<p>This is all hinting at a deeper fact: any language that allows you to define and apply functions is Turing-complete (meaning it lets you compute anything that can be computed). The <a href="http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html">lambda calculus</a> is the canonical example of such a language.</p>
+
+<p>Neat, huh?</p>
 </div>
   
   
@@ -236,11 +443,11 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/07/03/ruby-or-python/">Ruby or Python</a>
+        <a href="/blog/2014/07/03/ruby-or-python/">Why Ruby Is Awesome</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/07/03/a-list-made-of-functions/">Functions</a>
+        <a href="/blog/2014/07/03/a-list-made-of-functions/">Functions Are Weird</a>
       </li>
     
   </ul>

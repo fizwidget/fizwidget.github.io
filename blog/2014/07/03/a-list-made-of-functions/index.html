@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Functions - OnCode</title>
+  <title>Functions Are Weird - OnCode</title>
   <meta name="author" content="James Russell">
 
   
-  <meta name="description" content="A list made of functions. Not a list containing functions, and not a function that creates lists. A list that is functions. That probably doesn&rsquo &hellip;">
+  <meta name="description" content="Imagine we&rsquo;re using a programming language that doesn&rsquo;t give us any way of defining data structures. No arrays, no structs, no objects, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -37,6 +37,8 @@
 <body   >
   <header role="banner"><hgroup>
   <h1><a href="/">OnCode</a></h1>
+  
+    <h2>Miscellaneous thoughts on programming and CS</h2>
   
 </hgroup>
 
@@ -66,7 +68,7 @@
   
   <header>
     
-      <h1 class="entry-title">Functions</h1>
+      <h1 class="entry-title">Functions Are Weird</h1>
     
     
       <p class="meta">
@@ -89,7 +91,13 @@
   </header>
 
 
-<div class="entry-content"><p>A list made of functions. Not a list containing functions, and not a function that creates lists. A list that <em>is</em> functions. That probably doesn&rsquo;t make any sense, so let&rsquo;s jump straight into the code&hellip;</p>
+<div class="entry-content"><p>Imagine we&rsquo;re using a programming language that doesn&rsquo;t give us any way of defining data structures. No arrays, no structs, no objects, no classes. Nothing. All we can do is define and call functions.</p>
+
+<p>We need to work with a collection of items. Are we screwed?</p>
+
+<h2>A list made of functions</h2>
+
+<p>Turns out the answer is no. We can create linked lists, quite literally, out of functions. Let&rsquo;s jump straight into some code:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -98,45 +106,70 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">make_node</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">next_node</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">node</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-</span><span class='line'>    <span class="k">if</span> <span class="n">request</span> <span class="o">==</span> <span class="s">&quot;value&quot;</span><span class="p">:</span>
-</span><span class='line'>      <span class="k">return</span> <span class="n">value</span>
-</span><span class='line'>    <span class="k">elif</span> <span class="n">request</span> <span class="o">==</span> <span class="s">&quot;next_node&quot;</span><span class="p">:</span>
-</span><span class='line'>      <span class="k">return</span> <span class="n">next_node</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">make_list</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">tail</span><span class="p">):</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">node</span><span class="p">(</span><span class="n">operation</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">operation</span> <span class="o">==</span> <span class="s">&quot;head&quot;</span><span class="p">:</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">head</span>
+</span><span class='line'>    <span class="k">elif</span> <span class="n">operation</span> <span class="o">==</span> <span class="s">&quot;tail&quot;</span><span class="p">:</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">tail</span>
 </span><span class='line'>  <span class="k">return</span> <span class="n">node</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Let&rsquo;s try it out&hellip;</p>
+<p>The <code>make_list</code> function accepts a <code>head</code> (the data item we want to store), and a <code>tail</code> (the rest of the linked list). We can use it to construct the list <code>[1, 2, 3]</code> as follows:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">items</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="bp">None</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When we call <code>make_list</code>, it defines and returns function called <code>node</code>. The <code>node</code> function accepts a single parameter and returns the head or the tail based on its value.</p>
+
+<p>Let&rsquo;s test it out:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">numbers</span> <span class="o">=</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">make_node</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;value&quot;</span><span class="p">)</span> <span class="c"># =&gt; 1</span>
-</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;next_node&quot;</span><span class="p">)(</span><span class="s">&quot;value&quot;</span><span class="p">)</span> <span class="c"># =&gt; 2</span>
-</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;next_node&quot;</span><span class="p">)(</span><span class="s">&quot;next_node&quot;</span><span class="p">)(</span><span class="s">&quot;value&quot;</span><span class="p">)</span> <span class="c"># =&gt; 3</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>                 <span class="c"># =&gt; 1</span>
+</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span>                 <span class="c"># =&gt; &lt;function node at 0x107a82b18&gt;</span>
+</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>         <span class="c"># =&gt; 2</span>
+</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;head&quot;</span><span class="p">)</span> <span class="c"># =&gt; 3</span>
+</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span> <span class="c"># =&gt; None</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-
+<p>Neat! That&rsquo;s a bit tedious though, so let&rsquo;s write a function to print the list:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">print_list</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
-</span><span class='line'>  <span class="k">if</span> <span class="n">node</span><span class="p">:</span>
-</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="n">node</span><span class="p">(</span><span class="s">&quot;value&quot;</span><span class="p">))</span>
-</span><span class='line'>    <span class="n">print_list</span><span class="p">(</span><span class="n">node</span><span class="p">(</span><span class="s">&quot;next_node&quot;</span><span class="p">))</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">print_list</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+</span><span class='line'>  <span class="k">if</span> <span class="n">items</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="n">items</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">))</span>
+</span><span class='line'>    <span class="n">print_list</span><span class="p">(</span><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">print_list</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="c"># Output: 1 2 3</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>So, we can build data structures out of functions. Kinda pointless, but I think it does a pretty good job of explaining what closures are. It also hints at the fact that functions are really powerful. It turns out you can do pretty much <em>anything</em> with functions &ndash; the lambda calculus is a Turing complete language which consists of nothing but the application of anonymous functions. A programming language doesn&rsquo;t technically <em>need</em> to have the concept of numbers build into it &ndash; you can model numbers using functions (Church numerals).</p>
+<h2>Closures</h2>
+
+<p>A closure is a function that can access the variables from the scope in which it was created. We can see an example of this in the code above: the <code>node</code> function accesses <code>head</code> and <code>tail</code>, which were passed into <code>make_list</code>. Each time we call <code>make_list</code>, a new instance of <code>node</code> is returned that references the new <code>head</code> and <code>tail</code> arguments.</p>
+
+<p>Our list is nothing more than a chain of nested closures. When we call the outermost closure and pass it <code>"tail"</code> as an argument, it returns the next closure in the chain (i.e. the next node in the list).</p>
+
+<h2>Conclusion</h2>
+
+<p>We&rsquo;ve really just scratched the surface here &ndash; it&rsquo;s not hard to see that similar techniques could be used to define more complex data structures. We could even use functions to define <em>numbers</em> by representing the nth integer as a series of n nested functions.</p>
+
+<p>This is all hinting at a deeper fact: any language that allows you to define and apply functions is Turing-complete (meaning it lets you compute anything that can be computed). The <a href="http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html">lambda calculus</a> is the canonical example of such a language.</p>
+
+<p>Neat, huh?</p>
 </div>
 
 
@@ -164,7 +197,7 @@
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/closures/'>closures</a>, <a class='category' href='/blog/categories/functional-programming/'>functional programming</a>
+    <a class='category' href='/blog/categories/closure/'>closure</a>, <a class='category' href='/blog/categories/functional-programming/'>functional programming</a>, <a class='category' href='/blog/categories/lambda-calculus/'>lambda calculus</a>, <a class='category' href='/blog/categories/linked-list/'>linked list</a>
   
 </span>
 
@@ -185,7 +218,7 @@
     <p class="meta">
       
       
-        <a class="basic-alignment right" href="/blog/2014/07/03/ruby-or-python/" title="Next Post: Ruby or Python">Ruby or Python &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2014/07/03/ruby-or-python/" title="Next Post: Why Ruby is Awesome">Why Ruby is Awesome &raquo;</a>
       
     </p>
   </footer>
@@ -206,11 +239,11 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/07/03/ruby-or-python/">Ruby or Python</a>
+        <a href="/blog/2014/07/03/ruby-or-python/">Why Ruby Is Awesome</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/07/03/a-list-made-of-functions/">Functions</a>
+        <a href="/blog/2014/07/03/a-list-made-of-functions/">Functions Are Weird</a>
       </li>
     
   </ul>
