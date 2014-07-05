@@ -12,10 +12,10 @@ At first glance this seems counter-intuitive. Surely there are a *lot* of things
 
 <!-- more -->
 
-If you read my previous post on functions, you might be thinking we could pass around linked lists to simulate multiple arguments. There's one problem with that though...the `make_list` function accepts two arguments. We can't use a function that takes multiple arguments to implement multi-argument functions. That'd be assuming what we want to prove :P
+If you read my previous post on functions, you might be thinking we could pass around linked lists to simulate multiple arguments. There's one problem with that though...the `make_list` function accepts two arguments. We can't use a function that takes multiple arguments to implement multi-argument functions. That'd be assuming what we want to prove.
 
-Closures come to the rescue
----------------------------
+Closures to the rescue
+----------------------
 
 Remember closures? In addition to their arguments, they can access variables from their enclosing scope. Turns out we can use this ability to simulate multi-argument functions. Let's try writing a function to concatenate two strings:
 
