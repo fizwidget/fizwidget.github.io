@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[OnCode]]></title>
+  <title><![CDATA[fizwidget]]></title>
   <link href="http://fizwidget.github.io/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-04T21:11:31+09:30</updated>
+  <updated>2014-07-05T11:43:51+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -14,11 +14,11 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Why Ruby Is Awesome]]></title>
-    <link href="http://fizwidget.github.io/blog/2014/07/03/ruby-or-python/"/>
-    <updated>2014-07-03T22:10:23+09:30</updated>
-    <id>http://fizwidget.github.io/blog/2014/07/03/ruby-or-python</id>
-    <content type="html"><![CDATA[<p>Python and Ruby are the two main contenders in the high-level, general-purpose, dynamic language category. They&rsquo;re both awesome, but given the choice I&rsquo;ll generally go with Ruby. This is my attempt at explaining why.</p>
+    <title type="html"><![CDATA[Ruby == Awesome]]></title>
+    <link href="http://fizwidget.github.io/blog/2014/07/05/ruby-equals-equals-awesome/"/>
+    <updated>2014-07-05T22:10:23+09:30</updated>
+    <id>http://fizwidget.github.io/blog/2014/07/05/ruby-equals-equals-awesome</id>
+    <content type="html"><![CDATA[<p>Python and Ruby are the two main contenders in the general purpose, high level, dynamic language category. They&rsquo;re both awesome, but given the choice, I&rsquo;ll generally go with Ruby. This is my attempt at explaining why.</p>
 
 <h2>Ruby is consistently object-oriented</h2>
 
@@ -32,14 +32,14 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">-</span><span class="mi">42</span><span class="o">.</span><span class="n">abs</span>             <span class="c1"># =&gt; 42</span>
-</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">length</span>    <span class="c1"># =&gt; 3</span>
-</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">reverse</span>   <span class="c1"># =&gt; [3, 2, 1]</span>
-</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">reverse!</span>  <span class="c1"># Reverses list in-place.</span>
-</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">min</span>       <span class="c1"># =&gt; 1</span>
-</span><span class='line'><span class="s2">&quot;foo&quot;</span><span class="o">.</span><span class="n">capitalize</span>    <span class="c1"># =&gt; &quot;Foo&quot;</span>
-</span><span class='line'><span class="no">File</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">)</span>     <span class="c1"># =&gt; File object</span>
-</span><span class='line'><span class="n">file</span><span class="o">.</span><span class="n">close</span>          <span class="c1"># Closes file object.</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">-</span><span class="mi">42</span><span class="o">.</span><span class="n">abs</span>               <span class="c1"># =&gt; 42</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">length</span>      <span class="c1"># =&gt; 3</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">reverse</span>     <span class="c1"># =&gt; [3, 2, 1]</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">reverse!</span>    <span class="c1"># Reverses list in-place.</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">min</span>         <span class="c1"># =&gt; 1</span>
+</span><span class='line'><span class="s2">&quot;foo&quot;</span><span class="o">.</span><span class="n">capitalize</span>      <span class="c1"># =&gt; &quot;Foo&quot;</span>
+</span><span class='line'><span class="no">File</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">)</span>       <span class="c1"># =&gt; File object</span>
+</span><span class='line'><span class="n">file</span><span class="o">.</span><span class="n">close</span>            <span class="c1"># Closes file object.</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -53,32 +53,32 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="nb">abs</span><span class="p">(</span><span class="o">-</span><span class="mi">42</span><span class="p">)</span>            <span class="c"># =&gt; 42</span>
-</span><span class='line'><span class="nb">len</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>      <span class="c"># =&gt; 3</span>
-</span><span class='line'><span class="nb">reversed</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="c"># =&gt; [3, 2, 1]</span>
-</span><span class='line'><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span> <span class="c"># Reverses list in-place.</span>
-</span><span class='line'><span class="nb">min</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>      <span class="c"># =&gt; 1</span>
-</span><span class='line'><span class="s">&quot;foo&quot;</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>  <span class="c"># =&gt; &quot;Foo&quot;</span>
-</span><span class='line'><span class="nb">open</span><span class="p">(</span><span class="s">&quot;bar&quot;</span><span class="p">)</span>         <span class="c"># =&gt; File object</span>
-</span><span class='line'><span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>        <span class="c"># Closes file object.</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="nb">abs</span><span class="p">(</span><span class="o">-</span><span class="mi">42</span><span class="p">)</span>              <span class="c"># =&gt; 42</span>
+</span><span class='line'><span class="nb">len</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>        <span class="c"># =&gt; 3</span>
+</span><span class='line'><span class="nb">reversed</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>   <span class="c"># =&gt; [3, 2, 1]</span>
+</span><span class='line'><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>   <span class="c"># Reverses list in-place.</span>
+</span><span class='line'><span class="nb">min</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>        <span class="c"># =&gt; 1</span>
+</span><span class='line'><span class="s">&quot;foo&quot;</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>    <span class="c"># =&gt; &quot;Foo&quot;</span>
+</span><span class='line'><span class="nb">open</span><span class="p">(</span><span class="s">&quot;bar&quot;</span><span class="p">)</span>           <span class="c"># =&gt; File object</span>
+</span><span class='line'><span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>          <span class="c"># Closes file object.</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>One of the benefits of Ruby&rsquo;s consistent use of OOP is that we can always read code left-to-right:</p>
+<p>One of the benefits of Ruby&rsquo;s consistency is that we can always read code left-to-right:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="s2">&quot;world hello&quot;</span><span class="o">.</span><span class="n">split</span><span class="o">.</span><span class="n">reverse</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span> <span class="c1"># =&gt; &quot;hello world&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>But in Python, we have to read some parts left-to-right and others inside-out (yuk):</p>
+<p>In the equivalent Python code, we have to read some parts left-to-right and other parts inside-out (yuk!):</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='python'><span class='line'><span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="s">&quot;world hello&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span> <span class="c"># =&gt; &quot;hello world&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h2>Ruby&rsquo;s blocks are pure awesome</h2>
+<h2>Ruby&rsquo;s blocks are brilliant</h2>
 
 <p>One of Ruby&rsquo;s best features is the really nice syntax it has for passing anonymous functions (&ldquo;blocks&rdquo;) as arguments to methods. Blocks are like Python&rsquo;s lambda expressions, only more elegant, more powerful, and more commonly used.</p>
 
@@ -112,9 +112,9 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>I&rsquo;ll take one flexible construct over many specific constructs any day.</p>
+<p>Needless to say, I prefer one flexible construct over multiple rigid constructs.</p>
 
-<h2>Clearer code</h2>
+<h2>Not true</h2>
 
 <p>In Ruby, <code>false</code> and <code>nil</code> are the only values that evaluate to false. This means we have to explicitly ask objects questions:</p>
 
@@ -136,7 +136,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Ruby&rsquo;s approach is both more readable and less error-prone.</p>
+<p>I think Ruby&rsquo;s approach is both more readable and less error-prone.</p>
 
 <h2>Private parts</h2>
 
@@ -167,12 +167,14 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 </pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span class='line'>      <span class="bp">self</span><span class="o">.</span><span class="n">not_so_secret</span> <span class="o">=</span> <span class="mi">42</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">not_so_secret</span> <span class="o">=</span> <span class="mi">42</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">Foo</span><span class="p">()</span><span class="o">.</span><span class="n">not_so_secret</span> <span class="c"># =&gt; 42</span>
 </span></code></pre></td></tr></table></div></figure>
 
+
+<p>And no, we don&rsquo;t need to write lots of boilerplate getter/setter methods in Ruby. Placing <code>attr_accessor :foo</code> in the class body will generate basic getters/setters for <code>foo</code>, which we can override later if necessary.</p>
 
 <h2>Ruby is pretty</h2>
 
@@ -217,11 +219,11 @@
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 </pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">age</span><span class="p">):</span>
-</span><span class='line'>    <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">age</span><span class="p">):</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span class='line'>    <span class="k">return</span> <span class="s">&quot;Person is {} years old.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class='line'>        <span class="k">return</span> <span class="s">&quot;Person is {} years old.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">34</span><span class="p">)</span>
 </span><span class='line'><span class="k">print</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
@@ -232,15 +234,77 @@
 
 <h2>Conclusion</h2>
 
-<p>So yay for Ruby? Admittedly this was a rather one sided comparison &ndash; Ruby has plenty of issues that I neglected to mention. Perhaps that&rsquo;ll be the topic of a future post.</p>
+<p>So yay for Ruby? Admittedly this was a very one sided comparison &ndash; Ruby has plenty of issues that I neglected to mention. Perhaps that&rsquo;ll be the topic of a future post.</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Functions Are Weird]]></title>
-    <link href="http://fizwidget.github.io/blog/2014/07/03/a-list-made-of-functions/"/>
+    <title type="html"><![CDATA[Nothing but Single-Argument Functions]]></title>
+    <link href="http://fizwidget.github.io/blog/2014/07/04/nothing-but-single-argument-functions/"/>
+    <updated>2014-07-04T09:17:13+09:30</updated>
+    <id>http://fizwidget.github.io/blog/2014/07/04/nothing-but-single-argument-functions</id>
+    <content type="html"><![CDATA[<p>In a previous post, we talked about the fact that functions are the only thing a language needs to be Turing-complete. In this post I&rsquo;m going to take it a little further: <em>single-argument functions</em> are all a language needs to be Turing-complete.</p>
+
+<p>At first glance that seems weird. It seems like there are a <em>lot</em> of things you wouldn&rsquo;t be able to do&hellip;like adding two numbers, comparing two strings, searching for a number in a list, etc. These functions would all require more than one argument.</p>
+
+<p>If you read <a href="">this post</a>, you might suggest we pass in a linked list to simulate multiple arguments. There&rsquo;s one problem with that though&hellip;the <code>make_list</code> function accepts two arguments. We can&rsquo;t use a function that takes multiple arguments to implement multi-argument functions. That&rsquo;d be assuming what we want to prove :P</p>
+
+<h2>Closures come to the rescue</h2>
+
+<p>Remember closures? In addition to their arguments, they can access variables from their enclosing scope. Perfect! Let&rsquo;s use closures to write a function that concatenates two strings:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">concatenate</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">concatenate_aux</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">concatenate_aux</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">concatenate</span><span class="p">(</span><span class="s">&quot;Hello&quot;</span><span class="p">)(</span><span class="s">&quot;World&quot;</span><span class="p">)</span> <span class="c"># =&gt; &quot;HelloWorld&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Tada! The top-level <code>add</code> function returns another function, which will in-turn return the final result. The <code>concatenate_aux</code> function is a closure, meaning it still has access to <code>a</code> when we call it later on.</p>
+
+<p>So, we can decompose an n-argument function into a series of n nested single-argument functions (a process known as <a href="http://en.wikipedia.org/wiki/Currying">currying</a>).</p>
+
+<p>This opens up an interesting possibility&hellip;</p>
+
+<h2>Partial application</h2>
+
+<p>Typically, if a function takes n arguments, you have to call it with n arguments. Anything less results in an error. If we define functions like we did above though, we can <em>partially apply</em> them:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">greet</span> <span class="o">=</span> <span class="n">concatenate</span><span class="p">(</span><span class="s">&quot;Hello, &quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We&rsquo;ve now got a new function (an instance of <code>concatenate_aux</code>) that will prepend <code>"Hello, "</code> to its argument:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">greet</span><span class="p">(</span><span class="s">&quot;Fred&quot;</span><span class="p">)</span> <span class="c"># =&gt; &quot;Hello, Fred&quot;</span>
+</span><span class='line'><span class="n">greet</span><span class="p">(</span><span class="s">&quot;Bob&quot;</span><span class="p">)</span>  <span class="c"># =&gt; &quot;Hello, Bob&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Conclusion</h2>
+
+<p>So, single-argument functions are all a language needs to be Turing-complete. Neat, but not very practically useful.</p>
+
+<p>Partial application on the other hand is actually a useful technique. Not so much in Python, but some languages make it really easy. In Haskell we can partially apply any function, without having to to through the hassle of defining it in a weird way.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Nothing but Functions]]></title>
+    <link href="http://fizwidget.github.io/blog/2014/07/03/nothing-but-functions/"/>
     <updated>2014-07-03T16:59:34+09:30</updated>
-    <id>http://fizwidget.github.io/blog/2014/07/03/a-list-made-of-functions</id>
+    <id>http://fizwidget.github.io/blog/2014/07/03/nothing-but-functions</id>
     <content type="html"><![CDATA[<p>Imagine we&rsquo;re using a programming language that doesn&rsquo;t give us any way of defining data structures. No arrays, no structs, no objects, no classes. Nothing. All we can do is define and call functions.</p>
 
 <p>We need to work with a collection of items. Are we screwed?</p>
@@ -273,9 +337,9 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>When we call <code>make_list</code>, it defines and returns function called <code>node</code>. The <code>node</code> function accepts a single parameter and returns the head or the tail based on its value.</p>
+<p>When we call <code>make_list</code>, it defines and returns a function called <code>node</code>. The <code>node</code> function accepts a single parameter and returns the head or the tail based on its value.</p>
 
-<p>Let&rsquo;s test it out:</p>
+<p>Let&rsquo;s give it a try:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>

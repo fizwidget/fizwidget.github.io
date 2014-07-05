@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Linked List | OnCode]]></title>
+  <title><![CDATA[Category: Linked List | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/linked-list/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-04T21:11:31+09:30</updated>
+  <updated>2014-07-05T11:43:51+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -14,10 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Functions Are Weird]]></title>
-    <link href="http://fizwidget.github.io/blog/2014/07/03/a-list-made-of-functions/"/>
+    <title type="html"><![CDATA[Nothing but Functions]]></title>
+    <link href="http://fizwidget.github.io/blog/2014/07/03/nothing-but-functions/"/>
     <updated>2014-07-03T16:59:34+09:30</updated>
-    <id>http://fizwidget.github.io/blog/2014/07/03/a-list-made-of-functions</id>
+    <id>http://fizwidget.github.io/blog/2014/07/03/nothing-but-functions</id>
     <content type="html"><![CDATA[<p>Imagine we&rsquo;re using a programming language that doesn&rsquo;t give us any way of defining data structures. No arrays, no structs, no objects, no classes. Nothing. All we can do is define and call functions.</p>
 
 <p>We need to work with a collection of items. Are we screwed?</p>
@@ -45,9 +45,9 @@ elif operation == "tail":
 items = make_list(1, make_list(2, make_list(3, None)))
 </code></p>
 
-<p>When we call <code>make_list</code>, it defines and returns function called <code>node</code>. The <code>node</code> function accepts a single parameter and returns the head or the tail based on its value.</p>
+<p>When we call <code>make_list</code>, it defines and returns a function called <code>node</code>. The <code>node</code> function accepts a single parameter and returns the head or the tail based on its value.</p>
 
-<p>Let&rsquo;s test it out:</p>
+<p>Let&rsquo;s give it a try:</p>
 
 <p><code>python
 items("head")                 # =&gt; 1

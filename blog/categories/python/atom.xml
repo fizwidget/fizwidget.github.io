@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Python | OnCode]]></title>
+  <title><![CDATA[Category: Python | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-04T21:11:31+09:30</updated>
+  <updated>2014-07-05T11:43:51+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -14,51 +14,51 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Why Ruby Is Awesome]]></title>
-    <link href="http://fizwidget.github.io/blog/2014/07/03/ruby-or-python/"/>
-    <updated>2014-07-03T22:10:23+09:30</updated>
-    <id>http://fizwidget.github.io/blog/2014/07/03/ruby-or-python</id>
-    <content type="html"><![CDATA[<p>Python and Ruby are the two main contenders in the high-level, general-purpose, dynamic language category. They&rsquo;re both awesome, but given the choice I&rsquo;ll generally go with Ruby. This is my attempt at explaining why.</p>
+    <title type="html"><![CDATA[Ruby == Awesome]]></title>
+    <link href="http://fizwidget.github.io/blog/2014/07/05/ruby-equals-equals-awesome/"/>
+    <updated>2014-07-05T22:10:23+09:30</updated>
+    <id>http://fizwidget.github.io/blog/2014/07/05/ruby-equals-equals-awesome</id>
+    <content type="html"><![CDATA[<p>Python and Ruby are the two main contenders in the general purpose, high level, dynamic language category. They&rsquo;re both awesome, but given the choice, I&rsquo;ll generally go with Ruby. This is my attempt at explaining why.</p>
 
 <h2>Ruby is consistently object-oriented</h2>
 
 <p>Pretty much everything we do in Ruby involves calling methods:</p>
 
 <p><code>ruby
--42.abs             # =&gt; 42
-[1, 2, 3].length    # =&gt; 3
-[1, 2, 3].reverse   # =&gt; [3, 2, 1]
-[1, 2, 3].reverse!  # Reverses list in-place.
-[1, 2, 3].min       # =&gt; 1
-"foo".capitalize    # =&gt; "Foo"
-File.new("bar")     # =&gt; File object
-file.close          # Closes file object.
+-42.abs               # =&gt; 42
+[1, 2, 3].length      # =&gt; 3
+[1, 2, 3].reverse     # =&gt; [3, 2, 1]
+[1, 2, 3].reverse!    # Reverses list in-place.
+[1, 2, 3].min         # =&gt; 1
+"foo".capitalize      # =&gt; "Foo"
+File.new("bar")       # =&gt; File object
+file.close            # Closes file object.
 </code>
 In Python though, we use a weird mixture of methods and functions:</p>
 
 <p><code>python
-abs(-42)            # =&gt; 42
-len([1, 2, 3])      # =&gt; 3
-reversed([1, 2, 3]) # =&gt; [3, 2, 1]
-[1, 2, 3].reverse() # Reverses list in-place.
-min([1, 2, 3])      # =&gt; 1
-"foo".capitalize()  # =&gt; "Foo"
-open("bar")         # =&gt; File object
-file.close()        # Closes file object.
+abs(-42)              # =&gt; 42
+len([1, 2, 3])        # =&gt; 3
+reversed([1, 2, 3])   # =&gt; [3, 2, 1]
+[1, 2, 3].reverse()   # Reverses list in-place.
+min([1, 2, 3])        # =&gt; 1
+"foo".capitalize()    # =&gt; "Foo"
+open("bar")           # =&gt; File object
+file.close()          # Closes file object.
 </code></p>
 
-<p>One of the benefits of Ruby&rsquo;s consistent use of OOP is that we can always read code left-to-right:</p>
+<p>One of the benefits of Ruby&rsquo;s consistency is that we can always read code left-to-right:</p>
 
 <p><code>ruby
 "world hello".split.reverse.join(' ') # =&gt; "hello world"
 </code>
-But in Python, we have to read some parts left-to-right and others inside-out (yuk):</p>
+In the equivalent Python code, we have to read some parts left-to-right and other parts inside-out (yuk!):</p>
 
 <p><code>python
 ' '.join(reversed("world hello".split())) # =&gt; "hello world"
 </code></p>
 
-<h2>Ruby&rsquo;s blocks are pure awesome</h2>
+<h2>Ruby&rsquo;s blocks are brilliant</h2>
 
 <p>One of Ruby&rsquo;s best features is the really nice syntax it has for passing anonymous functions (&ldquo;blocks&rdquo;) as arguments to methods. Blocks are like Python&rsquo;s lambda expressions, only more elegant, more powerful, and more commonly used.</p>
 
@@ -82,9 +82,9 @@ sorted(data, key=lambda x: x[1])      # Sorting using 'lambda'.
 (Image(f) for f in files)             # Lazy-loading using generator expressions.
 </code></p>
 
-<p>I&rsquo;ll take one flexible construct over many specific constructs any day.</p>
+<p>Needless to say, I prefer one flexible construct over multiple rigid constructs.</p>
 
-<h2>Clearer code</h2>
+<h2>Not true</h2>
 
 <p>In Ruby, <code>false</code> and <code>nil</code> are the only values that evaluate to false. This means we have to explicitly ask objects questions:</p>
 
@@ -104,7 +104,7 @@ if not some_collection:</p>
 
 <p>```</p>
 
-<p>Ruby&rsquo;s approach is both more readable and less error-prone.</p>
+<p>I think Ruby&rsquo;s approach is both more readable and less error-prone.</p>
 
 <h2>Private parts</h2>
 
@@ -126,14 +126,16 @@ end</p>
 <p>In Python though, everything defaults to public. This means we&rsquo;re more likely to end up with dependencies on implementation details.</p>
 
 <p>``` python
-class Foo:
-  def <strong>init</strong>(self):</p>
+class Foo:</p>
 
-<pre><code>  self.not_so_secret = 42
+<pre><code>def __init__(self):
+    self.not_so_secret = 42
 </code></pre>
 
 <p>Foo().not_so_secret # => 42
 ```</p>
+
+<p>And no, we don&rsquo;t need to write lots of boilerplate getter/setter methods in Ruby. Placing <code>attr_accessor :foo</code> in the class body will generate basic getters/setters for <code>foo</code>, which we can override later if necessary.</p>
 
 <h2>Ruby is pretty</h2>
 
@@ -164,15 +166,13 @@ puts person</p>
 <p>To this:</p>
 
 <p>``` python
-class Person(object):
-  def <strong>init</strong>(self, age):</p>
+class Person(object):</p>
 
-<pre><code>self.age = age
-</code></pre>
+<pre><code>def __init__(self, age):
+    self.age = age
 
-<p>  def <strong>str</strong>(self):</p>
-
-<pre><code>return "Person is {} years old.".format(self.age)
+def __str__(self):
+    return "Person is {} years old.".format(self.age)
 </code></pre>
 
 <p>person = Person(34)
@@ -183,7 +183,7 @@ print(person)
 
 <h2>Conclusion</h2>
 
-<p>So yay for Ruby? Admittedly this was a rather one sided comparison &ndash; Ruby has plenty of issues that I neglected to mention. Perhaps that&rsquo;ll be the topic of a future post.</p>
+<p>So yay for Ruby? Admittedly this was a very one sided comparison &ndash; Ruby has plenty of issues that I neglected to mention. Perhaps that&rsquo;ll be the topic of a future post.</p>
 ]]></content>
   </entry>
   
