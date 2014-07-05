@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Turing Complete | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/turing-complete/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-05T17:04:38+09:30</updated>
+  <updated>2014-07-05T17:35:02+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -25,9 +25,9 @@
 <!-- more -->
 
 
-<p>If you read my previous post on functions, you might be thinking we could pass around linked lists to simulate multiple arguments. There&rsquo;s one problem with that though&hellip;the <code>make_list</code> function accepts two arguments. We can&rsquo;t use a function that takes multiple arguments to implement multi-argument functions. That&rsquo;d be assuming what we want to prove :P</p>
+<p>If you read my previous post on functions, you might be thinking we could pass around linked lists to simulate multiple arguments. There&rsquo;s one problem with that though&hellip;the <code>make_list</code> function accepts two arguments. We can&rsquo;t use a function that takes multiple arguments to implement multi-argument functions. That&rsquo;d be assuming what we want to prove.</p>
 
-<h2>Closures come to the rescue</h2>
+<h2>Closures to the rescue</h2>
 
 <p>Remember closures? In addition to their arguments, they can access variables from their enclosing scope. Turns out we can use this ability to simulate multi-argument functions. Let&rsquo;s try writing a function to concatenate two strings:</p>
 
