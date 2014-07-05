@@ -1,0 +1,158 @@
+---
+layout: post
+title: Ruby == Awesome
+date: 2014-07-05 22:10:23 +0930
+comments: true
+categories: ruby, python
+---
+
+Python and Ruby are the two main contenders in the general purpose, high level, dynamic language category. They're both fairly awesome, but given the choice, I'll generally go with Ruby. This is my attempt at explaining why.
+
+## Ruby is consistently object-oriented
+
+Pretty much everything we do in Ruby involves calling methods on objects:
+
+``` ruby
+-42.abs               # => 42
+[1, 2, 3].length      # => 3
+[1, 2, 3].reverse     # => [3, 2, 1]
+[1, 2, 3].reverse!    # Reverses list in-place.
+[1, 2, 3].min         # => 1
+"foo".capitalize      # => "Foo"
+File.new("bar")       # => File object
+file.close            # Closes file object.
+```
+In Python though, we use a weird mixture of functions and methods:
+
+``` python
+abs(-42)              # => 42
+len([1, 2, 3])        # => 3
+reversed([1, 2, 3])   # => [3, 2, 1]
+[1, 2, 3].reverse()   # Reverses list in-place.
+min([1, 2, 3])        # => 1
+"foo".capitalize()    # => "Foo"
+open("bar")           # => File object
+file.close()          # Closes file object.
+```
+
+One of the benefits of Ruby's consistency is that we can always read code left-to-right:
+
+``` ruby
+"world hello".split.reverse.join(' ') # => "hello world"
+```
+With the equivalent Python code, we have to read some parts left-to-right and other parts inside-out (yuk!):
+
+``` python
+' '.join(reversed("world hello".split())) # => "hello world"
+```
+
+## Ruby's blocks are brilliant
+
+One of Ruby's best features is the really nice syntax it has for passing anonymous functions ("blocks") as arguments to methods. Blocks are like Python's lambda expressions, only more elegant, more powerful, and more commonly used.
+
+Blocks allow us to perform many different tasks using a simple, uniform syntax. For example:
+
+``` ruby
+[1, 2, 3].each   { |x| puts x }       # Iteration using blocks.
+File.open('n')   { |f| puts f.read }  # Automatic resource management using blocks.
+[1, 2, 3].select { |x| x > 2 }        # List processing using blocks.
+data.sort_by     { |x| x[1] }         # Sorting using blocks.
+files.lazy.map   { |f| Image.new(f) } # Lazy-loading using blocks.
+```
+
+In Python, we use no fewer than five different language constructs to perform the same tasks:
+
+``` python
+for x in [1, 2, 3]: print(x)          # Iteration using 'for'.
+with f as open('n'): print(f.read())  # Automatic resource management using 'with'.
+[x for x in [1, 2, 3] if x > 2]       # List processing using list comprehensions.
+sorted(data, key=lambda x: x[1])      # Sorting using 'lambda'.
+(Image(f) for f in files)             # Lazy-loading using generator expressions.
+```
+
+Needless to say, I prefer one flexible construct over multiple rigid constructs.
+
+## Clear conditionals
+
+In Python, pretty much everything with a length/size/magnitude of zero evaluates to false. This isn't just a quirk of the language, it's promoted as the "Pythonic" way of doing things.
+
+``` python
+if not some_collection:
+    # Whatever happened to "explicit is better than implicit"??
+```
+
+In Ruby, `false` and `nil` are the only values that evaluate to false. This means we have to explicitly ask objects questions:
+
+``` ruby
+if some_collection.empty? 
+  # Obvious meaning is obvious.
+end
+```
+Ruby's approach seems more readable and less error-prone.
+
+## Private parts
+
+In Ruby, instance variables are private by default. This encourages proper encapsulation of implementation details.
+
+``` ruby
+class Foo
+  def initialize
+    @secret = 42
+  end
+end
+
+Foo.new.secret # => Error!
+```
+
+In Python though, everything defaults to public. This means we're more likely to end up with dependencies on implementation details.
+
+``` python
+class Foo:
+    def __init__(self):
+        self.not_so_secret = 42
+
+Foo().not_so_secret # => 42
+```
+
+And no, we don't need to write lots of boilerplate getter/setter code in Ruby. Placing `attr_accessor :foo` in the class body will generate basic getters/setters for `foo`, which we can override later if necessary.
+
+## Ruby is pretty
+
+OK, I'll admit this is ever so slightly subjective. Having said that, compare this:
+
+``` ruby
+class Person
+  def initialize(age)
+    @age = age
+  end
+
+  def to_s
+    "Person is #{@age} years old."
+  end
+end
+
+person = Person.new(34)
+puts person
+
+```
+
+To this:
+
+
+``` python
+class Person(object):
+    def __init__(self, age):
+        self.age = age
+
+    def __str__(self):
+        return "Person is {} years old.".format(self.age)
+
+person = Person(34)
+print(person)
+```
+
+The Ruby code feels less "noisy" to me - it has fewer parentheses, colons, and underscores, and it doesn't need to specify `object`, `self`, or `return`.
+
+## Conclusion
+
+So yay for Ruby? Admittedly this was a very one sided comparison - Ruby has plenty of issues that I neglected to mention. Perhaps that'll be the topic of a future post.
