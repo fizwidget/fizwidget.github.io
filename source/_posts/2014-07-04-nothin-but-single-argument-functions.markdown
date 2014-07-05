@@ -39,20 +39,20 @@ This opens up another interesting possibility...
 Partial function application
 ----------------------------
 
-If a function takes n arguments, we usually have to call it with n arguments - anything less results in an error. If we define functions like we did above though, we can *partially apply* them:
+If a function takes n arguments, we usually have to call it with n arguments (anything less results in an error). If we define functions like we did above though, we can *partially apply* them:
 
 ```python
-greet = concatenate("Hello, ")
+greet = concatenate("Hello ")
 ```
 
-We've now got a new function (an instance of `concatenate_aux`) that will prepend `"Hello, "` to whatever we give it:
+We've now got a new function (an instance of `concatenate_aux`) that will prepend `"Hello "` to whatever we give it:
 
 ``` python
-greet("Fred") # => "Hello, Fred"
-greet("Bob")  # => "Hello, Bob"
+greet("Fred") # => "Hello Fred"
+greet("Bob")  # => "Hello Bob"
 ```
 
-This can actually be a useful technique. The way we did it above is kinda messy, but Python has a [library function](https://docs.python.org/3/library/functools.html#functools.partial) to simplify the process. In some languages (e.g. Haskell) any function can be partially applied - no extra work needed.
+This can actually be a useful technique. The way we did it above is kinda messy, but Python has a [library function](https://docs.python.org/3/library/functools.html#functools.partial) that simplifies the process. Some languages make things even easier, and allow any function to be partially applied without us having to do any extra work. Partial application is quite common in Haskell for example.
 
 Conclusion
 ----------

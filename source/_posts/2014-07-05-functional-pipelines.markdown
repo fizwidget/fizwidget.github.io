@@ -40,8 +40,8 @@ students.select  { |s| s.level == 1 }
         .collect { |s| s.id_number }
 ```
 
-This is a much, much better approach. The main difference is that it's *declarative* rather than *imperative*. We're describing what we want, rather than spelling out exactly how to achieve it. This approach is easier to understand, easier to modify, less error-prone, more concise, and has the *potential* to perform better (the system could, for example, distribute the `select` operation over multiple cores).
+This is a much, much better approach. The main difference is that it's declarative rather than imperative. We're describing what we want, rather than spelling out exactly how to achieve it. This approach is easier to understand, easier to modify, less error-prone, more concise, and has the *potential* to perform better (the system could, for example, distribute the `select` operation over multiple cores).
 
-I've used Ruby in the above example, but you can write this kind of code in a bunch of different languages (Python, C#, and Java 8 to name a few of the more popular ones). You might also notice similarities to SQL. This is no coincidence: SQL is very much a declarative language.
+I've used Ruby in the above example, but you can write this kind of code in many different languages (Python, C#, and Java 8 to name a few of the more popular ones). You might also notice similarities to SQL - this is no coincidence, as SQL is also a declarative language.
 
 So go forth and be functional!

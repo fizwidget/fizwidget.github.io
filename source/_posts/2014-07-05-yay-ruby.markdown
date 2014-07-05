@@ -1,12 +1,12 @@
 ---
 layout: post
-title: "Ruby == Awesome"
+title: "Yay Ruby!"
 date: 2014-07-05 22:10:23 +0930
 comments: true
 categories: [ruby, python]
 ---
 
-Python and Ruby are the two main contenders in the general purpose, high level, dynamic language category. They're both awesome, but given the choice, I'll generally go with Ruby...
+Python and Ruby are the two heavyweights in the general-purpose, high-level, dynamic language category. They're both awesome languages, but given the choice, I'll generally go with Ruby. This is my attempt at explaining why.
 
 <!-- more -->
 
@@ -26,7 +26,7 @@ File.new("bar")       # => File object
 file.close            # Closes file object.
 ```
 
-In Python though, we use a weird mixture of functions and methods:
+In Python though, we use a mixture of functions and methods:
 
 ``` python
 abs(-42)              # => 42
@@ -45,7 +45,7 @@ One of the benefits of Ruby's consistency is that we can always read code left-t
 "world hello".split.reverse.join(' ') # => "hello world"
 ```
 
-Looking at the equivalent Python code, we have to read some parts left-to-right and other parts inside-out (yuk!):
+Whereas the equivalent Python code is much harder to make sense of:
 
 ``` python
 ' '.join(reversed("world hello".split())) # => "hello world"
@@ -63,7 +63,7 @@ Blocks allow us to perform many different tasks using a simple, uniform syntax. 
 File.open('n')   { |f| puts f.read }    # Automatic resource management using blocks.
 [1, 2, 3].select { |x| x > 2 }          # List processing using blocks.
 data.sort_by     { |x| x[1] }           # Sorting using blocks.
-files.lazy.map   { |f| Image.new(f) }   # Lazy-loading using blocks.
+files.lazy.map   { |f| Image.new(f) }   # Lazy evaluation using blocks.
 ```
 
 In Python, we use no fewer than five different language constructs to perform the same tasks:
@@ -73,7 +73,7 @@ for x in [1, 2, 3]: print(x)            # Iteration using 'for'.
 with f as open('n'): print(f.read())    # Automatic resource management using 'with'.
 [x for x in [1, 2, 3] if x > 2]         # List processing using list comprehensions.
 sorted(data, key=lambda x: x[1])        # Sorting using 'lambda'.
-(Image(f) for f in files)               # Lazy-loading using generator expressions.
+(Image(f) for f in files)               # Lazy evaluation using generator expressions.
 ```
 
 In my book, one flexible construct > multiple rigid constructs.
