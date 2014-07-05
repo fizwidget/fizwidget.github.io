@@ -3,7 +3,7 @@ layout: post
 title: "Nothin' but Functions"
 date: 2014-07-03 16:59:34 +0930
 comments: true
-categories: [functional programming, lambda calculus, turing complete]
+categories: [functional programming, lambda calculus]
 ---
 
 Imagine we're using a programming language that doesn't give us any way of defining data structures. No arrays, no structs, no classes. Nothing. All we can do is define and call functions.
@@ -71,7 +71,7 @@ Our list is nothing more than a chain of nested closures. When we call the outer
 Conclusion
 ----------
 
-We've really just scratched the surface here - it's not hard to see that we could create more complex data structures using similar techniques. We could even use functions to define *numbers* by representing the nth integer as a series of n nested functions.
+We've really just scratched the surface here - it's not hard to see that we could create more complex data structures using similar techniques. We could even use functions to define *numbers* by representing the *n*th integer as a series of *n* nested functions.
 
 This all hints at a deeper fact: if a language allows you to define and apply functions, that language is Turing-complete (meaning it lets you compute anything that can be computed). The [lambda calculus](http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html) is the canonical example of such a language.
 

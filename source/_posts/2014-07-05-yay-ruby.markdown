@@ -39,17 +39,19 @@ open("bar")           # => File object
 file.close()          # Closes file object.
 ```
 
-One of the benefits of Ruby's consistency is that we can always read code left-to-right:
+One of the benefits of Ruby's consistency is that we can always read it left-to-right:
 
 ``` ruby
 "world hello".split.reverse.join(' ') # => "hello world"
 ```
 
-Whereas the equivalent Python code is much harder to make sense of:
+The equivalent Python code is much harder to make sense of:
 
 ``` python
 ' '.join(reversed("world hello".split())) # => "hello world"
 ```
+
+We have to read some parts left-to-right and other parts inside-out. Yuk.
 
 Blocks are brilliant
 --------------------
@@ -81,7 +83,7 @@ In my book, one flexible construct > multiple rigid constructs.
 Clear conditionals
 ------------------
 
-In Python, pretty much everything with a length/size/magnitude of zero evaluates to false. This isn't just a quirk of the language, it's promoted as the "Pythonic" way of doing things.
+Pretty much everything with a length/size/magnitude of zero evaluates to false in Python. This isn't just a quirk of the language, it's promoted in [PEP 8](http://legacy.python.org/dev/peps/pep-0008/) as the Pythonic way of doing things.
 
 ``` python
 if not some_collection:
@@ -96,7 +98,7 @@ if some_collection.empty?
 end
 ```
 
-Ruby's approach seems more readable and less error-prone.
+Ruby's approach seems both more readable and less error-prone.
 
 Private parts
 -------------
@@ -122,8 +124,6 @@ class Foo:
 
 Foo().not_so_secret # => 42
 ```
-
-And no, we don't need to write lots of boilerplate getter/setter code in Ruby. If we stick `attr_accessor :foo` in the class body, basic getters/setters are generated for `foo`. We can add validation logic later on if necessary.
 
 Ruby is pretty
 --------------
@@ -160,9 +160,9 @@ person = Person(34)
 print(person)
 ```
 
-The Ruby code feels less "noisy" to me - it has fewer parentheses, colons, and underscores, and it doesn't need to specify `object`, `self`, or `return`.
+The Ruby code has fewer parentheses, colons, and underscores, and doesn't need to specify `object`, `self`, or `return`.
 
 Conclusion
 ----------
 
-So yay for Ruby? Admittedly this was a very one sided comparison - Ruby has plenty of issues that I neglected to mention. Perhaps that'll be the topic of a future post.
+So that's why I like Ruby. Admittedly this was a rather one sided comparison - Ruby has plenty of issues and Python plenty of benefits that I neglected to mention. Perhaps that'll be the topic of a future post.
