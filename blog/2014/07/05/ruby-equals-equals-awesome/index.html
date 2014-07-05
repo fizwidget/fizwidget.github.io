@@ -91,11 +91,14 @@
   </header>
 
 
-<div class="entry-content"><p>Python and Ruby are the two main contenders in the general purpose, high level, dynamic language category. They&rsquo;re both awesome, but given the choice, I&rsquo;ll generally go with Ruby. This is my attempt at explaining why.</p>
+<div class="entry-content"><p>Python and Ruby are the two main contenders in the general purpose, high level, dynamic language category. They&rsquo;re both awesome, but given the choice, I&rsquo;ll generally go with Ruby&hellip;</p>
+
+<!-- more -->
+
 
 <h2>Ruby is consistently object-oriented</h2>
 
-<p>Pretty much everything we do in Ruby involves calling methods:</p>
+<p>Pretty much everything we do in Ruby involves calling methods on objects:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -116,7 +119,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>In Python though, we use a weird mixture of methods and functions:</p>
+<p>In Python though, we use a weird mixture of functions and methods:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -144,14 +147,14 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>In the equivalent Python code, we have to read some parts left-to-right and other parts inside-out (yuk!):</p>
+<p>With the equivalent Python code, we have to read some parts left-to-right and other parts inside-out (yuk!):</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='python'><span class='line'><span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="s">&quot;world hello&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span> <span class="c"># =&gt; &quot;hello world&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h2>Ruby&rsquo;s blocks are brilliant</h2>
+<h2>Blocks are brilliant</h2>
 
 <p>One of Ruby&rsquo;s best features is the really nice syntax it has for passing anonymous functions (&ldquo;blocks&rdquo;) as arguments to methods. Blocks are like Python&rsquo;s lambda expressions, only more elegant, more powerful, and more commonly used.</p>
 
@@ -162,11 +165,11 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">each</span>   <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">x</span> <span class="p">}</span>       <span class="c1"># Iteration using blocks.</span>
-</span><span class='line'><span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">)</span>   <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span> <span class="p">}</span>  <span class="c1"># Automatic resource management using blocks.</span>
-</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="p">}</span>        <span class="c1"># List processing using blocks.</span>
-</span><span class='line'><span class="n">data</span><span class="o">.</span><span class="n">sort_by</span>     <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="p">}</span>         <span class="c1"># Sorting using blocks.</span>
-</span><span class='line'><span class="n">files</span><span class="o">.</span><span class="n">lazy</span><span class="o">.</span><span class="n">map</span>   <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="no">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="p">}</span> <span class="c1"># Lazy-loading using blocks.</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">each</span>   <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">x</span> <span class="p">}</span>         <span class="c1"># Iteration using blocks.</span>
+</span><span class='line'><span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">)</span>   <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span> <span class="p">}</span>    <span class="c1"># Automatic resource management using blocks.</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="p">}</span>          <span class="c1"># List processing using blocks.</span>
+</span><span class='line'><span class="n">data</span><span class="o">.</span><span class="n">sort_by</span>     <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="p">}</span>           <span class="c1"># Sorting using blocks.</span>
+</span><span class='line'><span class="n">files</span><span class="o">.</span><span class="n">lazy</span><span class="o">.</span><span class="n">map</span>   <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="no">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="p">}</span>   <span class="c1"># Lazy-loading using blocks.</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -177,17 +180,26 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span> <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>          <span class="c"># Iteration using &#39;for&#39;.</span>
-</span><span class='line'><span class="k">with</span> <span class="n">f</span> <span class="k">as</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;n&#39;</span><span class="p">):</span> <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>  <span class="c"># Automatic resource management using &#39;with&#39;.</span>
-</span><span class='line'><span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">]</span>       <span class="c"># List processing using list comprehensions.</span>
-</span><span class='line'><span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>      <span class="c"># Sorting using &#39;lambda&#39;.</span>
-</span><span class='line'><span class="p">(</span><span class="n">Image</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">)</span>             <span class="c"># Lazy-loading using generator expressions.</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span> <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>            <span class="c"># Iteration using &#39;for&#39;.</span>
+</span><span class='line'><span class="k">with</span> <span class="n">f</span> <span class="k">as</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;n&#39;</span><span class="p">):</span> <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>    <span class="c"># Automatic resource management using &#39;with&#39;.</span>
+</span><span class='line'><span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">]</span>         <span class="c"># List processing using list comprehensions.</span>
+</span><span class='line'><span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>        <span class="c"># Sorting using &#39;lambda&#39;.</span>
+</span><span class='line'><span class="p">(</span><span class="n">Image</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">)</span>               <span class="c"># Lazy-loading using generator expressions.</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Needless to say, I prefer one flexible construct over multiple rigid constructs.</p>
+<p>One flexible construct > multiple rigid constructs in my book.</p>
 
-<h2>Not true</h2>
+<h2>Clear conditionals</h2>
+
+<p>In Python, pretty much everything with a length/size/magnitude of zero evaluates to false. This isn&rsquo;t just a quirk of the language, it&rsquo;s promoted as the &ldquo;Pythonic&rdquo; way of doing things.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">if</span> <span class="ow">not</span> <span class="n">some_collection</span><span class="p">:</span>
+</span><span class='line'>    <span class="c"># Whatever happened to &quot;explicit is better than implicit&quot;??</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>In Ruby, <code>false</code> and <code>nil</code> are the only values that evaluate to false. This means we have to explicitly ask objects questions:</p>
 
@@ -200,16 +212,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>In Python though, pretty much everything with a length/size/magnitude of zero evaluates to false. This isn&rsquo;t just a quirk of the language, it&rsquo;s promoted as the &ldquo;Pythonic&rdquo; way of doing things.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">if</span> <span class="ow">not</span> <span class="n">some_collection</span><span class="p">:</span>
-</span><span class='line'>    <span class="c"># Whatever happened to &quot;explicit is better than implicit&quot;??</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I think Ruby&rsquo;s approach is both more readable and less error-prone.</p>
+<p>Ruby&rsquo;s approach seems more readable and less error-prone.</p>
 
 <h2>Private parts</h2>
 
@@ -247,7 +250,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>And no, we don&rsquo;t need to write lots of boilerplate getter/setter methods in Ruby. Placing <code>attr_accessor :foo</code> in the class body will generate basic getters/setters for <code>foo</code>, which we can override later if necessary.</p>
+<p>And no, we don&rsquo;t need to write lots of boilerplate getter/setter code in Ruby. Placing <code>attr_accessor :foo</code> in the class body will generate basic getters/setters for <code>foo</code>, which we can expand on later if necessary.</p>
 
 <h2>Ruby is pretty</h2>
 
@@ -335,7 +338,7 @@
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/python/'>python</a>, <a class='category' href='/blog/categories/ruby/'>ruby,</a>
+    <a class='category' href='/blog/categories/python/'>python</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
   
 </span>
 
@@ -355,7 +358,7 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/07/04/nothing-but-single-argument-functions/" title="Previous Post: Nothing but Single-Argument Functions">&laquo; Nothing but Single-Argument Functions</a>
+        <a class="basic-alignment left" href="/blog/2014/07/05/functional-pipelines/" title="Previous Post: Functional Pipelines">&laquo; Functional Pipelines</a>
       
       
     </p>
@@ -381,11 +384,15 @@
       </li>
     
       <li class="post">
-        <a href="/blog/2014/07/04/nothing-but-single-argument-functions/">Nothing but Single-Argument Functions</a>
+        <a href="/blog/2014/07/05/functional-pipelines/">Functional Pipelines</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/07/03/nothing-but-functions/">Nothing but Functions</a>
+        <a href="/blog/2014/07/04/nothin-but-single-argument-functions/">Nothin' but Single-Argument Functions</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/03/nothin-but-functions/">Nothin' but Functions</a>
       </li>
     
   </ul>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Functional Programming | fizwidget]]></title>
-  <link href="http://fizwidget.github.io/blog/categories/functional-programming/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Turing Complete | fizwidget]]></title>
+  <link href="http://fizwidget.github.io/blog/categories/turing-complete/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
   <updated>2014-07-05T15:58:44+09:30</updated>
   <id>http://fizwidget.github.io/</id>
@@ -12,63 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Functional Pipelines]]></title>
-    <link href="http://fizwidget.github.io/blog/2014/07/05/functional-pipelines/"/>
-    <updated>2014-07-05T12:45:10+09:30</updated>
-    <id>http://fizwidget.github.io/blog/2014/07/05/functional-pipelines</id>
-    <content type="html"><![CDATA[<p>Let&rsquo;s say we&rsquo;ve got a list of student objects, and we want to get the ID numbers of the 10 youngest first-year students. Perhaps to send them a survey or something. I dunno.</p>
-
-<p>The point is, how do we do it? If you&rsquo;d asked me a few years ago, I probably would&rsquo;ve written something horrific like this:</p>
-
-<!-- more -->
-
-
-<p>``` ruby
-youngest_ids = []</p>
-
-<p>youngest_to_oldest = students.sort_by { |s| s.age }
-i = 0</p>
-
-<p>for student in youngest_to_oldest
-  if student.level == 1</p>
-
-<pre><code>youngest_ids.push(student.id_number)
-i += 1
-</code></pre>
-
-<p>  end
-  if i == 10</p>
-
-<pre><code>break
-</code></pre>
-
-<p>  end
-end</p>
-
-<p>return youngest_ids
-```</p>
-
-<p>Since then I&rsquo;ve been exposed to functional programming. I&rsquo;d now write something more like this:</p>
-
-<p>``` ruby
-students.select  { |s| s.level == 1 }</p>
-
-<pre><code>    .sort_by { |s| s.age }
-    .take(10)
-    .collect { |s| s.id_number }
-</code></pre>
-
-<p>```</p>
-
-<p>Words can&rsquo;t describe how much better this approach is. The main difference is that it&rsquo;s <em>declarative</em> rather than <em>imperative</em>. We&rsquo;re describing what we want, rather than spelling out exactly how to achieve it. This approach is easier to understand, easier to modify, less error-prone, more concise, and has the <em>potential</em> to perform better (the system could, for example, distribute the <code>select</code> operation over multiple cores).</p>
-
-<p>I&rsquo;ve used Ruby in the above example, but you can write this kind of code in a bunch of different languages (Python, C#, and Java 8 to name a few of the more popular ones). You might also notice similarities to SQL &ndash; that&rsquo;s no coincidence, as SQL is very much a declarative language.</p>
-
-<p>So go forth and be functional!</p>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[Nothin' but Single-Argument Functions]]></title>

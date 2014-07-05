@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Nothing but Functions - fizwidget</title>
+  <title>Nothin' but Functions - fizwidget</title>
   <meta name="author" content="James Russell">
 
   
-  <meta name="description" content="Imagine we&rsquo;re using a programming language that doesn&rsquo;t give us any way of defining data structures. No arrays, no structs, no objects, &hellip;">
+  <meta name="description" content="Imagine we&rsquo;re using a programming language that doesn&rsquo;t give us any way of defining data structures. No arrays, no structs, no classes. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizwidget.github.io/blog/2014/07/03/nothing-but-functions">
+  <link rel="canonical" href="http://fizwidget.github.io/blog/2014/07/03/nothin-but-functions">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="fizwidget" type="application/atom+xml">
@@ -68,7 +68,7 @@
   
   <header>
     
-      <h1 class="entry-title">Nothing but Functions</h1>
+      <h1 class="entry-title">Nothin' but Functions</h1>
     
     
       <p class="meta">
@@ -91,13 +91,16 @@
   </header>
 
 
-<div class="entry-content"><p>Imagine we&rsquo;re using a programming language that doesn&rsquo;t give us any way of defining data structures. No arrays, no structs, no objects, no classes. Nothing. All we can do is define and call functions.</p>
+<div class="entry-content"><p>Imagine we&rsquo;re using a programming language that doesn&rsquo;t give us any way of defining data structures. No arrays, no structs, no classes. Nothing. All we can do is define and call functions.</p>
 
 <p>We need to work with a collection of items. Are we screwed?</p>
 
+<!-- more -->
+
+
 <h2>A list made of functions</h2>
 
-<p>Turns out the answer is no. We can create linked lists, quite literally, out of functions. Let&rsquo;s jump straight into some code:</p>
+<p>Turns out the answer is no. We can create linked lists, quite literally, out of functions:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -123,7 +126,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>When we call <code>make_list</code>, it defines and returns a function called <code>node</code>. The <code>node</code> function accepts a single parameter and returns the head or the tail based on its value.</p>
+<p>When we call <code>make_list</code>, it returns an instance of the <code>node</code> function. This function accepts a single argument and returns the head or the tail based on the value of that argument.</p>
 
 <p>Let&rsquo;s give it a try:</p>
 
@@ -153,21 +156,23 @@
 </span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="n">items</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">))</span>
 </span><span class='line'>    <span class="n">print_list</span><span class="p">(</span><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">))</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">print_list</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="c"># Output: 1 2 3</span>
+</span><span class='line'><span class="n">print_list</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p>As you&rsquo;d expect, this prints out 1 2 3.</p>
+
 <h2>Closures</h2>
 
-<p>A closure is a function that can access the variables from the scope in which it was created. We can see an example of this in the code above: the <code>node</code> function accesses <code>head</code> and <code>tail</code>, which were passed into <code>make_list</code>. Each time we call <code>make_list</code>, a new instance of <code>node</code> is returned that references the new <code>head</code> and <code>tail</code> arguments.</p>
+<p>A closure is a function that has access to the variables from the scope it was defined in. The <code>node</code> function is a good example of this: it accesses <code>head</code> and <code>tail</code>. These variables aren&rsquo;t explicitly passed in as arguments, but <code>node</code> can access them all the same. Each time we call <code>make_list</code>, a new instance of <code>node</code> is returned that references the new <code>head</code> and <code>tail</code> arguments.</p>
 
 <p>Our list is nothing more than a chain of nested closures. When we call the outermost closure and pass it <code>"tail"</code> as an argument, it returns the next closure in the chain (i.e. the next node in the list).</p>
 
 <h2>Conclusion</h2>
 
-<p>We&rsquo;ve really just scratched the surface here &ndash; it&rsquo;s not hard to see that similar techniques could be used to define more complex data structures. We could even use functions to define <em>numbers</em> by representing the nth integer as a series of n nested functions.</p>
+<p>We&rsquo;ve really just scratched the surface here &ndash; it&rsquo;s not hard to see that we could create more complex data structures using similar techniques. We could even use functions to define <em>numbers</em> by representing the nth integer as a series of n nested functions.</p>
 
-<p>This is all hinting at a deeper fact: any language that allows you to define and apply functions is Turing-complete (meaning it lets you compute anything that can be computed). The <a href="http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html">lambda calculus</a> is the canonical example of such a language.</p>
+<p>This all hints at a deeper fact: if a language allows you to define and apply functions, that language is Turing-complete (meaning it lets you compute anything that can be computed). The <a href="http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html">lambda calculus</a> is the canonical example of such a language.</p>
 
 <p>Neat, huh?</p>
 </div>
@@ -197,7 +202,7 @@
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/closure/'>closure</a>, <a class='category' href='/blog/categories/functional-programming/'>functional programming</a>, <a class='category' href='/blog/categories/lambda-calculus/'>lambda calculus</a>, <a class='category' href='/blog/categories/linked-list/'>linked list</a>
+    <a class='category' href='/blog/categories/functional-programming/'>functional programming</a>, <a class='category' href='/blog/categories/lambda-calculus/'>lambda calculus</a>, <a class='category' href='/blog/categories/turing-complete/'>turing complete</a>
   
 </span>
 
@@ -206,7 +211,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizwidget.github.io/blog/2014/07/03/nothing-but-functions/" data-via="" data-counturl="http://fizwidget.github.io/blog/2014/07/03/nothing-but-functions/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizwidget.github.io/blog/2014/07/03/nothin-but-functions/" data-via="" data-counturl="http://fizwidget.github.io/blog/2014/07/03/nothin-but-functions/" >Tweet</a>
   
   
   
@@ -218,7 +223,7 @@
     <p class="meta">
       
       
-        <a class="basic-alignment right" href="/blog/2014/07/04/nothing-but-single-argument-functions/" title="Next Post: Nothing but Single-Argument Functions">Nothing but Single-Argument Functions &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2014/07/04/nothin-but-single-argument-functions/" title="Next Post: Nothin' but Single-Argument Functions">Nothin' but Single-Argument Functions &raquo;</a>
       
     </p>
   </footer>
@@ -243,11 +248,15 @@
       </li>
     
       <li class="post">
-        <a href="/blog/2014/07/04/nothing-but-single-argument-functions/">Nothing but Single-Argument Functions</a>
+        <a href="/blog/2014/07/05/functional-pipelines/">Functional Pipelines</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/07/03/nothing-but-functions/">Nothing but Functions</a>
+        <a href="/blog/2014/07/04/nothin-but-single-argument-functions/">Nothin' but Single-Argument Functions</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/03/nothin-but-functions/">Nothin' but Functions</a>
       </li>
     
   </ul>
@@ -276,8 +285,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://fizwidget.github.io/blog/2014/07/03/nothing-but-functions/';
-        var disqus_url = 'http://fizwidget.github.io/blog/2014/07/03/nothing-but-functions/';
+        var disqus_identifier = 'http://fizwidget.github.io/blog/2014/07/03/nothin-but-functions/';
+        var disqus_url = 'http://fizwidget.github.io/blog/2014/07/03/nothin-but-functions/';
         var disqus_script = 'embed.js';
       
     (function () {

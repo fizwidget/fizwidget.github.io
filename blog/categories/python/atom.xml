@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Python | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-05T11:43:51+09:30</updated>
+  <updated>2014-07-05T15:58:44+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -18,11 +18,14 @@
     <link href="http://fizwidget.github.io/blog/2014/07/05/ruby-equals-equals-awesome/"/>
     <updated>2014-07-05T22:10:23+09:30</updated>
     <id>http://fizwidget.github.io/blog/2014/07/05/ruby-equals-equals-awesome</id>
-    <content type="html"><![CDATA[<p>Python and Ruby are the two main contenders in the general purpose, high level, dynamic language category. They&rsquo;re both awesome, but given the choice, I&rsquo;ll generally go with Ruby. This is my attempt at explaining why.</p>
+    <content type="html"><![CDATA[<p>Python and Ruby are the two main contenders in the general purpose, high level, dynamic language category. They&rsquo;re both awesome, but given the choice, I&rsquo;ll generally go with Ruby&hellip;</p>
+
+<!-- more -->
+
 
 <h2>Ruby is consistently object-oriented</h2>
 
-<p>Pretty much everything we do in Ruby involves calling methods:</p>
+<p>Pretty much everything we do in Ruby involves calling methods on objects:</p>
 
 <p><code>ruby
 -42.abs               # =&gt; 42
@@ -33,8 +36,9 @@
 "foo".capitalize      # =&gt; "Foo"
 File.new("bar")       # =&gt; File object
 file.close            # Closes file object.
-</code>
-In Python though, we use a weird mixture of methods and functions:</p>
+</code></p>
+
+<p>In Python though, we use a weird mixture of functions and methods:</p>
 
 <p><code>python
 abs(-42)              # =&gt; 42
@@ -51,50 +55,43 @@ file.close()          # Closes file object.
 
 <p><code>ruby
 "world hello".split.reverse.join(' ') # =&gt; "hello world"
-</code>
-In the equivalent Python code, we have to read some parts left-to-right and other parts inside-out (yuk!):</p>
+</code></p>
+
+<p>With the equivalent Python code, we have to read some parts left-to-right and other parts inside-out (yuk!):</p>
 
 <p><code>python
 ' '.join(reversed("world hello".split())) # =&gt; "hello world"
 </code></p>
 
-<h2>Ruby&rsquo;s blocks are brilliant</h2>
+<h2>Blocks are brilliant</h2>
 
 <p>One of Ruby&rsquo;s best features is the really nice syntax it has for passing anonymous functions (&ldquo;blocks&rdquo;) as arguments to methods. Blocks are like Python&rsquo;s lambda expressions, only more elegant, more powerful, and more commonly used.</p>
 
 <p>Blocks allow us to perform many different tasks using a simple, uniform syntax. For example:</p>
 
 <p><code>ruby
-[1, 2, 3].each   { |x| puts x }       # Iteration using blocks.
-File.open('n')   { |f| puts f.read }  # Automatic resource management using blocks.
-[1, 2, 3].select { |x| x &gt; 2 }        # List processing using blocks.
-data.sort_by     { |x| x[1] }         # Sorting using blocks.
-files.lazy.map   { |f| Image.new(f) } # Lazy-loading using blocks.
+[1, 2, 3].each   { |x| puts x }         # Iteration using blocks.
+File.open('n')   { |f| puts f.read }    # Automatic resource management using blocks.
+[1, 2, 3].select { |x| x &gt; 2 }          # List processing using blocks.
+data.sort_by     { |x| x[1] }           # Sorting using blocks.
+files.lazy.map   { |f| Image.new(f) }   # Lazy-loading using blocks.
 </code></p>
 
 <p>In Python, we use no fewer than five different language constructs to perform the same tasks:</p>
 
 <p><code>python
-for x in [1, 2, 3]: print(x)          # Iteration using 'for'.
-with f as open('n'): print(f.read())  # Automatic resource management using 'with'.
-[x for x in [1, 2, 3] if x &gt; 2]       # List processing using list comprehensions.
-sorted(data, key=lambda x: x[1])      # Sorting using 'lambda'.
-(Image(f) for f in files)             # Lazy-loading using generator expressions.
+for x in [1, 2, 3]: print(x)            # Iteration using 'for'.
+with f as open('n'): print(f.read())    # Automatic resource management using 'with'.
+[x for x in [1, 2, 3] if x &gt; 2]         # List processing using list comprehensions.
+sorted(data, key=lambda x: x[1])        # Sorting using 'lambda'.
+(Image(f) for f in files)               # Lazy-loading using generator expressions.
 </code></p>
 
-<p>Needless to say, I prefer one flexible construct over multiple rigid constructs.</p>
+<p>One flexible construct > multiple rigid constructs in my book.</p>
 
-<h2>Not true</h2>
+<h2>Clear conditionals</h2>
 
-<p>In Ruby, <code>false</code> and <code>nil</code> are the only values that evaluate to false. This means we have to explicitly ask objects questions:</p>
-
-<p><code>ruby
-if some_collection.empty?
-  # Obvious meaning is obvious.
-end
-</code></p>
-
-<p>In Python though, pretty much everything with a length/size/magnitude of zero evaluates to false. This isn&rsquo;t just a quirk of the language, it&rsquo;s promoted as the &ldquo;Pythonic&rdquo; way of doing things.</p>
+<p>In Python, pretty much everything with a length/size/magnitude of zero evaluates to false. This isn&rsquo;t just a quirk of the language, it&rsquo;s promoted as the &ldquo;Pythonic&rdquo; way of doing things.</p>
 
 <p>``` python
 if not some_collection:</p>
@@ -104,7 +101,14 @@ if not some_collection:</p>
 
 <p>```</p>
 
-<p>I think Ruby&rsquo;s approach is both more readable and less error-prone.</p>
+<p>In Ruby, <code>false</code> and <code>nil</code> are the only values that evaluate to false. This means we have to explicitly ask objects questions:</p>
+
+<p><code>ruby
+if some_collection.empty?
+  # Obvious meaning is obvious.
+end
+</code>
+Ruby&rsquo;s approach seems more readable and less error-prone.</p>
 
 <h2>Private parts</h2>
 
@@ -135,7 +139,7 @@ class Foo:</p>
 <p>Foo().not_so_secret # => 42
 ```</p>
 
-<p>And no, we don&rsquo;t need to write lots of boilerplate getter/setter methods in Ruby. Placing <code>attr_accessor :foo</code> in the class body will generate basic getters/setters for <code>foo</code>, which we can override later if necessary.</p>
+<p>And no, we don&rsquo;t need to write lots of boilerplate getter/setter code in Ruby. Placing <code>attr_accessor :foo</code> in the class body will generate basic getters/setters for <code>foo</code>, which we can expand on later if necessary.</p>
 
 <h2>Ruby is pretty</h2>
 
