@@ -27,7 +27,7 @@ def make_list(head, tail):
   return node
 ```
 
-The `make_list` function accepts a `head` (the data item we want to store), and a `tail` (the rest of the linked list). We can use it to construct the list `[1, 2, 3]` as follows:
+The `make_list` function accepts a `head` (the data item we want to store), and a `tail` (the next node in the list). We can use it to construct the list `[1, 2, 3]` as follows:
 
 ``` python
 items = make_list(1, make_list(2, make_list(3, None)))
@@ -38,14 +38,17 @@ When we call `make_list`, it returns an instance of the `node` function. This fu
 Let's give it a try:
 
 ``` python
+items                         # => <function make_node.<locals>.node at 0x10987e598>
 items("head")                 # => 1
-items("tail")                 # => <function node at 0x107a82b18>
+items("tail")                 # => <function make_node.<locals>.node at 0x10987e620>
 items("tail")("head")         # => 2
 items("tail")("tail")("head") # => 3
 items("tail")("tail")("tail") # => None
 ```
 
-Neat! That's a bit tedious though, so let's write a function to print the list:
+Neat! We can see that both `items` and `items("tail")` are instances of the `node` function, and that `items("head")` returns the value we stored in the first node.
+
+Let's write a function to print the list:
 
 ``` python
 def print_list(items):
@@ -56,7 +59,7 @@ def print_list(items):
 print_list(items)
 ```
 
-As you'd expect, this prints out 1 2 3.
+As you'd expect, it prints out 1 2 3.
 
 Closures
 --------

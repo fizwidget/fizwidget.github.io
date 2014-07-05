@@ -45,7 +45,7 @@ One of the benefits of Ruby's consistency is that we can always read code left-t
 "world hello".split.reverse.join(' ') # => "hello world"
 ```
 
-With the equivalent Python code, we have to read some parts left-to-right and other parts inside-out (yuk!):
+Looking at the equivalent Python code, we have to read some parts left-to-right and other parts inside-out (yuk!):
 
 ``` python
 ' '.join(reversed("world hello".split())) # => "hello world"
@@ -76,7 +76,7 @@ sorted(data, key=lambda x: x[1])        # Sorting using 'lambda'.
 (Image(f) for f in files)               # Lazy-loading using generator expressions.
 ```
 
-One flexible construct > multiple rigid constructs in my book.
+In my book, one flexible construct > multiple rigid constructs.
 
 Clear conditionals
 ------------------
@@ -95,6 +95,7 @@ if some_collection.empty?
   # Obvious meaning is obvious.
 end
 ```
+
 Ruby's approach seems more readable and less error-prone.
 
 Private parts
@@ -122,7 +123,7 @@ class Foo:
 Foo().not_so_secret # => 42
 ```
 
-And no, we don't need to write lots of boilerplate getter/setter code in Ruby. Placing `attr_accessor :foo` in the class body will generate basic getters/setters for `foo`, which we can expand on later if necessary.
+And no, we don't need to write lots of boilerplate getter/setter code in Ruby. If we stick `attr_accessor :foo` in the class body, basic getters/setters are generated for `foo`. We can add validation logic later on if necessary.
 
 Ruby is pretty
 --------------
