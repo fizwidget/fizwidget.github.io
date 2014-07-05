@@ -105,7 +105,7 @@
 
 <div class="entry-content"><p>Let&rsquo;s say we&rsquo;ve got a list of student objects, and we want to get the ID numbers of the 10 youngest first-year students. Perhaps to send them a survey or something. I dunno.</p>
 
-<p>The point is, how do we do it? If you&rsquo;d asked me a few years ago, I probably would&rsquo;ve written something horrific like this:</p>
+<p>The point is, how do we do it? If you&rsquo;d asked me a few years ago, I probably would&rsquo;ve written something horrible like this:</p>
 
 <!-- more -->
 
@@ -147,7 +147,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Since then I&rsquo;ve been exposed to functional programming. I&rsquo;d now write something more like this:</p>
+<p>If you asked me today, I&rsquo;d write something more like this:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -160,9 +160,9 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Words can&rsquo;t describe how much better this approach is. The main difference is that it&rsquo;s <em>declarative</em> rather than <em>imperative</em>. We&rsquo;re describing what we want, rather than spelling out exactly how to achieve it. This approach is easier to understand, easier to modify, less error-prone, more concise, and has the <em>potential</em> to perform better (the system could, for example, distribute the <code>select</code> operation over multiple cores).</p>
+<p>This is a much, much better approach. The main difference is that it&rsquo;s <em>declarative</em> rather than <em>imperative</em>. We&rsquo;re describing what we want, rather than spelling out exactly how to achieve it. This approach is easier to understand, easier to modify, less error-prone, more concise, and has the <em>potential</em> to perform better (the system could, for example, distribute the <code>select</code> operation over multiple cores).</p>
 
-<p>I&rsquo;ve used Ruby in the above example, but you can write this kind of code in a bunch of different languages (Python, C#, and Java 8 to name a few of the more popular ones). You might also notice similarities to SQL &ndash; that&rsquo;s no coincidence, as SQL is very much a declarative language.</p>
+<p>I&rsquo;ve used Ruby in the above example, but you can write this kind of code in a bunch of different languages (Python, C#, and Java 8 to name a few of the more popular ones). You might also notice similarities to SQL. This is no coincidence: SQL is very much a declarative language.</p>
 
 <p>So go forth and be functional!</p>
 </div>

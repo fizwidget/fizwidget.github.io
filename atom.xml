@@ -4,7 +4,7 @@
   <title><![CDATA[fizwidget]]></title>
   <link href="http://fizwidget.github.io/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-05T16:08:11+09:30</updated>
+  <updated>2014-07-05T17:04:38+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -74,7 +74,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>With the equivalent Python code, we have to read some parts left-to-right and other parts inside-out (yuk!):</p>
+<p>Looking at the equivalent Python code, we have to read some parts left-to-right and other parts inside-out (yuk!):</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='python'><span class='line'><span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="s">&quot;world hello&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span> <span class="c"># =&gt; &quot;hello world&quot;</span>
@@ -115,7 +115,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>One flexible construct > multiple rigid constructs in my book.</p>
+<p>In my book, one flexible construct > multiple rigid constructs.</p>
 
 <h2>Clear conditionals</h2>
 
@@ -177,7 +177,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>And no, we don&rsquo;t need to write lots of boilerplate getter/setter code in Ruby. Placing <code>attr_accessor :foo</code> in the class body will generate basic getters/setters for <code>foo</code>, which we can expand on later if necessary.</p>
+<p>And no, we don&rsquo;t need to write lots of boilerplate getter/setter code in Ruby. If we stick <code>attr_accessor :foo</code> in the class body, basic getters/setters are generated for <code>foo</code>. We can add validation logic later on if necessary.</p>
 
 <h2>Ruby is pretty</h2>
 
@@ -248,7 +248,7 @@
     <id>http://fizwidget.github.io/blog/2014/07/05/functional-pipelines</id>
     <content type="html"><![CDATA[<p>Let&rsquo;s say we&rsquo;ve got a list of student objects, and we want to get the ID numbers of the 10 youngest first-year students. Perhaps to send them a survey or something. I dunno.</p>
 
-<p>The point is, how do we do it? If you&rsquo;d asked me a few years ago, I probably would&rsquo;ve written something horrific like this:</p>
+<p>The point is, how do we do it? If you&rsquo;d asked me a few years ago, I probably would&rsquo;ve written something horrible like this:</p>
 
 <!-- more -->
 
@@ -290,7 +290,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Since then I&rsquo;ve been exposed to functional programming. I&rsquo;d now write something more like this:</p>
+<p>If you asked me today, I&rsquo;d write something more like this:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -303,9 +303,9 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Words can&rsquo;t describe how much better this approach is. The main difference is that it&rsquo;s <em>declarative</em> rather than <em>imperative</em>. We&rsquo;re describing what we want, rather than spelling out exactly how to achieve it. This approach is easier to understand, easier to modify, less error-prone, more concise, and has the <em>potential</em> to perform better (the system could, for example, distribute the <code>select</code> operation over multiple cores).</p>
+<p>This is a much, much better approach. The main difference is that it&rsquo;s <em>declarative</em> rather than <em>imperative</em>. We&rsquo;re describing what we want, rather than spelling out exactly how to achieve it. This approach is easier to understand, easier to modify, less error-prone, more concise, and has the <em>potential</em> to perform better (the system could, for example, distribute the <code>select</code> operation over multiple cores).</p>
 
-<p>I&rsquo;ve used Ruby in the above example, but you can write this kind of code in a bunch of different languages (Python, C#, and Java 8 to name a few of the more popular ones). You might also notice similarities to SQL &ndash; that&rsquo;s no coincidence, as SQL is very much a declarative language.</p>
+<p>I&rsquo;ve used Ruby in the above example, but you can write this kind of code in a bunch of different languages (Python, C#, and Java 8 to name a few of the more popular ones). You might also notice similarities to SQL. This is no coincidence: SQL is very much a declarative language.</p>
 
 <p>So go forth and be functional!</p>
 ]]></content>
@@ -316,18 +316,18 @@
     <link href="http://fizwidget.github.io/blog/2014/07/04/nothin-but-single-argument-functions/"/>
     <updated>2014-07-04T09:17:13+09:30</updated>
     <id>http://fizwidget.github.io/blog/2014/07/04/nothin-but-single-argument-functions</id>
-    <content type="html"><![CDATA[<p>In a <a href="http://fizwidget.github.io/blog/2014/07/03/nothin-but-functions/">previous post</a>, I talked about the fact that functions are the only thing a language needs to be Turing-complete. In this post I&rsquo;m going to take it a little further: <em>single-argument functions</em> are all a language needs to be Turing-complete.</p>
+    <content type="html"><![CDATA[<p>In a <a href="http://fizwidget.github.io/blog/2014/07/03/nothin-but-functions/">previous post</a>, I talked about the fact that functions are the only thing a language needs to be Turing-complete. In this post I&rsquo;ll take it a little further: <em>single-argument functions</em> are all a language needs to be Turing-complete.</p>
 
-<p>At first glance that seems weird. Surely there are a <em>lot</em> of things this would prevent us from doing&hellip;adding two numbers, comparing two strings, searching for a number in a list, etc. These functions would all require more than one argument.</p>
+<p>At first glance this seems counter-intuitive. Surely there are a <em>lot</em> of things we wouldn&rsquo;t be able to do&hellip;adding two numbers, comparing two strings, searching for a number in a list, etc. These functions would all require more than one argument.</p>
 
 <!-- more -->
 
 
-<p>If you read my previous post, you might be thinking of passing a linked list to simulate multiple arguments. There&rsquo;s one problem with that though&hellip;the <code>make_list</code> function accepts two arguments. We can&rsquo;t use a function that takes multiple arguments to implement multi-argument functions. That&rsquo;d be assuming what we want to prove :P</p>
+<p>If you read my previous post on functions, you might be thinking we could pass around linked lists to simulate multiple arguments. There&rsquo;s one problem with that though&hellip;the <code>make_list</code> function accepts two arguments. We can&rsquo;t use a function that takes multiple arguments to implement multi-argument functions. That&rsquo;d be assuming what we want to prove :P</p>
 
 <h2>Closures come to the rescue</h2>
 
-<p>Remember closures? In addition to their arguments, they can access variables from their enclosing scope. We can use this ability to simulate multi-argument functions. Let&rsquo;s try writing a function function to concatenate two strings:</p>
+<p>Remember closures? In addition to their arguments, they can access variables from their enclosing scope. Turns out we can use this ability to simulate multi-argument functions. Let&rsquo;s try writing a function to concatenate two strings:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -344,15 +344,17 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Tada! The top-level <code>add</code> function returns another function, which will in-turn return the final result. The <code>concatenate_aux</code> function is a closure, meaning it still has access to <code>a</code> when we call it later on.</p>
+<p><em>(Ignore the fact that I&rsquo;ve implemented concatenation with <code>+</code>, which is essentially a multi-argument function. That&rsquo;s just for brevity.)</em></p>
 
-<p>So, we can decompose an n-argument function into a series of n nested single-argument functions (a process known as <a href="http://en.wikipedia.org/wiki/Currying">currying</a>).</p>
+<p>Tada! The top-level <code>concatenate</code> function returns another function, which returns the final result when called. The <code>concatenate_aux</code> function is a closure, meaning it still has access to <code>a</code> when we call it later on.</p>
 
-<p>This opens up an interesting possibility&hellip;</p>
+<p>So, we can decompose an n-argument function into a series of n nested single-argument functions (this is known as <a href="http://en.wikipedia.org/wiki/Currying">currying</a>).</p>
 
-<h2>Partial application</h2>
+<p>This opens up another interesting possibility&hellip;</p>
 
-<p>Typically, if a function takes n arguments, you have to call it with n arguments. Anything less results in an error. If we define functions like we did above though, we can <em>partially apply</em> them:</p>
+<h2>Partial function application</h2>
+
+<p>If a function takes n arguments, we usually have to call it with n arguments &ndash; anything less results in an error. If we define functions like we did above though, we can <em>partially apply</em> them:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">greet</span> <span class="o">=</span> <span class="n">concatenate</span><span class="p">(</span><span class="s">&quot;Hello, &quot;</span><span class="p">)</span>
@@ -368,11 +370,15 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p>This can actually be a useful technique. The way we did it above is kinda messy, but Python has a <a href="https://docs.python.org/3/library/functools.html#functools.partial">library function</a> to simplify the process. In some languages (e.g. Haskell) any function can be partially applied &ndash; no extra work needed.</p>
+
 <h2>Conclusion</h2>
 
-<p>So, single-argument functions are all a language needs to be Turing-complete. Neat, but not very practical.</p>
+<ul>
+<li>Single-argument functions are all a language needs to be Turing-complete.</li>
+<li>Partial function application lets us build specialised functions out of more general ones.</li>
+</ul>
 
-<p>Partial application on the other hand is actually a useful technique. Not so much in Python (due to the messy way we&rsquo;d have to define functions) but some languages make it really easy. In Haskell we can partially apply any function, without having to to through the hassle of defining them in a weird way. This lets us build specialised functions from more general ones.</p>
 ]]></content>
   </entry>
   
@@ -409,7 +415,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The <code>make_list</code> function accepts a <code>head</code> (the data item we want to store), and a <code>tail</code> (the rest of the linked list). We can use it to construct the list <code>[1, 2, 3]</code> as follows:</p>
+<p>The <code>make_list</code> function accepts a <code>head</code> (the data item we want to store), and a <code>tail</code> (the next node in the list). We can use it to construct the list <code>[1, 2, 3]</code> as follows:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">items</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="bp">None</span><span class="p">)))</span>
@@ -425,15 +431,19 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>                 <span class="c"># =&gt; 1</span>
-</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span>                 <span class="c"># =&gt; &lt;function node at 0x107a82b18&gt;</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">items</span>                         <span class="c"># =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10987e598&gt;</span>
+</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>                 <span class="c"># =&gt; 1</span>
+</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span>                 <span class="c"># =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10987e620&gt;</span>
 </span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>         <span class="c"># =&gt; 2</span>
 </span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;head&quot;</span><span class="p">)</span> <span class="c"># =&gt; 3</span>
 </span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span> <span class="c"># =&gt; None</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Neat! That&rsquo;s a bit tedious though, so let&rsquo;s write a function to print the list:</p>
+<p>Neat! We can see that both <code>items</code> and <code>items("tail")</code> are instances of the <code>node</code> function, and that <code>items("head")</code> returns the value we stored in the first node.</p>
+
+<p>Let&rsquo;s write a function to print the list:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -450,7 +460,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>As you&rsquo;d expect, this prints out 1 2 3.</p>
+<p>As you&rsquo;d expect, it prints out 1 2 3.</p>
 
 <h2>Closures</h2>
 

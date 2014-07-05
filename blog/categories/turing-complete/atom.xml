@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Turing Complete | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/turing-complete/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-05T16:08:11+09:30</updated>
+  <updated>2014-07-05T17:04:38+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -18,18 +18,18 @@
     <link href="http://fizwidget.github.io/blog/2014/07/04/nothin-but-single-argument-functions/"/>
     <updated>2014-07-04T09:17:13+09:30</updated>
     <id>http://fizwidget.github.io/blog/2014/07/04/nothin-but-single-argument-functions</id>
-    <content type="html"><![CDATA[<p>In a <a href="/blog/2014/07/03/nothin-but-functions/">previous post</a>, I talked about the fact that functions are the only thing a language needs to be Turing-complete. In this post I&rsquo;m going to take it a little further: <em>single-argument functions</em> are all a language needs to be Turing-complete.</p>
+    <content type="html"><![CDATA[<p>In a <a href="/blog/2014/07/03/nothin-but-functions/">previous post</a>, I talked about the fact that functions are the only thing a language needs to be Turing-complete. In this post I&rsquo;ll take it a little further: <em>single-argument functions</em> are all a language needs to be Turing-complete.</p>
 
-<p>At first glance that seems weird. Surely there are a <em>lot</em> of things this would prevent us from doing&hellip;adding two numbers, comparing two strings, searching for a number in a list, etc. These functions would all require more than one argument.</p>
+<p>At first glance this seems counter-intuitive. Surely there are a <em>lot</em> of things we wouldn&rsquo;t be able to do&hellip;adding two numbers, comparing two strings, searching for a number in a list, etc. These functions would all require more than one argument.</p>
 
 <!-- more -->
 
 
-<p>If you read my previous post, you might be thinking of passing a linked list to simulate multiple arguments. There&rsquo;s one problem with that though&hellip;the <code>make_list</code> function accepts two arguments. We can&rsquo;t use a function that takes multiple arguments to implement multi-argument functions. That&rsquo;d be assuming what we want to prove :P</p>
+<p>If you read my previous post on functions, you might be thinking we could pass around linked lists to simulate multiple arguments. There&rsquo;s one problem with that though&hellip;the <code>make_list</code> function accepts two arguments. We can&rsquo;t use a function that takes multiple arguments to implement multi-argument functions. That&rsquo;d be assuming what we want to prove :P</p>
 
 <h2>Closures come to the rescue</h2>
 
-<p>Remember closures? In addition to their arguments, they can access variables from their enclosing scope. We can use this ability to simulate multi-argument functions. Let&rsquo;s try writing a function function to concatenate two strings:</p>
+<p>Remember closures? In addition to their arguments, they can access variables from their enclosing scope. Turns out we can use this ability to simulate multi-argument functions. Let&rsquo;s try writing a function to concatenate two strings:</p>
 
 <p>``` python
 def concatenate(a):
@@ -43,15 +43,17 @@ def concatenate(a):
 <p>concatenate(&ldquo;Hello&rdquo;)(&ldquo;World&rdquo;) # => &ldquo;HelloWorld&rdquo;
 ```</p>
 
-<p>Tada! The top-level <code>add</code> function returns another function, which will in-turn return the final result. The <code>concatenate_aux</code> function is a closure, meaning it still has access to <code>a</code> when we call it later on.</p>
+<p><em>(Ignore the fact that I&rsquo;ve implemented concatenation with <code>+</code>, which is essentially a multi-argument function. That&rsquo;s just for brevity.)</em></p>
 
-<p>So, we can decompose an n-argument function into a series of n nested single-argument functions (a process known as <a href="http://en.wikipedia.org/wiki/Currying">currying</a>).</p>
+<p>Tada! The top-level <code>concatenate</code> function returns another function, which returns the final result when called. The <code>concatenate_aux</code> function is a closure, meaning it still has access to <code>a</code> when we call it later on.</p>
 
-<p>This opens up an interesting possibility&hellip;</p>
+<p>So, we can decompose an n-argument function into a series of n nested single-argument functions (this is known as <a href="http://en.wikipedia.org/wiki/Currying">currying</a>).</p>
 
-<h2>Partial application</h2>
+<p>This opens up another interesting possibility&hellip;</p>
 
-<p>Typically, if a function takes n arguments, you have to call it with n arguments. Anything less results in an error. If we define functions like we did above though, we can <em>partially apply</em> them:</p>
+<h2>Partial function application</h2>
+
+<p>If a function takes n arguments, we usually have to call it with n arguments &ndash; anything less results in an error. If we define functions like we did above though, we can <em>partially apply</em> them:</p>
 
 <p><code>python
 greet = concatenate("Hello, ")
@@ -64,11 +66,15 @@ greet("Fred") # =&gt; "Hello, Fred"
 greet("Bob")  # =&gt; "Hello, Bob"
 </code></p>
 
+<p>This can actually be a useful technique. The way we did it above is kinda messy, but Python has a <a href="https://docs.python.org/3/library/functools.html#functools.partial">library function</a> to simplify the process. In some languages (e.g. Haskell) any function can be partially applied &ndash; no extra work needed.</p>
+
 <h2>Conclusion</h2>
 
-<p>So, single-argument functions are all a language needs to be Turing-complete. Neat, but not very practical.</p>
+<ul>
+<li>Single-argument functions are all a language needs to be Turing-complete.</li>
+<li>Partial function application lets us build specialised functions out of more general ones.</li>
+</ul>
 
-<p>Partial application on the other hand is actually a useful technique. Not so much in Python (due to the messy way we&rsquo;d have to define functions) but some languages make it really easy. In Haskell we can partially apply any function, without having to to through the hassle of defining them in a weird way. This lets us build specialised functions from more general ones.</p>
 ]]></content>
   </entry>
   
@@ -101,7 +107,7 @@ elif operation == "tail":
 <p>  return node
 ```</p>
 
-<p>The <code>make_list</code> function accepts a <code>head</code> (the data item we want to store), and a <code>tail</code> (the rest of the linked list). We can use it to construct the list <code>[1, 2, 3]</code> as follows:</p>
+<p>The <code>make_list</code> function accepts a <code>head</code> (the data item we want to store), and a <code>tail</code> (the next node in the list). We can use it to construct the list <code>[1, 2, 3]</code> as follows:</p>
 
 <p><code>python
 items = make_list(1, make_list(2, make_list(3, None)))
@@ -112,14 +118,17 @@ items = make_list(1, make_list(2, make_list(3, None)))
 <p>Let&rsquo;s give it a try:</p>
 
 <p><code>python
+items                         # =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10987e598&gt;
 items("head")                 # =&gt; 1
-items("tail")                 # =&gt; &lt;function node at 0x107a82b18&gt;
+items("tail")                 # =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10987e620&gt;
 items("tail")("head")         # =&gt; 2
 items("tail")("tail")("head") # =&gt; 3
 items("tail")("tail")("tail") # =&gt; None
 </code></p>
 
-<p>Neat! That&rsquo;s a bit tedious though, so let&rsquo;s write a function to print the list:</p>
+<p>Neat! We can see that both <code>items</code> and <code>items("tail")</code> are instances of the <code>node</code> function, and that <code>items("head")</code> returns the value we stored in the first node.</p>
+
+<p>Let&rsquo;s write a function to print the list:</p>
 
 <p>``` python
 def print_list(items):
@@ -132,7 +141,7 @@ print_list(items("tail"))
 <p>print_list(items)
 ```</p>
 
-<p>As you&rsquo;d expect, this prints out 1 2 3.</p>
+<p>As you&rsquo;d expect, it prints out 1 2 3.</p>
 
 <h2>Closures</h2>
 

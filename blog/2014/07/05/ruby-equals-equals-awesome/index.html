@@ -159,7 +159,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>With the equivalent Python code, we have to read some parts left-to-right and other parts inside-out (yuk!):</p>
+<p>Looking at the equivalent Python code, we have to read some parts left-to-right and other parts inside-out (yuk!):</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='python'><span class='line'><span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="s">&quot;world hello&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span> <span class="c"># =&gt; &quot;hello world&quot;</span>
@@ -200,7 +200,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>One flexible construct > multiple rigid constructs in my book.</p>
+<p>In my book, one flexible construct > multiple rigid constructs.</p>
 
 <h2>Clear conditionals</h2>
 
@@ -262,7 +262,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>And no, we don&rsquo;t need to write lots of boilerplate getter/setter code in Ruby. Placing <code>attr_accessor :foo</code> in the class body will generate basic getters/setters for <code>foo</code>, which we can expand on later if necessary.</p>
+<p>And no, we don&rsquo;t need to write lots of boilerplate getter/setter code in Ruby. If we stick <code>attr_accessor :foo</code> in the class body, basic getters/setters are generated for <code>foo</code>. We can add validation logic later on if necessary.</p>
 
 <h2>Ruby is pretty</h2>
 

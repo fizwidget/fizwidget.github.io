@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Lambda Calculus | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/lambda-calculus/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-05T16:08:11+09:30</updated>
+  <updated>2014-07-05T17:04:38+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -42,7 +42,7 @@ elif operation == "tail":
 <p>  return node
 ```</p>
 
-<p>The <code>make_list</code> function accepts a <code>head</code> (the data item we want to store), and a <code>tail</code> (the rest of the linked list). We can use it to construct the list <code>[1, 2, 3]</code> as follows:</p>
+<p>The <code>make_list</code> function accepts a <code>head</code> (the data item we want to store), and a <code>tail</code> (the next node in the list). We can use it to construct the list <code>[1, 2, 3]</code> as follows:</p>
 
 <p><code>python
 items = make_list(1, make_list(2, make_list(3, None)))
@@ -53,14 +53,17 @@ items = make_list(1, make_list(2, make_list(3, None)))
 <p>Let&rsquo;s give it a try:</p>
 
 <p><code>python
+items                         # =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10987e598&gt;
 items("head")                 # =&gt; 1
-items("tail")                 # =&gt; &lt;function node at 0x107a82b18&gt;
+items("tail")                 # =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10987e620&gt;
 items("tail")("head")         # =&gt; 2
 items("tail")("tail")("head") # =&gt; 3
 items("tail")("tail")("tail") # =&gt; None
 </code></p>
 
-<p>Neat! That&rsquo;s a bit tedious though, so let&rsquo;s write a function to print the list:</p>
+<p>Neat! We can see that both <code>items</code> and <code>items("tail")</code> are instances of the <code>node</code> function, and that <code>items("head")</code> returns the value we stored in the first node.</p>
+
+<p>Let&rsquo;s write a function to print the list:</p>
 
 <p>``` python
 def print_list(items):
@@ -73,7 +76,7 @@ print_list(items("tail"))
 <p>print_list(items)
 ```</p>
 
-<p>As you&rsquo;d expect, this prints out 1 2 3.</p>
+<p>As you&rsquo;d expect, it prints out 1 2 3.</p>
 
 <h2>Closures</h2>
 

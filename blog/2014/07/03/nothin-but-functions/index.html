@@ -131,7 +131,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The <code>make_list</code> function accepts a <code>head</code> (the data item we want to store), and a <code>tail</code> (the rest of the linked list). We can use it to construct the list <code>[1, 2, 3]</code> as follows:</p>
+<p>The <code>make_list</code> function accepts a <code>head</code> (the data item we want to store), and a <code>tail</code> (the next node in the list). We can use it to construct the list <code>[1, 2, 3]</code> as follows:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">items</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="bp">None</span><span class="p">)))</span>
@@ -147,15 +147,19 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>                 <span class="c"># =&gt; 1</span>
-</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span>                 <span class="c"># =&gt; &lt;function node at 0x107a82b18&gt;</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">items</span>                         <span class="c"># =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10987e598&gt;</span>
+</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>                 <span class="c"># =&gt; 1</span>
+</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span>                 <span class="c"># =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10987e620&gt;</span>
 </span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>         <span class="c"># =&gt; 2</span>
 </span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;head&quot;</span><span class="p">)</span> <span class="c"># =&gt; 3</span>
 </span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span> <span class="c"># =&gt; None</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Neat! That&rsquo;s a bit tedious though, so let&rsquo;s write a function to print the list:</p>
+<p>Neat! We can see that both <code>items</code> and <code>items("tail")</code> are instances of the <code>node</code> function, and that <code>items("head")</code> returns the value we stored in the first node.</p>
+
+<p>Let&rsquo;s write a function to print the list:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -172,7 +176,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>As you&rsquo;d expect, this prints out 1 2 3.</p>
+<p>As you&rsquo;d expect, it prints out 1 2 3.</p>
 
 <h2>Closures</h2>
 
