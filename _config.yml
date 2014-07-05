@@ -3,9 +3,9 @@
 # ----------------------- #
 
 url: http://fizwidget.github.io
-title: My Octopress Blog
-subtitle: A blogging framework for hackers.
-author: Your Name
+title: fizwidget
+subtitle: misc thoughts on programming and cs
+author: James Russell
 simple_search: https://www.google.com/search
 description:
 
@@ -91,11 +91,11 @@ delicious_user:
 delicious_count: 3
 
 # Disqus Comments
-disqus_short_name:
+disqus_short_name: fiz-on-code
 disqus_show_comment_count: false
 
 # Google Analytics
-google_analytics_tracking_id:
+google_analytics_tracking_id: UA-52561227-1
 
 # Facebook Like
-facebook_like: false
+facebook_like: true
