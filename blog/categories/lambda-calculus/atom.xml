@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Lambda Calculus | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/lambda-calculus/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-06T13:23:07+09:30</updated>
+  <updated>2014-07-06T14:01:50+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -27,7 +27,24 @@
 
 <h2>A list made of functions</h2>
 
-<p>Turns out the answer is no. We can create linked lists, quite literally, out of functions:</p>
+<p>Turns out the answer is no. We can create linked lists, quite literally, out of functions. We can construct one of these lists using a <code>make_list</code> function as follows:</p>
+
+<p><code>python
+items = make_list(1, make_list(2, make_list(3, None)))
+</code></p>
+
+<p>Let&rsquo;s take a look at the list it returns:</p>
+
+<p><code>python
+items                           # =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10987e598&gt;
+items("head")                   # =&gt; 1
+items("tail")                   # =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10987e620&gt;
+items("tail")("head")           # =&gt; 2
+items("tail")("tail")("head")   # =&gt; 3
+items("tail")("tail")("tail")   # =&gt; None
+</code></p>
+
+<p>What is this black magic?</p>
 
 <p>``` python
 def make_list(head, tail):
@@ -44,22 +61,9 @@ elif operation == "tail":
 
 <p>The <code>make_list</code> function accepts a <code>head</code> (the data item we want to store), and a <code>tail</code> (the next node in the list). We can use it to construct the list <code>[1, 2, 3]</code> as follows:</p>
 
-<p><code>python
-items = make_list(1, make_list(2, make_list(3, None)))
-</code></p>
-
 <p>When we call <code>make_list</code>, it returns an instance of the <code>node</code> function. This function accepts a single argument and returns the head or the tail based on the value of that argument.</p>
 
 <p>Let&rsquo;s give it a try:</p>
-
-<p><code>python
-items                         # =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10987e598&gt;
-items("head")                 # =&gt; 1
-items("tail")                 # =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10987e620&gt;
-items("tail")("head")         # =&gt; 2
-items("tail")("tail")("head") # =&gt; 3
-items("tail")("tail")("tail") # =&gt; None
-</code></p>
 
 <p>Neat! We can see that both <code>items</code> and <code>items("tail")</code> are instances of the <code>node</code> function, and that <code>items("head")</code> returns the value we stored in the first node.</p>
 

@@ -112,7 +112,31 @@
 
 <h2>A list made of functions</h2>
 
-<p>Turns out the answer is no. We can create linked lists, quite literally, out of functions:</p>
+<p>Turns out the answer is no. We can create linked lists, quite literally, out of functions. We can construct one of these lists using a <code>make_list</code> function as follows:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">items</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="bp">None</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Let&rsquo;s take a look at the list it returns:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">items</span>                           <span class="c"># =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10987e598&gt;</span>
+</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>                   <span class="c"># =&gt; 1</span>
+</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span>                   <span class="c"># =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10987e620&gt;</span>
+</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>           <span class="c"># =&gt; 2</span>
+</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>   <span class="c"># =&gt; 3</span>
+</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span>   <span class="c"># =&gt; None</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>What is this black magic?</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -133,29 +157,9 @@
 
 <p>The <code>make_list</code> function accepts a <code>head</code> (the data item we want to store), and a <code>tail</code> (the next node in the list). We can use it to construct the list <code>[1, 2, 3]</code> as follows:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">items</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="bp">None</span><span class="p">)))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
 <p>When we call <code>make_list</code>, it returns an instance of the <code>node</code> function. This function accepts a single argument and returns the head or the tail based on the value of that argument.</p>
 
 <p>Let&rsquo;s give it a try:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">items</span>                         <span class="c"># =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10987e598&gt;</span>
-</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>                 <span class="c"># =&gt; 1</span>
-</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span>                 <span class="c"># =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10987e620&gt;</span>
-</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>         <span class="c"># =&gt; 2</span>
-</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;head&quot;</span><span class="p">)</span> <span class="c"># =&gt; 3</span>
-</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span> <span class="c"># =&gt; None</span>
-</span></code></pre></td></tr></table></div></figure>
-
 
 <p>Neat! We can see that both <code>items</code> and <code>items("tail")</code> are instances of the <code>node</code> function, and that <code>items("head")</code> returns the value we stored in the first node.</p>
 
@@ -239,7 +243,7 @@
     <p class="meta">
       
       
-        <a class="basic-alignment right" href="/blog/2014/07/06/implicit-futures/" title="Next Post: Implicit Futures">Implicit Futures &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2014/07/06/implementing-implicit-futures/" title="Next Post: Implementing Implicit Futures">Implementing Implicit Futures &raquo;</a>
       
     </p>
   </footer>
@@ -260,7 +264,7 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/07/06/implicit-futures/">Implicit Futures</a>
+        <a href="/blog/2014/07/06/implementing-implicit-futures/">Implementing Implicit Futures</a>
       </li>
     
       <li class="post">

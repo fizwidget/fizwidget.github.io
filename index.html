@@ -83,7 +83,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/07/06/implicit-futures/">Implicit Futures</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/07/06/implementing-implicit-futures/">Implementing Implicit Futures</a></h1>
     
     
       <p class="meta">
@@ -221,7 +221,7 @@
 
 <p>We could make the call to <code>future</code> block until the result is available, but that&rsquo;d defeat the whole point of the exercise &ndash; we&rsquo;re trying to <em>prevent</em> unnecessary blocking.</p>
 
-<p>We can&rsquo;t magically replace <code>a</code> with the result when it becomes available. As far as I&rsquo;m aware, you simply can&rsquo;t do that in any mainstream programming language. What we <em>can</em> do is make <code>a</code> a transparent proxy object &ndash; that it, make it forward all method calls onto the result (blocking if necessary until the result becomes available). At first glance this might also seem impossible, but in dynamic languages like Ruby or Python, it&rsquo;s actually pretty easy.</p>
+<p>As far as I&rsquo;m aware, there&rsquo;s no way of magically replacing <code>a</code> with the result when it becomes available. Instead, what we <em>can</em> do is make <code>a</code> a transparent proxy object &ndash; that it, make it forward all method calls to the result (blocking if necessary until the result becomes available). At first glance this might also seem impossible, but in dynamic languages like Ruby and Python, it&rsquo;s actually pretty easy.</p>
 
 <p>In Ruby, you can define a special method called <code>method_missing</code>. As the name suggests, this method is automatically called when an object can&rsquo;t respond to a method. Normally this would cause a runtime error, but if <code>method_missing</code> is defined, it&rsquo;ll be called instead. Let&rsquo;s check it out:</p>
 
@@ -262,7 +262,7 @@
 </span><span class='line'>wat</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Now let&rsquo;s try something slightly less useless:</p>
+<p>Let&rsquo;s try something slightly less useless:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -291,7 +291,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The result: <code>42</code>. The proxy forwarded the call to <code>*</code> to the integer it was wrapping (&hellip;numbers are objects in Ruby by the way).</p>
+<p>The result: <code>42</code>. The proxy used the forwarded the call to <code>*</code> to the integer it was wrapping (&hellip;numbers are objects in Ruby by the way). Note that the <code>send</code> method allows to you to dynamically call an arbitrary method by specifing the method&rsquo;s name.</p>
 
 <p>We&rsquo;ve now got everything we need to implement implicit futures. The final code is ridiculously simple:</p>
 
@@ -505,7 +505,7 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/07/06/implicit-futures/">Implicit Futures</a>
+        <a href="/blog/2014/07/06/implementing-implicit-futures/">Implementing Implicit Futures</a>
       </li>
     
       <li class="post">
