@@ -4,6 +4,7 @@ title: "Yay Ruby!"
 date: 2014-07-05 22:10:23 +0930
 comments: true
 categories: [ruby, python]
+published: false
 ---
 
 Python and Ruby are the two heavyweights in the general-purpose, high-level, dynamic language category. They're both awesome languages, but given the choice, I'll generally go with Ruby. This is my attempt at explaining why.

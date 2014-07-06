@@ -6,9 +6,9 @@ comments: true
 categories: [functional programming, lambda calculus]
 ---
 
-Imagine we're using a programming language that doesn't give us any way of defining data structures. No arrays, no structs, no classes. Nothing. All we can do is define and call functions.
+Imagine we're using a programming language that doesn't give us any way of defining data structures. No arrays, no tuples, no structs, no classes. Nothing. All we can do is define and call functions.
 
-We need to work with a collection of items. Are we screwed?
+Now imagine we need to work with a collection of items. Are we screwed?
 
 <!-- more -->
 

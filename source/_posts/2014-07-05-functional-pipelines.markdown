@@ -4,6 +4,7 @@ title: "Functional Pipelines"
 date: 2014-07-05 12:45:10 +0930
 comments: true
 categories: [functional programming]
+published: false
 ---
 
 Let's say we've got a list of student objects, and we want to get the ID numbers of the 10 youngest first-year students. Perhaps to send them a survey or something. I dunno.

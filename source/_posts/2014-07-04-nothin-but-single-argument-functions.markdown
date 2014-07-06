@@ -4,6 +4,7 @@ title: "Nothin' but Single-Argument Functions"
 date: 2014-07-04 09:17:13 +0930
 comments: true
 categories: [functional programming, partial application]
+published: false
 ---
 
 In a [previous post](/blog/2014/07/03/nothin-but-functions/), I talked about the fact that functions are the only thing a language needs to be Turing-complete. In this post I'll take it a little further: *single-argument functions* are all a language needs to be Turing-complete.
