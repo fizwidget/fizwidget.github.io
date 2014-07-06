@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Futures | fizwidget]]></title>
+  <link href="http://fizwidget.github.io/blog/categories/futures/atom.xml" rel="self"/>
+  <link href="http://fizwidget.github.io/"/>
+  <updated>2014-07-06T10:14:53+09:30</updated>
+  <id>http://fizwidget.github.io/</id>
+  <author>
+    <name><![CDATA[James Russell]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Implicit Futures]]></title>
+    <link href="http://fizwidget.github.io/blog/2014/07/06/implicit-futures/"/>
+    <updated>2014-07-06T02:20:05+09:30</updated>
+    <id>http://fizwidget.github.io/blog/2014/07/06/implicit-futures</id>
+    <content type="html"><![CDATA[<p>It&rsquo;s so damn easy in Ruby.</p>
+
+<p>``` ruby
+class Future
+  def initialize(&amp;block)</p>
+
+<pre><code>@thread = Thread.new { block.call }
+</code></pre>
+
+<p>  end</p>
+
+<p>  def method_missing(name, *args, &amp;block)</p>
+
+<pre><code>@thread.value.send(name, *args, &amp;block)
+</code></pre>
+
+<p>  end
+end
+```</p>
+]]></content>
+  </entry>
+  
+</feed>

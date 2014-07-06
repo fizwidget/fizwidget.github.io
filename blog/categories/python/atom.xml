@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Python | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-05T17:35:02+09:30</updated>
+  <updated>2014-07-06T10:14:53+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -14,11 +14,11 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Ruby == Awesome]]></title>
-    <link href="http://fizwidget.github.io/blog/2014/07/05/ruby-equals-equals-awesome/"/>
+    <title type="html"><![CDATA[Yay Ruby!]]></title>
+    <link href="http://fizwidget.github.io/blog/2014/07/05/yay-ruby/"/>
     <updated>2014-07-05T22:10:23+09:30</updated>
-    <id>http://fizwidget.github.io/blog/2014/07/05/ruby-equals-equals-awesome</id>
-    <content type="html"><![CDATA[<p>Python and Ruby are the two main contenders in the general purpose, high level, dynamic language category. They&rsquo;re both awesome, but given the choice, I&rsquo;ll generally go with Ruby&hellip;</p>
+    <id>http://fizwidget.github.io/blog/2014/07/05/yay-ruby</id>
+    <content type="html"><![CDATA[<p>Python and Ruby are the two heavyweights in the general-purpose, high-level, dynamic language category. They&rsquo;re both awesome languages, but given the choice, I&rsquo;ll generally go with Ruby. This is my attempt at explaining why.</p>
 
 <!-- more -->
 
@@ -38,7 +38,7 @@ File.new("bar")       # =&gt; File object
 file.close            # Closes file object.
 </code></p>
 
-<p>In Python though, we use a weird mixture of functions and methods:</p>
+<p>In Python though, we use a mixture of functions and methods:</p>
 
 <p><code>python
 abs(-42)              # =&gt; 42
@@ -51,17 +51,19 @@ open("bar")           # =&gt; File object
 file.close()          # Closes file object.
 </code></p>
 
-<p>One of the benefits of Ruby&rsquo;s consistency is that we can always read code left-to-right:</p>
+<p>One of the benefits of Ruby&rsquo;s consistency is that we can always read it left-to-right:</p>
 
 <p><code>ruby
 "world hello".split.reverse.join(' ') # =&gt; "hello world"
 </code></p>
 
-<p>Looking at the equivalent Python code, we have to read some parts left-to-right and other parts inside-out (yuk!):</p>
+<p>The equivalent Python code is much harder to make sense of:</p>
 
 <p><code>python
 ' '.join(reversed("world hello".split())) # =&gt; "hello world"
 </code></p>
+
+<p>We have to read some parts left-to-right and other parts inside-out. Yuk.</p>
 
 <h2>Blocks are brilliant</h2>
 
@@ -74,7 +76,7 @@ file.close()          # Closes file object.
 File.open('n')   { |f| puts f.read }    # Automatic resource management using blocks.
 [1, 2, 3].select { |x| x &gt; 2 }          # List processing using blocks.
 data.sort_by     { |x| x[1] }           # Sorting using blocks.
-files.lazy.map   { |f| Image.new(f) }   # Lazy-loading using blocks.
+files.lazy.map   { |f| Image.new(f) }   # Lazy evaluation using blocks.
 </code></p>
 
 <p>In Python, we use no fewer than five different language constructs to perform the same tasks:</p>
@@ -84,14 +86,14 @@ for x in [1, 2, 3]: print(x)            # Iteration using 'for'.
 with f as open('n'): print(f.read())    # Automatic resource management using 'with'.
 [x for x in [1, 2, 3] if x &gt; 2]         # List processing using list comprehensions.
 sorted(data, key=lambda x: x[1])        # Sorting using 'lambda'.
-(Image(f) for f in files)               # Lazy-loading using generator expressions.
+(Image(f) for f in files)               # Lazy evaluation using generator expressions.
 </code></p>
 
 <p>In my book, one flexible construct > multiple rigid constructs.</p>
 
 <h2>Clear conditionals</h2>
 
-<p>In Python, pretty much everything with a length/size/magnitude of zero evaluates to false. This isn&rsquo;t just a quirk of the language, it&rsquo;s promoted as the &ldquo;Pythonic&rdquo; way of doing things.</p>
+<p>Pretty much everything with a length/size/magnitude of zero evaluates to false in Python. This isn&rsquo;t just a quirk of the language, it&rsquo;s promoted in <a href="http://legacy.python.org/dev/peps/pep-0008/">PEP 8</a> as the Pythonic way of doing things.</p>
 
 <p>``` python
 if not some_collection:</p>
@@ -109,7 +111,7 @@ if some_collection.empty?
 end
 </code></p>
 
-<p>Ruby&rsquo;s approach seems more readable and less error-prone.</p>
+<p>Ruby&rsquo;s approach seems both more readable and less error-prone.</p>
 
 <h2>Private parts</h2>
 
@@ -139,8 +141,6 @@ class Foo:</p>
 
 <p>Foo().not_so_secret # => 42
 ```</p>
-
-<p>And no, we don&rsquo;t need to write lots of boilerplate getter/setter code in Ruby. If we stick <code>attr_accessor :foo</code> in the class body, basic getters/setters are generated for <code>foo</code>. We can add validation logic later on if necessary.</p>
 
 <h2>Ruby is pretty</h2>
 
@@ -184,11 +184,11 @@ def __str__(self):
 print(person)
 ```</p>
 
-<p>The Ruby code feels less &ldquo;noisy&rdquo; to me &ndash; it has fewer parentheses, colons, and underscores, and it doesn&rsquo;t need to specify <code>object</code>, <code>self</code>, or <code>return</code>.</p>
+<p>The Ruby code has fewer parentheses, colons, and underscores, and doesn&rsquo;t need to specify <code>object</code>, <code>self</code>, or <code>return</code>.</p>
 
 <h2>Conclusion</h2>
 
-<p>So yay for Ruby? Admittedly this was a very one sided comparison &ndash; Ruby has plenty of issues that I neglected to mention. Perhaps that&rsquo;ll be the topic of a future post.</p>
+<p>So that&rsquo;s why I like Ruby. Admittedly this was a rather one sided comparison &ndash; Ruby has plenty of issues and Python plenty of benefits that I neglected to mention. Perhaps that&rsquo;ll be the topic of a future post.</p>
 ]]></content>
   </entry>
   

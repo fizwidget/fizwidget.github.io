@@ -141,23 +141,23 @@
 
 <h2>Partial function application</h2>
 
-<p>If a function takes n arguments, we usually have to call it with n arguments &ndash; anything less results in an error. If we define functions like we did above though, we can <em>partially apply</em> them:</p>
+<p>If a function takes n arguments, we usually have to call it with n arguments (anything less results in an error). If we define functions like we did above though, we can <em>partially apply</em> them:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">greet</span> <span class="o">=</span> <span class="n">concatenate</span><span class="p">(</span><span class="s">&quot;Hello, &quot;</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">greet</span> <span class="o">=</span> <span class="n">concatenate</span><span class="p">(</span><span class="s">&quot;Hello &quot;</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>We&rsquo;ve now got a new function (an instance of <code>concatenate_aux</code>) that will prepend <code>"Hello, "</code> to whatever we give it:</p>
+<p>We&rsquo;ve now got a new function (an instance of <code>concatenate_aux</code>) that will prepend <code>"Hello "</code> to whatever we give it:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">greet</span><span class="p">(</span><span class="s">&quot;Fred&quot;</span><span class="p">)</span> <span class="c"># =&gt; &quot;Hello, Fred&quot;</span>
-</span><span class='line'><span class="n">greet</span><span class="p">(</span><span class="s">&quot;Bob&quot;</span><span class="p">)</span>  <span class="c"># =&gt; &quot;Hello, Bob&quot;</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">greet</span><span class="p">(</span><span class="s">&quot;Fred&quot;</span><span class="p">)</span> <span class="c"># =&gt; &quot;Hello Fred&quot;</span>
+</span><span class='line'><span class="n">greet</span><span class="p">(</span><span class="s">&quot;Bob&quot;</span><span class="p">)</span>  <span class="c"># =&gt; &quot;Hello Bob&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>This can actually be a useful technique. The way we did it above is kinda messy, but Python has a <a href="https://docs.python.org/3/library/functools.html#functools.partial">library function</a> to simplify the process. In some languages (e.g. Haskell) any function can be partially applied &ndash; no extra work needed.</p>
+<p>This can actually be a useful technique. The way we did it above is kinda messy, but Python has a <a href="https://docs.python.org/3/library/functools.html#functools.partial">library function</a> that simplifies the process. Some languages make things even easier, and allow any function to be partially applied without us having to do any extra work. Partial application is quite common in Haskell for example.</p>
 
 <h2>Conclusion</h2>
 
@@ -193,7 +193,7 @@
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/functional-programming/'>functional programming</a>, <a class='category' href='/blog/categories/partial-application/'>partial application</a>, <a class='category' href='/blog/categories/turing-complete/'>turing complete</a>
+    <a class='category' href='/blog/categories/functional-programming/'>functional programming</a>, <a class='category' href='/blog/categories/partial-application/'>partial application</a>
   
 </span>
 
@@ -237,7 +237,11 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/07/05/ruby-equals-equals-awesome/">Ruby == Awesome</a>
+        <a href="/blog/2014/07/06/implicit-futures/">Implicit Futures</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/05/yay-ruby/">Yay Ruby!</a>
       </li>
     
       <li class="post">

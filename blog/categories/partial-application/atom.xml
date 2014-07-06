@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Partial Application | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/partial-application/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-05T17:35:02+09:30</updated>
+  <updated>2014-07-06T10:14:53+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -53,20 +53,20 @@ def concatenate(a):
 
 <h2>Partial function application</h2>
 
-<p>If a function takes n arguments, we usually have to call it with n arguments &ndash; anything less results in an error. If we define functions like we did above though, we can <em>partially apply</em> them:</p>
+<p>If a function takes n arguments, we usually have to call it with n arguments (anything less results in an error). If we define functions like we did above though, we can <em>partially apply</em> them:</p>
 
 <p><code>python
-greet = concatenate("Hello, ")
+greet = concatenate("Hello ")
 </code></p>
 
-<p>We&rsquo;ve now got a new function (an instance of <code>concatenate_aux</code>) that will prepend <code>"Hello, "</code> to whatever we give it:</p>
+<p>We&rsquo;ve now got a new function (an instance of <code>concatenate_aux</code>) that will prepend <code>"Hello "</code> to whatever we give it:</p>
 
 <p><code>python
-greet("Fred") # =&gt; "Hello, Fred"
-greet("Bob")  # =&gt; "Hello, Bob"
+greet("Fred") # =&gt; "Hello Fred"
+greet("Bob")  # =&gt; "Hello Bob"
 </code></p>
 
-<p>This can actually be a useful technique. The way we did it above is kinda messy, but Python has a <a href="https://docs.python.org/3/library/functools.html#functools.partial">library function</a> to simplify the process. In some languages (e.g. Haskell) any function can be partially applied &ndash; no extra work needed.</p>
+<p>This can actually be a useful technique. The way we did it above is kinda messy, but Python has a <a href="https://docs.python.org/3/library/functools.html#functools.partial">library function</a> that simplifies the process. Some languages make things even easier, and allow any function to be partially applied without us having to do any extra work. Partial application is quite common in Haskell for example.</p>
 
 <h2>Conclusion</h2>
 

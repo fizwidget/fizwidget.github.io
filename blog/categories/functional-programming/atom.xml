@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Functional Programming | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/functional-programming/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-05T17:35:02+09:30</updated>
+  <updated>2014-07-06T10:14:53+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -62,9 +62,9 @@ students.select  { |s| s.level == 1 }</p>
 
 <p>```</p>
 
-<p>This is a much, much better approach. The main difference is that it&rsquo;s <em>declarative</em> rather than <em>imperative</em>. We&rsquo;re describing what we want, rather than spelling out exactly how to achieve it. This approach is easier to understand, easier to modify, less error-prone, more concise, and has the <em>potential</em> to perform better (the system could, for example, distribute the <code>select</code> operation over multiple cores).</p>
+<p>This is a much, much better approach. The main difference is that it&rsquo;s declarative rather than imperative. We&rsquo;re describing what we want, rather than spelling out exactly how to achieve it. This approach is easier to understand, easier to modify, less error-prone, more concise, and has the <em>potential</em> to perform better (the system could, for example, distribute the <code>select</code> operation over multiple cores).</p>
 
-<p>I&rsquo;ve used Ruby in the above example, but you can write this kind of code in a bunch of different languages (Python, C#, and Java 8 to name a few of the more popular ones). You might also notice similarities to SQL. This is no coincidence: SQL is very much a declarative language.</p>
+<p>I&rsquo;ve used Ruby in the above example, but you can write this kind of code in many different languages (Python, C#, and Java 8 to name a few of the more popular ones). You might also notice similarities to SQL &ndash; this is no coincidence, as SQL is also a declarative language.</p>
 
 <p>So go forth and be functional!</p>
 ]]></content>
@@ -110,20 +110,20 @@ def concatenate(a):
 
 <h2>Partial function application</h2>
 
-<p>If a function takes n arguments, we usually have to call it with n arguments &ndash; anything less results in an error. If we define functions like we did above though, we can <em>partially apply</em> them:</p>
+<p>If a function takes n arguments, we usually have to call it with n arguments (anything less results in an error). If we define functions like we did above though, we can <em>partially apply</em> them:</p>
 
 <p><code>python
-greet = concatenate("Hello, ")
+greet = concatenate("Hello ")
 </code></p>
 
-<p>We&rsquo;ve now got a new function (an instance of <code>concatenate_aux</code>) that will prepend <code>"Hello, "</code> to whatever we give it:</p>
+<p>We&rsquo;ve now got a new function (an instance of <code>concatenate_aux</code>) that will prepend <code>"Hello "</code> to whatever we give it:</p>
 
 <p><code>python
-greet("Fred") # =&gt; "Hello, Fred"
-greet("Bob")  # =&gt; "Hello, Bob"
+greet("Fred") # =&gt; "Hello Fred"
+greet("Bob")  # =&gt; "Hello Bob"
 </code></p>
 
-<p>This can actually be a useful technique. The way we did it above is kinda messy, but Python has a <a href="https://docs.python.org/3/library/functools.html#functools.partial">library function</a> to simplify the process. In some languages (e.g. Haskell) any function can be partially applied &ndash; no extra work needed.</p>
+<p>This can actually be a useful technique. The way we did it above is kinda messy, but Python has a <a href="https://docs.python.org/3/library/functools.html#functools.partial">library function</a> that simplifies the process. Some languages make things even easier, and allow any function to be partially applied without us having to do any extra work. Partial application is quite common in Haskell for example.</p>
 
 <h2>Conclusion</h2>
 
@@ -208,7 +208,7 @@ print_list(items("tail"))
 
 <h2>Conclusion</h2>
 
-<p>We&rsquo;ve really just scratched the surface here &ndash; it&rsquo;s not hard to see that we could create more complex data structures using similar techniques. We could even use functions to define <em>numbers</em> by representing the nth integer as a series of n nested functions.</p>
+<p>We&rsquo;ve really just scratched the surface here &ndash; it&rsquo;s not hard to see that we could create more complex data structures using similar techniques. We could even use functions to define <em>numbers</em> by representing the <em>n</em>th integer as a series of <em>n</em> nested functions.</p>
 
 <p>This all hints at a deeper fact: if a language allows you to define and apply functions, that language is Turing-complete (meaning it lets you compute anything that can be computed). The <a href="http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html">lambda calculus</a> is the canonical example of such a language.</p>
 

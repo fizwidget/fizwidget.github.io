@@ -4,7 +4,7 @@
   <title><![CDATA[fizwidget]]></title>
   <link href="http://fizwidget.github.io/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-05T17:35:02+09:30</updated>
+  <updated>2014-07-06T10:14:53+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -14,11 +14,41 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Ruby == Awesome]]></title>
-    <link href="http://fizwidget.github.io/blog/2014/07/05/ruby-equals-equals-awesome/"/>
+    <title type="html"><![CDATA[Implicit Futures]]></title>
+    <link href="http://fizwidget.github.io/blog/2014/07/06/implicit-futures/"/>
+    <updated>2014-07-06T02:20:05+09:30</updated>
+    <id>http://fizwidget.github.io/blog/2014/07/06/implicit-futures</id>
+    <content type="html"><![CDATA[<p>It&rsquo;s so damn easy in Ruby.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Future</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@thread</span> <span class="o">=</span> <span class="no">Thread</span><span class="o">.</span><span class="n">new</span> <span class="p">{</span> <span class="n">block</span><span class="o">.</span><span class="n">call</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">method_missing</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@thread</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Yay Ruby!]]></title>
+    <link href="http://fizwidget.github.io/blog/2014/07/05/yay-ruby/"/>
     <updated>2014-07-05T22:10:23+09:30</updated>
-    <id>http://fizwidget.github.io/blog/2014/07/05/ruby-equals-equals-awesome</id>
-    <content type="html"><![CDATA[<p>Python and Ruby are the two main contenders in the general purpose, high level, dynamic language category. They&rsquo;re both awesome, but given the choice, I&rsquo;ll generally go with Ruby&hellip;</p>
+    <id>http://fizwidget.github.io/blog/2014/07/05/yay-ruby</id>
+    <content type="html"><![CDATA[<p>Python and Ruby are the two heavyweights in the general-purpose, high-level, dynamic language category. They&rsquo;re both awesome languages, but given the choice, I&rsquo;ll generally go with Ruby. This is my attempt at explaining why.</p>
 
 <!-- more -->
 
@@ -46,7 +76,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>In Python though, we use a weird mixture of functions and methods:</p>
+<p>In Python though, we use a mixture of functions and methods:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -67,19 +97,21 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>One of the benefits of Ruby&rsquo;s consistency is that we can always read code left-to-right:</p>
+<p>One of the benefits of Ruby&rsquo;s consistency is that we can always read it left-to-right:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="s2">&quot;world hello&quot;</span><span class="o">.</span><span class="n">split</span><span class="o">.</span><span class="n">reverse</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span> <span class="c1"># =&gt; &quot;hello world&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Looking at the equivalent Python code, we have to read some parts left-to-right and other parts inside-out (yuk!):</p>
+<p>The equivalent Python code is much harder to make sense of:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='python'><span class='line'><span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="s">&quot;world hello&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span> <span class="c"># =&gt; &quot;hello world&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
+
+<p>We have to read some parts left-to-right and other parts inside-out. Yuk.</p>
 
 <h2>Blocks are brilliant</h2>
 
@@ -96,7 +128,7 @@
 </span><span class='line'><span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">)</span>   <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span> <span class="p">}</span>    <span class="c1"># Automatic resource management using blocks.</span>
 </span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="p">}</span>          <span class="c1"># List processing using blocks.</span>
 </span><span class='line'><span class="n">data</span><span class="o">.</span><span class="n">sort_by</span>     <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="p">}</span>           <span class="c1"># Sorting using blocks.</span>
-</span><span class='line'><span class="n">files</span><span class="o">.</span><span class="n">lazy</span><span class="o">.</span><span class="n">map</span>   <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="no">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="p">}</span>   <span class="c1"># Lazy-loading using blocks.</span>
+</span><span class='line'><span class="n">files</span><span class="o">.</span><span class="n">lazy</span><span class="o">.</span><span class="n">map</span>   <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="no">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="p">}</span>   <span class="c1"># Lazy evaluation using blocks.</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -111,7 +143,7 @@
 </span><span class='line'><span class="k">with</span> <span class="n">f</span> <span class="k">as</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;n&#39;</span><span class="p">):</span> <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>    <span class="c"># Automatic resource management using &#39;with&#39;.</span>
 </span><span class='line'><span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">]</span>         <span class="c"># List processing using list comprehensions.</span>
 </span><span class='line'><span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>        <span class="c"># Sorting using &#39;lambda&#39;.</span>
-</span><span class='line'><span class="p">(</span><span class="n">Image</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">)</span>               <span class="c"># Lazy-loading using generator expressions.</span>
+</span><span class='line'><span class="p">(</span><span class="n">Image</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">)</span>               <span class="c"># Lazy evaluation using generator expressions.</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -119,7 +151,7 @@
 
 <h2>Clear conditionals</h2>
 
-<p>In Python, pretty much everything with a length/size/magnitude of zero evaluates to false. This isn&rsquo;t just a quirk of the language, it&rsquo;s promoted as the &ldquo;Pythonic&rdquo; way of doing things.</p>
+<p>Pretty much everything with a length/size/magnitude of zero evaluates to false in Python. This isn&rsquo;t just a quirk of the language, it&rsquo;s promoted in <a href="http://legacy.python.org/dev/peps/pep-0008/">PEP 8</a> as the Pythonic way of doing things.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -139,7 +171,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Ruby&rsquo;s approach seems more readable and less error-prone.</p>
+<p>Ruby&rsquo;s approach seems both more readable and less error-prone.</p>
 
 <h2>Private parts</h2>
 
@@ -176,8 +208,6 @@
 </span><span class='line'><span class="n">Foo</span><span class="p">()</span><span class="o">.</span><span class="n">not_so_secret</span> <span class="c"># =&gt; 42</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<p>And no, we don&rsquo;t need to write lots of boilerplate getter/setter code in Ruby. If we stick <code>attr_accessor :foo</code> in the class body, basic getters/setters are generated for <code>foo</code>. We can add validation logic later on if necessary.</p>
 
 <h2>Ruby is pretty</h2>
 
@@ -233,11 +263,11 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The Ruby code feels less &ldquo;noisy&rdquo; to me &ndash; it has fewer parentheses, colons, and underscores, and it doesn&rsquo;t need to specify <code>object</code>, <code>self</code>, or <code>return</code>.</p>
+<p>The Ruby code has fewer parentheses, colons, and underscores, and doesn&rsquo;t need to specify <code>object</code>, <code>self</code>, or <code>return</code>.</p>
 
 <h2>Conclusion</h2>
 
-<p>So yay for Ruby? Admittedly this was a very one sided comparison &ndash; Ruby has plenty of issues that I neglected to mention. Perhaps that&rsquo;ll be the topic of a future post.</p>
+<p>So that&rsquo;s why I like Ruby. Admittedly this was a rather one sided comparison &ndash; Ruby has plenty of issues and Python plenty of benefits that I neglected to mention. Perhaps that&rsquo;ll be the topic of a future post.</p>
 ]]></content>
   </entry>
   
@@ -303,9 +333,9 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>This is a much, much better approach. The main difference is that it&rsquo;s <em>declarative</em> rather than <em>imperative</em>. We&rsquo;re describing what we want, rather than spelling out exactly how to achieve it. This approach is easier to understand, easier to modify, less error-prone, more concise, and has the <em>potential</em> to perform better (the system could, for example, distribute the <code>select</code> operation over multiple cores).</p>
+<p>This is a much, much better approach. The main difference is that it&rsquo;s declarative rather than imperative. We&rsquo;re describing what we want, rather than spelling out exactly how to achieve it. This approach is easier to understand, easier to modify, less error-prone, more concise, and has the <em>potential</em> to perform better (the system could, for example, distribute the <code>select</code> operation over multiple cores).</p>
 
-<p>I&rsquo;ve used Ruby in the above example, but you can write this kind of code in a bunch of different languages (Python, C#, and Java 8 to name a few of the more popular ones). You might also notice similarities to SQL. This is no coincidence: SQL is very much a declarative language.</p>
+<p>I&rsquo;ve used Ruby in the above example, but you can write this kind of code in many different languages (Python, C#, and Java 8 to name a few of the more popular ones). You might also notice similarities to SQL &ndash; this is no coincidence, as SQL is also a declarative language.</p>
 
 <p>So go forth and be functional!</p>
 ]]></content>
@@ -354,23 +384,23 @@
 
 <h2>Partial function application</h2>
 
-<p>If a function takes n arguments, we usually have to call it with n arguments &ndash; anything less results in an error. If we define functions like we did above though, we can <em>partially apply</em> them:</p>
+<p>If a function takes n arguments, we usually have to call it with n arguments (anything less results in an error). If we define functions like we did above though, we can <em>partially apply</em> them:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">greet</span> <span class="o">=</span> <span class="n">concatenate</span><span class="p">(</span><span class="s">&quot;Hello, &quot;</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">greet</span> <span class="o">=</span> <span class="n">concatenate</span><span class="p">(</span><span class="s">&quot;Hello &quot;</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>We&rsquo;ve now got a new function (an instance of <code>concatenate_aux</code>) that will prepend <code>"Hello, "</code> to whatever we give it:</p>
+<p>We&rsquo;ve now got a new function (an instance of <code>concatenate_aux</code>) that will prepend <code>"Hello "</code> to whatever we give it:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">greet</span><span class="p">(</span><span class="s">&quot;Fred&quot;</span><span class="p">)</span> <span class="c"># =&gt; &quot;Hello, Fred&quot;</span>
-</span><span class='line'><span class="n">greet</span><span class="p">(</span><span class="s">&quot;Bob&quot;</span><span class="p">)</span>  <span class="c"># =&gt; &quot;Hello, Bob&quot;</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">greet</span><span class="p">(</span><span class="s">&quot;Fred&quot;</span><span class="p">)</span> <span class="c"># =&gt; &quot;Hello Fred&quot;</span>
+</span><span class='line'><span class="n">greet</span><span class="p">(</span><span class="s">&quot;Bob&quot;</span><span class="p">)</span>  <span class="c"># =&gt; &quot;Hello Bob&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>This can actually be a useful technique. The way we did it above is kinda messy, but Python has a <a href="https://docs.python.org/3/library/functools.html#functools.partial">library function</a> to simplify the process. In some languages (e.g. Haskell) any function can be partially applied &ndash; no extra work needed.</p>
+<p>This can actually be a useful technique. The way we did it above is kinda messy, but Python has a <a href="https://docs.python.org/3/library/functools.html#functools.partial">library function</a> that simplifies the process. Some languages make things even easier, and allow any function to be partially applied without us having to do any extra work. Partial application is quite common in Haskell for example.</p>
 
 <h2>Conclusion</h2>
 
@@ -470,7 +500,7 @@
 
 <h2>Conclusion</h2>
 
-<p>We&rsquo;ve really just scratched the surface here &ndash; it&rsquo;s not hard to see that we could create more complex data structures using similar techniques. We could even use functions to define <em>numbers</em> by representing the nth integer as a series of n nested functions.</p>
+<p>We&rsquo;ve really just scratched the surface here &ndash; it&rsquo;s not hard to see that we could create more complex data structures using similar techniques. We could even use functions to define <em>numbers</em> by representing the <em>n</em>th integer as a series of <em>n</em> nested functions.</p>
 
 <p>This all hints at a deeper fact: if a language allows you to define and apply functions, that language is Turing-complete (meaning it lets you compute anything that can be computed). The <a href="http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html">lambda calculus</a> is the canonical example of such a language.</p>
 

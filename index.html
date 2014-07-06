@@ -9,7 +9,16 @@
   <meta name="author" content="James Russell">
 
   
-  <meta name="description" content="Python and Ruby are the two main contenders in the general purpose, high level, dynamic language category. They&rsquo;re both awesome, but given the &hellip;">
+  <meta name="description" content="It&rsquo;s so damn easy in Ruby. 1
+2
+3
+4
+5
+6
+7
+8
+9
+class Future def initialize(&amp;block) @thread = Thread.new { block.call } end def method_missing &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -83,7 +92,64 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/07/05/ruby-equals-equals-awesome/">Ruby == Awesome</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/07/06/implicit-futures/">Implicit Futures</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-06T02:20:05+09:30" pubdate data-updated="true">Jul 6<sup>th</sup>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>It&rsquo;s so damn easy in Ruby.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Future</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@thread</span> <span class="o">=</span> <span class="no">Thread</span><span class="o">.</span><span class="n">new</span> <span class="p">{</span> <span class="n">block</span><span class="o">.</span><span class="n">call</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">method_missing</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@thread</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/07/05/yay-ruby/">Yay Ruby!</a></h1>
     
     
       <p class="meta">
@@ -106,13 +172,13 @@
   </header>
 
 
-  <div class="entry-content"><p>Python and Ruby are the two main contenders in the general purpose, high level, dynamic language category. They&rsquo;re both awesome, but given the choice, I&rsquo;ll generally go with Ruby&hellip;</p>
+  <div class="entry-content"><p>Python and Ruby are the two heavyweights in the general-purpose, high-level, dynamic language category. They&rsquo;re both awesome languages, but given the choice, I&rsquo;ll generally go with Ruby. This is my attempt at explaining why.</p>
 
 </div>
   
   
     <footer>
-      <a rel="full-article" href="/blog/2014/07/05/ruby-equals-equals-awesome/">Read on &rarr;</a>
+      <a rel="full-article" href="/blog/2014/07/05/yay-ruby/">Read on &rarr;</a>
     </footer>
   
 
@@ -261,7 +327,11 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/07/05/ruby-equals-equals-awesome/">Ruby == Awesome</a>
+        <a href="/blog/2014/07/06/implicit-futures/">Implicit Futures</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/05/yay-ruby/">Yay Ruby!</a>
       </li>
     
       <li class="post">
