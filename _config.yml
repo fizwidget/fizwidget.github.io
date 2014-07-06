@@ -4,10 +4,10 @@
 
 url: http://fizwidget.github.io
 title: fizwidget
-subtitle: misc thoughts on programming and cs
+subtitle: "cat /dev/random"
 author: James Russell
 simple_search: https://www.google.com/search
-description:
+description: "Miscellaneous thoughts on programming and computer science."
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
