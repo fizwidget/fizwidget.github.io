@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-06T10:16:33+09:30</updated>
+  <updated>2014-07-06T13:23:07+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -18,7 +18,156 @@
     <link href="http://fizwidget.github.io/blog/2014/07/06/implicit-futures/"/>
     <updated>2014-07-06T02:20:05+09:30</updated>
     <id>http://fizwidget.github.io/blog/2014/07/06/implicit-futures</id>
-    <content type="html"><![CDATA[<p>It&rsquo;s so damn easy in Ruby.</p>
+    <content type="html"><![CDATA[<p>Implicit futures&hellip;sounds like an album title or something. In the world of CS though, it&rsquo;s a concurrency construct. Let&rsquo;s say we need to perform some time-consuming tasks (downloading webpages, performing expensive computations, loading data from disk, &hellip;), and we want to execute them as efficiently as possible. This means we want to run them in parallel, and we don&rsquo;t want to block the rest of the program while they&rsquo;re running.</p>
+
+<p>This is our starting point (the language is Ruby):</p>
+
+<p>``` ruby</p>
+
+<h1>Calculate results.</h1>
+
+<p>a = expensive_call_1
+b = expensive_call_2
+c = expensive_call_3</p>
+
+<h1>Do other stuff.</h1>
+
+<p>stuff</p>
+
+<h1>Use results.</h1>
+
+<p>puts a + (b * c)
+```</p>
+
+<p>&hellip;this will perfom horribly. The expensive calls will execute sequentually, meaning the CPU might be forced to sit twiddling its thumbs while a network request finishes. Additionally, <code>stuff</code> won&rsquo;t get to start running until after all three calls have finished, even though it doesn&rsquo;t depend on any of their results.</p>
+
+<p>This is what we&rsquo;re working towards:</p>
+
+<p>``` ruby</p>
+
+<h1>Calculate results.</h1>
+
+<p>a = future { expensive_call_1 }
+b = future { expensive_call_2 }
+c = future { expensive_call_3 }</p>
+
+<h1>Do other stuff.</h1>
+
+<p>stuff</p>
+
+<h1>Use results.</h1>
+
+<p>puts a + (b * c)
+```</p>
+
+<p>If you&rsquo;re unfamiliar with Ruby&rsquo;s block syntax, <code>foo { puts "Hi!" }</code> passes an anonymous function that prints &ldquo;Hi!&rdquo; into the method <code>foo</code> (equivalent to <code>foo(lambda: print("Hi!))</code> in Python). We need to pass in our computations like this because we don&rsquo;t want them to execute immediately &ndash; we want <code>future</code> to execute them in the background.</p>
+
+<p>This allows the three calls to execute in parallel, and it frees up the system to perform other tasks in the meantime. If the results have all been calculated by the time we reach the final statement, the final result will immediately be calculated and printed. If any of them haven&rsquo;t yet finished though, the code will block until they do.</p>
+
+<p>Perfect! How on Earth can we implement this though&hellip;?</p>
+
+<h2>Implementation attempt #1</h2>
+
+<p>It turns out Ruby&rsquo;s <code>Thread</code> class can do most of the work for us. A quick primer&hellip;</p>
+
+<p><code>ruby
+t = Thread.new { 2 + (10 * 4) }
+puts t.value
+</code></p>
+
+<p>Calling <code>Thread.new { some_code }</code> spawns a thread that executes <code>some_code</code>. Calling <code>t.value</code> will block until the thread finishes and return the thread&rsquo;s result. The thread&rsquo;s result in this case is 2 + (10 * 4) = 42. So, the above code executes <code>2 + (10 * 4)</code> on a background thread, then prints <code>42</code> after the thread has finished running.</p>
+
+<p>This <em>almost</em> gets us where we want to be. Let&rsquo;s try rewriting our original code using the <code>Thread</code> class:</p>
+
+<p>``` ruby</p>
+
+<h1>Calculate results.</h1>
+
+<p>a = Thread.new { expensive_call_1 }
+b = Thread.new { expensive_call_2 }
+c = Thread.new { expensive_call_3 }</p>
+
+<h1>Do other stuff.</h1>
+
+<p>stuff</p>
+
+<h1>Use results.</h1>
+
+<p>puts a.value + (b.value * c.value)
+```</p>
+
+<p>This is actually an <em>explicit</em> future. It&rsquo;s explicit because <code>a</code>, <code>b</code>, and <code>c</code> aren&rsquo;t the results of our computations &ndash; they&rsquo;re <code>Thread</code> objects, and we need to call <code>value</code> on them to get the results. Ideally we want <code>a</code>, <code>b</code>, and <code>c</code> to <em>actually be</em> the results (or at least appear as though they are).</p>
+
+<p>This might seem like a minor distinction, and in the example I&rsquo;ve given, it really doesn&rsquo;t make much difference. In a more realistic example though, we might want to pass <code>a</code> into a function, or return it as a result. Things now start getting messy &ndash; every piece of code that touches <code>a</code> needs to be aware of the fact that it&rsquo;s not <em>actually</em> the result, it&rsquo;s an object that we call <code>value</code> on to ask for the result. This is why <em>implicit</em> futures are so nice &ndash; the code that uses them can be blissfully ignorant of the fact that they&rsquo;re executing asynchronously. When code tries to use an implicit future, it will behave as though it were the result (blocking if necessary until the result becomes available).</p>
+
+<p>So, back to the drawing board.</p>
+
+<h2>Implementation attempt #2</h2>
+
+<p>To summarise the problem we&rsquo;re dealing with, we want <code>a</code> in the following code to behave as though it were the result of the computation:</p>
+
+<p><code>ruby
+a = future { some_computation }
+</code></p>
+
+<p>We could make the call to <code>future</code> block until the result is available, but that&rsquo;d defeat the whole point of the exercise &ndash; we&rsquo;re trying to <em>prevent</em> unnecessary blocking.</p>
+
+<p>We can&rsquo;t magically replace <code>a</code> with the result when it becomes available. As far as I&rsquo;m aware, you simply can&rsquo;t do that in any mainstream programming language. What we <em>can</em> do is make <code>a</code> a transparent proxy object &ndash; that it, make it forward all method calls onto the result (blocking if necessary until the result becomes available). At first glance this might also seem impossible, but in dynamic languages like Ruby or Python, it&rsquo;s actually pretty easy.</p>
+
+<p>In Ruby, you can define a special method called <code>method_missing</code>. As the name suggests, this method is automatically called when an object can&rsquo;t respond to a method. Normally this would cause a runtime error, but if <code>method_missing</code> is defined, it&rsquo;ll be called instead. Let&rsquo;s check it out:</p>
+
+<p>``` ruby
+class Useless
+  def method_missing(name, *args, &amp;block)</p>
+
+<pre><code>puts "Yay, someone called '#{name}' on me!"
+puts "I was given these arguments: #{args}"
+puts "Now let's run the block I was given..."
+block.call
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>well = Useless.new
+well.this_is_weird(1, 2, 3) { puts &ldquo;wat&rdquo; }
+```</p>
+
+<p>Running this produces the following output:</p>
+
+<p><code>plain
+Yay, someone called 'this_is_weird' on me!
+I was given these arguments: [1, 2, 3]
+Now let's run the block I was given...
+wat
+</code></p>
+
+<p>Now let&rsquo;s try something slightly less useless:</p>
+
+<p>``` ruby
+class TransparentProxy
+  def initialize(target)</p>
+
+<pre><code>@target = target
+</code></pre>
+
+<p>  end</p>
+
+<p>  def method_missing(name, *args, &amp;block)</p>
+
+<pre><code>@target.send(name, *args, &amp;block)
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>proxy = TransparentProxy.new(20)
+puts 2 + (proxy * 2)
+```</p>
+
+<p>The result: <code>42</code>. The proxy forwarded the call to <code>*</code> to the integer it was wrapping (&hellip;numbers are objects in Ruby by the way).</p>
+
+<p>We&rsquo;ve now got everything we need to implement implicit futures. The final code is ridiculously simple:</p>
 
 <p>``` ruby
 class Future
@@ -35,187 +184,90 @@ class Future
 </code></pre>
 
 <p>  end
-end
-```</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Yay Ruby!]]></title>
-    <link href="http://fizwidget.github.io/blog/2014/07/05/yay-ruby/"/>
-    <updated>2014-07-05T22:10:23+09:30</updated>
-    <id>http://fizwidget.github.io/blog/2014/07/05/yay-ruby</id>
-    <content type="html"><![CDATA[<p>Python and Ruby are the two heavyweights in the general-purpose, high-level, dynamic language category. They&rsquo;re both awesome languages, but given the choice, I&rsquo;ll generally go with Ruby. This is my attempt at explaining why.</p>
-
-<!-- more -->
-
-
-<h2>Ruby is consistently object-oriented</h2>
-
-<p>Pretty much everything we do in Ruby involves calling methods on objects:</p>
-
-<p><code>ruby
--42.abs               # =&gt; 42
-[1, 2, 3].length      # =&gt; 3
-[1, 2, 3].reverse     # =&gt; [3, 2, 1]
-[1, 2, 3].reverse!    # Reverses list in-place.
-[1, 2, 3].min         # =&gt; 1
-"foo".capitalize      # =&gt; "Foo"
-File.new("bar")       # =&gt; File object
-file.close            # Closes file object.
-</code></p>
-
-<p>In Python though, we use a mixture of functions and methods:</p>
-
-<p><code>python
-abs(-42)              # =&gt; 42
-len([1, 2, 3])        # =&gt; 3
-reversed([1, 2, 3])   # =&gt; [3, 2, 1]
-[1, 2, 3].reverse()   # Reverses list in-place.
-min([1, 2, 3])        # =&gt; 1
-"foo".capitalize()    # =&gt; "Foo"
-open("bar")           # =&gt; File object
-file.close()          # Closes file object.
-</code></p>
-
-<p>One of the benefits of Ruby&rsquo;s consistency is that we can always read it left-to-right:</p>
-
-<p><code>ruby
-"world hello".split.reverse.join(' ') # =&gt; "hello world"
-</code></p>
-
-<p>The equivalent Python code is much harder to make sense of:</p>
-
-<p><code>python
-' '.join(reversed("world hello".split())) # =&gt; "hello world"
-</code></p>
-
-<p>We have to read some parts left-to-right and other parts inside-out. Yuk.</p>
-
-<h2>Blocks are brilliant</h2>
-
-<p>One of Ruby&rsquo;s best features is the really nice syntax it has for passing anonymous functions (&ldquo;blocks&rdquo;) as arguments to methods. Blocks are like Python&rsquo;s lambda expressions, only more elegant, more powerful, and more commonly used.</p>
-
-<p>Blocks allow us to perform many different tasks using a simple, uniform syntax. For example:</p>
-
-<p><code>ruby
-[1, 2, 3].each   { |x| puts x }         # Iteration using blocks.
-File.open('n')   { |f| puts f.read }    # Automatic resource management using blocks.
-[1, 2, 3].select { |x| x &gt; 2 }          # List processing using blocks.
-data.sort_by     { |x| x[1] }           # Sorting using blocks.
-files.lazy.map   { |f| Image.new(f) }   # Lazy evaluation using blocks.
-</code></p>
-
-<p>In Python, we use no fewer than five different language constructs to perform the same tasks:</p>
-
-<p><code>python
-for x in [1, 2, 3]: print(x)            # Iteration using 'for'.
-with f as open('n'): print(f.read())    # Automatic resource management using 'with'.
-[x for x in [1, 2, 3] if x &gt; 2]         # List processing using list comprehensions.
-sorted(data, key=lambda x: x[1])        # Sorting using 'lambda'.
-(Image(f) for f in files)               # Lazy evaluation using generator expressions.
-</code></p>
-
-<p>In my book, one flexible construct > multiple rigid constructs.</p>
-
-<h2>Clear conditionals</h2>
-
-<p>Pretty much everything with a length/size/magnitude of zero evaluates to false in Python. This isn&rsquo;t just a quirk of the language, it&rsquo;s promoted in <a href="http://legacy.python.org/dev/peps/pep-0008/">PEP 8</a> as the Pythonic way of doing things.</p>
-
-<p>``` python
-if not some_collection:</p>
-
-<pre><code># Whatever happened to "explicit is better than implicit"??
-</code></pre>
-
-<p>```</p>
-
-<p>In Ruby, <code>false</code> and <code>nil</code> are the only values that evaluate to false. This means we have to explicitly ask objects questions:</p>
-
-<p><code>ruby
-if some_collection.empty?
-  # Obvious meaning is obvious.
-end
-</code></p>
-
-<p>Ruby&rsquo;s approach seems both more readable and less error-prone.</p>
-
-<h2>Private parts</h2>
-
-<p>In Ruby, instance variables are private by default. This encourages proper encapsulation of implementation details.</p>
-
-<p>``` ruby
-class Foo
-  def initialize</p>
-
-<pre><code>@secret = 42
-</code></pre>
-
-<p>  end
 end</p>
 
-<p>Foo.new.secret # => Error!
+<p>f = Future.new { 20 * 2 }
+puts f + 2
 ```</p>
 
-<p>In Python though, everything defaults to public. This means we&rsquo;re more likely to end up with dependencies on implementation details.</p>
-
-<p>``` python
-class Foo:</p>
-
-<pre><code>def __init__(self):
-    self.not_so_secret = 42
-</code></pre>
-
-<p>Foo().not_so_secret # => 42
-```</p>
-
-<h2>Ruby is pretty</h2>
-
-<p>OK, I&rsquo;ll admit this is ever so slightly subjective. Having said that, compare this:</p>
+<p>To make it slightly more usable, we&rsquo;ll define standalone function called <code>future</code>:</p>
 
 <p>``` ruby
-class Person
-  def initialize(age)</p>
-
-<pre><code>@age = age
-</code></pre>
-
-<p>  end</p>
-
-<p>  def to_s</p>
-
-<pre><code>"Person is #{@age} years old."
-</code></pre>
-
-<p>  end
+def future(&amp;block)
+  Future.new(&amp;block)
 end</p>
 
-<p>person = Person.new(34)
-puts person</p>
-
-<p>```</p>
-
-<p>To this:</p>
-
-<p>``` python
-class Person(object):</p>
-
-<pre><code>def __init__(self, age):
-    self.age = age
-
-def __str__(self):
-    return "Person is {} years old.".format(self.age)
-</code></pre>
-
-<p>person = Person(34)
-print(person)
+<p>f = future { 20 * 2 }
+puts f + 2
 ```</p>
 
-<p>The Ruby code has fewer parentheses, colons, and underscores, and doesn&rsquo;t need to specify <code>object</code>, <code>self</code>, or <code>return</code>.</p>
+<h2>Sanity check</h2>
+
+<p>Having done all that work, let&rsquo;s make sure the damn thing actually works how we expect it to:</p>
+
+<p>``` ruby
+puts &ldquo;Let&rsquo;s create a future&hellip;&rdquo;</p>
+
+<p>f = future do
+  puts &ldquo;Future: Just started running.&rdquo;
+  sleep(2)
+  puts &ldquo;Future: Done!&rdquo;
+  20
+end</p>
+
+<p>sleep(1)</p>
+
+<p>puts &ldquo;Shortly after the future was created.&rdquo;</p>
+
+<p>sleep(2)</p>
+
+<p>puts &ldquo;Future should have finished by now. Let&rsquo;s use the result:&rdquo;
+puts 2 + (f * 2)
+```</p>
+
+<p>This gives us the output:</p>
+
+<p><code>plain
+Let's create a future...
+Future: Just started running.
+Shortly after the future was created.
+Future: Done!
+Future should have finished by now. Let's use the result:
+42
+</code></p>
+
+<p>Perfect! Now let&rsquo;s try a scenario where we attempt to use the future before the result has been computed&hellip;</p>
+
+<p>``` ruby
+f = future do
+  puts &ldquo;Future: Just started running.&rdquo;
+  sleep(2)
+  puts &ldquo;Future: Done!&rdquo;
+  20
+end</p>
+
+<p>sleep(1)</p>
+
+<p>puts &ldquo;Let&rsquo;s try and use the future before it&rsquo;s ready&hellip;&rdquo;
+puts 2 + (f * 2)
+```</p>
+
+<p>This gives us:</p>
+
+<p><code>plain
+Future: Just started running.
+Let's try and use the future before it's ready...
+Future: Done!
+42
+</code></p>
+
+<p>This is exactly what we&rsquo;d expect to happen: the final result couldn&rsquo;t be calculated until the future finished running. Neat!</p>
 
 <h2>Conclusion</h2>
 
-<p>So that&rsquo;s why I like Ruby. Admittedly this was a rather one sided comparison &ndash; Ruby has plenty of issues and Python plenty of benefits that I neglected to mention. Perhaps that&rsquo;ll be the topic of a future post.</p>
+<p>I should probably mention that the above code isn&rsquo;t exactly production-ready. If you were going to use this in a real project, you&rsquo;d want to properly capture and re-throw exceptions, and you&rsquo;d also want to extend from <code>BasicObject</code> rather than <code>Object</code> (to ensure methods defined on <code>Object</code> are properly forwarded to the result). This would&rsquo;ve made the code harder to understand though, so I stuck with the most basic implementation above.</p>
+
+<p>tl;dr Futures are awesome and Ruby is awesome.</p>
 ]]></content>
   </entry>
   
