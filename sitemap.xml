@@ -21,12 +21,6 @@
   </url>
   
   <url>
-    <loc>http://fizwidget.github.io/blog/2014/07/04/nothin-but-single-argument-functions/</loc>
-    <lastmod>2014-07-04T09:17:13+09:30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
     <loc>http://fizwidget.github.io/blog/2014/07/03/nothin-but-functions/</loc>
     <lastmod>2014-07-03T16:59:34+09:30</lastmod>
     <priority>0.8</priority>
@@ -35,14 +29,14 @@
   
   <url>
     <loc>http://fizwidget.github.io/blog/archives/</loc>
-    <lastmod>2014-07-06T10:14:53+09:30</lastmod>
+    <lastmod>2014-07-06T10:16:33+09:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://fizwidget.github.io/</loc>
-    <lastmod>2014-07-06T10:14:53+09:30</lastmod>
+    <lastmod>2014-07-06T10:16:33+09:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
