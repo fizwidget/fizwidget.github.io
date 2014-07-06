@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Functional Programming | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/functional-programming/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-06T16:58:36+09:30</updated>
+  <updated>2014-07-06T22:29:01+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -27,24 +27,7 @@
 
 <h2>A list made of functions</h2>
 
-<p>Turns out the answer is no. We can create linked lists, quite literally, out of functions. We can construct one of these lists using a <code>make_list</code> function as follows:</p>
-
-<p><code>python
-items = make_list(1, make_list(2, make_list(3, None)))
-</code></p>
-
-<p>Let&rsquo;s take a look at the list it returns:</p>
-
-<p><code>python
-items                           # =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10987e598&gt;
-items("head")                   # =&gt; 1
-items("tail")                   # =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10987e620&gt;
-items("tail")("head")           # =&gt; 2
-items("tail")("tail")("head")   # =&gt; 3
-items("tail")("tail")("tail")   # =&gt; None
-</code></p>
-
-<p>What is this black magic?</p>
+<p>Turns out the answer is no. We can create linked lists, quite literally, out of functions:</p>
 
 <p>``` python
 def make_list(head, tail):
@@ -59,15 +42,34 @@ elif operation == "tail":
 <p>  return node
 ```</p>
 
-<p>The <code>make_list</code> function accepts a <code>head</code> (the data item we want to store), and a <code>tail</code> (the next node in the list). We can use it to construct the list <code>[1, 2, 3]</code> as follows:</p>
+<p>The <code>make_list</code> function accepts a <code>head</code> (the data item we want to store), and a <code>tail</code> (the next node in the list). It returns is an instance of the <code>node</code> function, which in turn accepts a single argument and returns the head or tail of the list.</p>
 
-<p>When we call <code>make_list</code>, it returns an instance of the <code>node</code> function. This function accepts a single argument and returns the head or the tail based on the value of that argument.</p>
+<p>We can use <code>make_node</code> it to construct the list <code>[1, 2, 3]</code> as follows:</p>
 
-<p>Let&rsquo;s give it a try:</p>
+<p><code>python
+items = make_list(1, make_list(2, make_list(3, None)))
+</code></p>
 
-<p>Neat! We can see that both <code>items</code> and <code>items("tail")</code> are instances of the <code>node</code> function, and that <code>items("head")</code> returns the value we stored in the first node.</p>
+<p>Let&rsquo;s try extracting the values from the list:</p>
 
-<p>Let&rsquo;s write a function to print the list:</p>
+<p><code>python
+items("head")                 # =&gt; 1
+items("tail")("head")         # =&gt; 2
+items("tail")("tail")("head") # =&gt; 3
+</code></p>
+
+<p>Now let&rsquo;s examine the nodes themselves:</p>
+
+<p><code>python
+items                         # =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10341d620&gt;
+items("tail")                 # =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10341d510&gt;
+items("tail")("tail")         # =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10341d488&gt;
+items("tail")("tail")("tail") # =&gt; None
+</code></p>
+
+<p>So, we can retrieve the values from the list, and we&rsquo;ve confirmed that the nodes are actually instances of the <code>node</code> function. We do indeed have a list made of functions.</p>
+
+<p>We could of course write utility functions to work with these lists. Here&rsquo;s a simple function that prints them for example:</p>
 
 <p>``` python
 def print_list(items):
@@ -77,22 +79,19 @@ def print_list(items):
 print_list(items("tail"))
 </code></pre>
 
-<p>print_list(items)
-```</p>
-
-<p>As you&rsquo;d expect, it prints out 1 2 3.</p>
+<p>```</p>
 
 <h2>Closures</h2>
 
-<p>A closure is a function that has access to the variables from the scope it was defined in. The <code>node</code> function is a good example of this: it accesses <code>head</code> and <code>tail</code>. These variables aren&rsquo;t explicitly passed in as arguments, but <code>node</code> can access them all the same. Each time we call <code>make_list</code>, a new instance of <code>node</code> is returned that references the new <code>head</code> and <code>tail</code> arguments.</p>
+<p>A closure is a function that has access to the variables from the scope it was defined in. The <code>node</code> function is a good example of this: <code>head</code> and <code>tail</code> aren&rsquo;t explicitly passed in as arguments, but it can access them all the same. Each time we call <code>make_list</code>, a new instance of <code>node</code> is returned that references the current <code>head</code> and <code>tail</code> arguments.</p>
 
-<p>Our list is nothing more than a chain of nested closures. When we call the outermost closure and pass it <code>"tail"</code> as an argument, it returns the next closure in the chain (i.e. the next node in the list).</p>
+<p>So, our list is nothing more than a chain of nested closures. When we call the outermost closure and pass it <code>"tail"</code> as an argument, it returns the next closure in the chain (i.e. the next node in the list).</p>
 
 <h2>Conclusion</h2>
 
 <p>We&rsquo;ve really just scratched the surface here &ndash; it&rsquo;s not hard to see that we could create more complex data structures using similar techniques. We could even use functions to define <em>numbers</em> by representing the <em>n</em>th integer as a series of <em>n</em> nested functions.</p>
 
-<p>This all hints at a deeper fact: if a language allows you to define and apply functions, that language is Turing-complete (meaning it lets you compute anything that can be computed). The <a href="http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html">lambda calculus</a> is the canonical example of such a language.</p>
+<p>This is all hinting at a deeper fact: any language allows us to define and apply functions is actually Turing-complete (meaning it lets us compute anything that can be computed). The <a href="http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html">lambda calculus</a> is the canonical example of this.</p>
 
 <p>Neat, huh?</p>
 ]]></content>

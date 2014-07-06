@@ -112,31 +112,7 @@
 
 <h2>A list made of functions</h2>
 
-<p>Turns out the answer is no. We can create linked lists, quite literally, out of functions. We can construct one of these lists using a <code>make_list</code> function as follows:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">items</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="bp">None</span><span class="p">)))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Let&rsquo;s take a look at the list it returns:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">items</span>                           <span class="c"># =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10987e598&gt;</span>
-</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>                   <span class="c"># =&gt; 1</span>
-</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span>                   <span class="c"># =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10987e620&gt;</span>
-</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>           <span class="c"># =&gt; 2</span>
-</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>   <span class="c"># =&gt; 3</span>
-</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span>   <span class="c"># =&gt; None</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>What is this black magic?</p>
+<p>Turns out the answer is no. We can create linked lists, quite literally, out of functions:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -155,44 +131,65 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The <code>make_list</code> function accepts a <code>head</code> (the data item we want to store), and a <code>tail</code> (the next node in the list). We can use it to construct the list <code>[1, 2, 3]</code> as follows:</p>
+<p>The <code>make_list</code> function accepts a <code>head</code> (the data item we want to store), and a <code>tail</code> (the next node in the list). It returns is an instance of the <code>node</code> function, which in turn accepts a single argument and returns the head or tail of the list.</p>
 
-<p>When we call <code>make_list</code>, it returns an instance of the <code>node</code> function. This function accepts a single argument and returns the head or the tail based on the value of that argument.</p>
+<p>We can use <code>make_node</code> it to construct the list <code>[1, 2, 3]</code> as follows:</p>
 
-<p>Let&rsquo;s give it a try:</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">items</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="bp">None</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>Neat! We can see that both <code>items</code> and <code>items("tail")</code> are instances of the <code>node</code> function, and that <code>items("head")</code> returns the value we stored in the first node.</p>
 
-<p>Let&rsquo;s write a function to print the list:</p>
+<p>Let&rsquo;s try extracting the values from the list:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>                 <span class="c"># =&gt; 1</span>
+</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>         <span class="c"># =&gt; 2</span>
+</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;head&quot;</span><span class="p">)</span> <span class="c"># =&gt; 3</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now let&rsquo;s examine the nodes themselves:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">items</span>                         <span class="c"># =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10341d620&gt;</span>
+</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span>                 <span class="c"># =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10341d510&gt;</span>
+</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span>         <span class="c"># =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10341d488&gt;</span>
+</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span> <span class="c"># =&gt; None</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So, we can retrieve the values from the list, and we&rsquo;ve confirmed that the nodes are actually instances of the <code>node</code> function. We do indeed have a list made of functions.</p>
+
+<p>We could of course write utility functions to work with these lists. Here&rsquo;s a simple function that prints them for example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
 </pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">print_list</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
 </span><span class='line'>  <span class="k">if</span> <span class="n">items</span><span class="p">:</span>
 </span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="n">items</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">))</span>
 </span><span class='line'>    <span class="n">print_list</span><span class="p">(</span><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">print_list</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>As you&rsquo;d expect, it prints out 1 2 3.</p>
-
 <h2>Closures</h2>
 
-<p>A closure is a function that has access to the variables from the scope it was defined in. The <code>node</code> function is a good example of this: it accesses <code>head</code> and <code>tail</code>. These variables aren&rsquo;t explicitly passed in as arguments, but <code>node</code> can access them all the same. Each time we call <code>make_list</code>, a new instance of <code>node</code> is returned that references the new <code>head</code> and <code>tail</code> arguments.</p>
+<p>A closure is a function that has access to the variables from the scope it was defined in. The <code>node</code> function is a good example of this: <code>head</code> and <code>tail</code> aren&rsquo;t explicitly passed in as arguments, but it can access them all the same. Each time we call <code>make_list</code>, a new instance of <code>node</code> is returned that references the current <code>head</code> and <code>tail</code> arguments.</p>
 
-<p>Our list is nothing more than a chain of nested closures. When we call the outermost closure and pass it <code>"tail"</code> as an argument, it returns the next closure in the chain (i.e. the next node in the list).</p>
+<p>So, our list is nothing more than a chain of nested closures. When we call the outermost closure and pass it <code>"tail"</code> as an argument, it returns the next closure in the chain (i.e. the next node in the list).</p>
 
 <h2>Conclusion</h2>
 
 <p>We&rsquo;ve really just scratched the surface here &ndash; it&rsquo;s not hard to see that we could create more complex data structures using similar techniques. We could even use functions to define <em>numbers</em> by representing the <em>n</em>th integer as a series of <em>n</em> nested functions.</p>
 
-<p>This all hints at a deeper fact: if a language allows you to define and apply functions, that language is Turing-complete (meaning it lets you compute anything that can be computed). The <a href="http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html">lambda calculus</a> is the canonical example of such a language.</p>
+<p>This is all hinting at a deeper fact: any language allows us to define and apply functions is actually Turing-complete (meaning it lets us compute anything that can be computed). The <a href="http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html">lambda calculus</a> is the canonical example of this.</p>
 
 <p>Neat, huh?</p>
 </div>
