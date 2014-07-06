@@ -15,7 +15,27 @@ Now imagine we need to work with a collection of items. Are we screwed?
 A list made of functions
 ------------------------
 
-Turns out the answer is no. We can create linked lists, quite literally, out of functions:
+Turns out the answer is no. We can create linked lists, quite literally, out of functions. We can construct one of these lists using a `make_list` function as follows:
+
+``` python
+items = make_list(1, make_list(2, make_list(3, None)))
+```
+
+Let's take a look at the list it returns:
+
+``` python
+items                           # => <function make_node.<locals>.node at 0x10987e598>
+items("head")                   # => 1
+items("tail")                   # => <function make_node.<locals>.node at 0x10987e620>
+items("tail")("head")           # => 2
+items("tail")("tail")("head")   # => 3
+items("tail")("tail")("tail")   # => None
+```
+
+What is this black magic?
+
+
+
 
 ``` python
 def make_list(head, tail):
@@ -29,22 +49,10 @@ def make_list(head, tail):
 
 The `make_list` function accepts a `head` (the data item we want to store), and a `tail` (the next node in the list). We can use it to construct the list `[1, 2, 3]` as follows:
 
-``` python
-items = make_list(1, make_list(2, make_list(3, None)))
-```
-
 When we call `make_list`, it returns an instance of the `node` function. This function accepts a single argument and returns the head or the tail based on the value of that argument.
 
 Let's give it a try:
 
-``` python
-items                         # => <function make_node.<locals>.node at 0x10987e598>
-items("head")                 # => 1
-items("tail")                 # => <function make_node.<locals>.node at 0x10987e620>
-items("tail")("head")         # => 2
-items("tail")("tail")("head") # => 3
-items("tail")("tail")("tail") # => None
-```
 
 Neat! We can see that both `items` and `items("tail")` are instances of the `node` function, and that `items("head")` returns the value we stored in the first node.
 
