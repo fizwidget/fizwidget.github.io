@@ -65,7 +65,7 @@ c = Thread.new { baz.expensive_call_3 }
 
 other_stuff
 
-puts a.value + (b.value * c.value)
+puts a.value.xyz(b.value + c.value)
 ```
 
 This almost gets us where we want to be, but not quite.
