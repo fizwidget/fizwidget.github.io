@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Functional Programming | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/functional-programming/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-07T18:47:23+09:30</updated>
+  <updated>2014-07-07T22:36:04+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -27,7 +27,7 @@
 
 <h2>Building data structures from functions</h2>
 
-<p>Turns out the answer is no. We can create data structures, quite literally, out of functions. Here&rsquo;s a linked list:</p>
+<p>Turns out the answer is no. We can create data structures, quite literally, out of functions. Here&rsquo;s a linked list in Python:</p>
 
 <p>``` python
 def make_list(head, tail=None):
@@ -67,7 +67,9 @@ numbers("tail")("tail")         # =&gt; &lt;function make_list.&lt;locals&gt;.no
 numbers("tail")("tail")("tail") # =&gt; None
 </code></p>
 
-<p>We do indeed have a list made of functions (an immutable, singly-linked list to be precise). It&rsquo;s a bit tedious to work with at the moment, but there&rsquo;s nothing stopping us from defining utility functions to operate on it. For example, here&rsquo;s a simple function that&rsquo;d print the list:</p>
+<p>We do indeed have a list made of functions (an immutable, singly-linked list to be precise).</p>
+
+<p>It&rsquo;s a bit tedious to work with at the moment, but there&rsquo;s nothing stopping us from writing utility functions to work with it. Here&rsquo;s a function that&rsquo;d print it for example:</p>
 
 <p>``` python
 def print_list(lst):
@@ -79,19 +81,21 @@ print_list(lst("tail"))
 
 <p>```</p>
 
+<p>Easy!</p>
+
 <h2>Closures</h2>
 
-<p>What we&rsquo;ve done above is only possible because Python supports <em>closures</em>. A closure is a function that has access to the variables from the scope it was defined in. The <code>node</code> function is a good example of this: <code>head</code> and <code>tail</code> aren&rsquo;t explicitly passed in as arguments, but it can access them all the same. Each time we call <code>make_list</code>, a new instance of <code>node</code> is returned that references the new versions of <code>head</code> and <code>tail</code>.</p>
+<p>What we&rsquo;ve done above is only possible because Python supports <em>closures</em>. A closure is, roughly speaking, a function that has access to the variables from the scope it was defined in. The <code>node</code> function is a good example of this: <code>head</code> and <code>tail</code> aren&rsquo;t explicitly passed in as arguments, but it&rsquo;s able to use them all the same. Each time we call <code>make_list</code>, a new instance of <code>node</code> is created that references the new versions of <code>head</code> and <code>tail</code>.</p>
 
-<p>Our list is nothing more than a chain of nested closures. When we call the outermost closure and pass it <code>"tail"</code> as an argument, it returns the next closure in the chain (i.e. the next node in the list).</p>
+<p>Our list is nothing more than a chain of nested closures. When we call the outermost closure and pass it <code>"tail"</code>, it returns the next closure in the chain (i.e. the next node in the list).</p>
 
 <h2>Conclusion</h2>
 
 <p>We&rsquo;ve really just scratched the surface here &ndash; it&rsquo;s not hard to see that more complex data structures could be defined using similar techniques. We could even use functions to define <em>numbers</em> by representing the <em>n</em>th integer as a series of <em>n</em> nested functions.</p>
 
-<p>This is all hinting at a deeper fact: any language that allows us to define and apply functions is Turing-complete (meaning we can use it to compute anything that can be computed). The <a href="http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html">lambda calculus</a> is the ultimate example of this.</p>
+<p>This is all hinting at a deeper fact: any language that allows us to define and apply functions is Turing-complete (meaning we can use it to compute <em>anything that can be computed</em>). Inbuilt constructs for arrays, classes, numbers, and even control structures are optional extras!</p>
 
-<p>Neat, huh?</p>
+<p>Check out the <a href="http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html">lambda calculus</a> if this is even remotely interesting. Neat, huh?</p>
 ]]></content>
   </entry>
   
