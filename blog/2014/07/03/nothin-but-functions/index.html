@@ -121,7 +121,7 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">make_list</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">tail</span><span class="p">):</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">make_list</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">tail</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 </span><span class='line'>  <span class="k">def</span> <span class="nf">node</span><span class="p">(</span><span class="n">operation</span><span class="p">):</span>
 </span><span class='line'>    <span class="k">if</span> <span class="n">operation</span> <span class="o">==</span> <span class="s">&quot;head&quot;</span><span class="p">:</span>
 </span><span class='line'>      <span class="k">return</span> <span class="n">head</span>
@@ -133,10 +133,10 @@
 
 <p>The <code>make_list</code> function accepts a <code>head</code> (the data item we want to store), and a <code>tail</code> (the next node in the list). It returns an instance of the <code>node</code> function, which in turn accepts a single argument and returns the head or tail of the list.</p>
 
-<p>We can use <code>make_node</code> to construct the list <code>[1, 2, 3]</code> as follows:</p>
+<p>We can use <code>make_list</code> to construct the list <code>[1, 2, 3]</code> as follows:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">items</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="bp">None</span><span class="p">)))</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">numbers</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">make_list</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -145,9 +145,9 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>                 <span class="c"># =&gt; 1</span>
-</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>         <span class="c"># =&gt; 2</span>
-</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;head&quot;</span><span class="p">)</span> <span class="c"># =&gt; 3</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>                 <span class="c"># =&gt; 1</span>
+</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>         <span class="c"># =&gt; 2</span>
+</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;head&quot;</span><span class="p">)</span> <span class="c"># =&gt; 3</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -157,31 +157,29 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">items</span>                         <span class="c"># =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10341d620&gt;</span>
-</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span>                 <span class="c"># =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10341d510&gt;</span>
-</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span>         <span class="c"># =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10341d488&gt;</span>
-</span><span class='line'><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span> <span class="c"># =&gt; None</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">numbers</span>                         <span class="c"># =&gt; &lt;function make_list.&lt;locals&gt;.node at 0x10341d620&gt;</span>
+</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span>                 <span class="c"># =&gt; &lt;function make_list.&lt;locals&gt;.node at 0x10341d510&gt;</span>
+</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span>         <span class="c"># =&gt; &lt;function make_list.&lt;locals&gt;.node at 0x10341d488&gt;</span>
+</span><span class='line'><span class="n">numbers</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)(</span><span class="s">&quot;tail&quot;</span><span class="p">)</span> <span class="c"># =&gt; None</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>We do indeed have a list made of functions. An immutable, singly-linked list to be precise.</p>
-
-<p>We can of course define utility functions to make them easier to work with. For example, here&rsquo;s a simple function that&rsquo;ll print them out:</p>
+<p>We do indeed have a list made of functions (an immutable, singly-linked list to be precise). It&rsquo;s a bit tedious to work with at the moment, but there&rsquo;s nothing stopping us from defining utility functions to operate on it. For example, here&rsquo;s a simple function that&rsquo;d print the list:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">print_list</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
-</span><span class='line'>  <span class="k">if</span> <span class="n">items</span><span class="p">:</span>
-</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="n">items</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">))</span>
-</span><span class='line'>    <span class="n">print_list</span><span class="p">(</span><span class="n">items</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">))</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">print_list</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
+</span><span class='line'>  <span class="k">if</span> <span class="n">lst</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="n">lst</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">))</span>
+</span><span class='line'>    <span class="n">print_list</span><span class="p">(</span><span class="n">lst</span><span class="p">(</span><span class="s">&quot;tail&quot;</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <h2>Closures</h2>
 
-<p>A closure is a function that has access to the variables from the scope it was defined in. The <code>node</code> function is a good example of this: <code>head</code> and <code>tail</code> aren&rsquo;t explicitly passed in as arguments, but it can access them all the same. Each time we call <code>make_list</code>, a new instance of <code>node</code> is returned that references the new versions of <code>head</code> and <code>tail</code>.</p>
+<p>What we&rsquo;ve done above is only possible because Python supports <em>closures</em>. A closure is a function that has access to the variables from the scope it was defined in. The <code>node</code> function is a good example of this: <code>head</code> and <code>tail</code> aren&rsquo;t explicitly passed in as arguments, but it can access them all the same. Each time we call <code>make_list</code>, a new instance of <code>node</code> is returned that references the new versions of <code>head</code> and <code>tail</code>.</p>
 
 <p>Our list is nothing more than a chain of nested closures. When we call the outermost closure and pass it <code>"tail"</code> as an argument, it returns the next closure in the chain (i.e. the next node in the list).</p>
 
@@ -189,7 +187,7 @@
 
 <p>We&rsquo;ve really just scratched the surface here &ndash; it&rsquo;s not hard to see that more complex data structures could be defined using similar techniques. We could even use functions to define <em>numbers</em> by representing the <em>n</em>th integer as a series of <em>n</em> nested functions.</p>
 
-<p>This is all hinting at a deeper fact: any language allows us to define and apply functions is Turing-complete (meaning we can use it to compute anything that can be computed). The <a href="http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html">lambda calculus</a> is the ultimate example of this.</p>
+<p>This is all hinting at a deeper fact: any language that allows us to define and apply functions is Turing-complete (meaning we can use it to compute anything that can be computed). The <a href="http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html">lambda calculus</a> is the ultimate example of this.</p>
 
 <p>Neat, huh?</p>
 </div>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Lambda Calculus | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/lambda-calculus/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-07T13:58:02+09:30</updated>
+  <updated>2014-07-07T18:47:23+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -30,7 +30,7 @@
 <p>Turns out the answer is no. We can create data structures, quite literally, out of functions. Here&rsquo;s a linked list:</p>
 
 <p>``` python
-def make_list(head, tail):
+def make_list(head, tail=None):
   def node(operation):</p>
 
 <pre><code>if operation == "head":
@@ -44,46 +44,44 @@ elif operation == "tail":
 
 <p>The <code>make_list</code> function accepts a <code>head</code> (the data item we want to store), and a <code>tail</code> (the next node in the list). It returns an instance of the <code>node</code> function, which in turn accepts a single argument and returns the head or tail of the list.</p>
 
-<p>We can use <code>make_node</code> to construct the list <code>[1, 2, 3]</code> as follows:</p>
+<p>We can use <code>make_list</code> to construct the list <code>[1, 2, 3]</code> as follows:</p>
 
 <p><code>python
-items = make_list(1, make_list(2, make_list(3, None)))
+numbers = make_list(1, make_list(2, make_list(3)))
 </code></p>
 
 <p>Let&rsquo;s try extracting the values from it:</p>
 
 <p><code>python
-items("head")                 # =&gt; 1
-items("tail")("head")         # =&gt; 2
-items("tail")("tail")("head") # =&gt; 3
+numbers("head")                 # =&gt; 1
+numbers("tail")("head")         # =&gt; 2
+numbers("tail")("tail")("head") # =&gt; 3
 </code></p>
 
 <p>Now let&rsquo;s take a look at the nodes themselves:</p>
 
 <p><code>python
-items                         # =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10341d620&gt;
-items("tail")                 # =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10341d510&gt;
-items("tail")("tail")         # =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10341d488&gt;
-items("tail")("tail")("tail") # =&gt; None
+numbers                         # =&gt; &lt;function make_list.&lt;locals&gt;.node at 0x10341d620&gt;
+numbers("tail")                 # =&gt; &lt;function make_list.&lt;locals&gt;.node at 0x10341d510&gt;
+numbers("tail")("tail")         # =&gt; &lt;function make_list.&lt;locals&gt;.node at 0x10341d488&gt;
+numbers("tail")("tail")("tail") # =&gt; None
 </code></p>
 
-<p>We do indeed have a list made of functions. An immutable, singly-linked list to be precise.</p>
-
-<p>We can of course define utility functions to make them easier to work with. For example, here&rsquo;s a simple function that&rsquo;ll print them out:</p>
+<p>We do indeed have a list made of functions (an immutable, singly-linked list to be precise). It&rsquo;s a bit tedious to work with at the moment, but there&rsquo;s nothing stopping us from defining utility functions to operate on it. For example, here&rsquo;s a simple function that&rsquo;d print the list:</p>
 
 <p>``` python
-def print_list(items):
-  if items:</p>
+def print_list(lst):
+  if lst:</p>
 
-<pre><code>print(items("head"))
-print_list(items("tail"))
+<pre><code>print(lst("head"))
+print_list(lst("tail"))
 </code></pre>
 
 <p>```</p>
 
 <h2>Closures</h2>
 
-<p>A closure is a function that has access to the variables from the scope it was defined in. The <code>node</code> function is a good example of this: <code>head</code> and <code>tail</code> aren&rsquo;t explicitly passed in as arguments, but it can access them all the same. Each time we call <code>make_list</code>, a new instance of <code>node</code> is returned that references the new versions of <code>head</code> and <code>tail</code>.</p>
+<p>What we&rsquo;ve done above is only possible because Python supports <em>closures</em>. A closure is a function that has access to the variables from the scope it was defined in. The <code>node</code> function is a good example of this: <code>head</code> and <code>tail</code> aren&rsquo;t explicitly passed in as arguments, but it can access them all the same. Each time we call <code>make_list</code>, a new instance of <code>node</code> is returned that references the new versions of <code>head</code> and <code>tail</code>.</p>
 
 <p>Our list is nothing more than a chain of nested closures. When we call the outermost closure and pass it <code>"tail"</code> as an argument, it returns the next closure in the chain (i.e. the next node in the list).</p>
 
@@ -91,7 +89,7 @@ print_list(items("tail"))
 
 <p>We&rsquo;ve really just scratched the surface here &ndash; it&rsquo;s not hard to see that more complex data structures could be defined using similar techniques. We could even use functions to define <em>numbers</em> by representing the <em>n</em>th integer as a series of <em>n</em> nested functions.</p>
 
-<p>This is all hinting at a deeper fact: any language allows us to define and apply functions is Turing-complete (meaning we can use it to compute anything that can be computed). The <a href="http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html">lambda calculus</a> is the ultimate example of this.</p>
+<p>This is all hinting at a deeper fact: any language that allows us to define and apply functions is Turing-complete (meaning we can use it to compute anything that can be computed). The <a href="http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html">lambda calculus</a> is the ultimate example of this.</p>
 
 <p>Neat, huh?</p>
 ]]></content>
