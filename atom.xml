@@ -4,7 +4,7 @@
   <title><![CDATA[fizwidget]]></title>
   <link href="http://fizwidget.github.io/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-07T22:42:45+09:30</updated>
+  <updated>2014-07-07T22:45:17+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -81,7 +81,7 @@
 
 <p>We do indeed have a list made of functions (an immutable, singly-linked list to be precise).</p>
 
-<p>It&rsquo;s a bit tedious to work with at the moment, but there&rsquo;s nothing stopping us from writing utility functions to work with it. Here&rsquo;s a function that print it for example:</p>
+<p>It&rsquo;s a bit tedious to work with at the moment, but there&rsquo;s nothing stopping us from writing utility functions to work with it. Here&rsquo;s a function that&rsquo;d print it for example:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
