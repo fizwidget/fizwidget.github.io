@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Lambda Calculus | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/lambda-calculus/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-07T22:39:02+09:30</updated>
+  <updated>2014-07-07T22:42:45+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -69,7 +69,7 @@ numbers("tail")("tail")("tail") # =&gt; None
 
 <p>We do indeed have a list made of functions (an immutable, singly-linked list to be precise).</p>
 
-<p>It&rsquo;s a bit tedious to work with at the moment, but there&rsquo;s nothing stopping us from writing utility functions to work with it. Here&rsquo;s a function that&rsquo;d print it for example:</p>
+<p>It&rsquo;s a bit tedious to work with at the moment, but there&rsquo;s nothing stopping us from writing utility functions to work with it. Here&rsquo;s a function that print it for example:</p>
 
 <p>``` python
 def print_list(lst):
