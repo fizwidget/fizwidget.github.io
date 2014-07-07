@@ -4,7 +4,7 @@
   <title><![CDATA[fizwidget]]></title>
   <link href="http://fizwidget.github.io/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-08T09:20:06+09:30</updated>
+  <updated>2014-07-08T09:23:38+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -198,7 +198,7 @@
 </span><span class='line'>
 </span><span class='line'><span class="n">other_stuff</span>
 </span><span class='line'>
-</span><span class='line'><span class="nb">puts</span> <span class="n">a</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">a</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">xyz</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 

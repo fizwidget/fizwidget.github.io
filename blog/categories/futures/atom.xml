@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Futures | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/futures/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-08T09:20:06+09:30</updated>
+  <updated>2014-07-08T09:23:38+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -77,7 +77,7 @@ c = Thread.new { baz.expensive_call_3 }</p>
 
 <p>other_stuff</p>
 
-<p>puts a.value + (b.value * c.value)
+<p>puts a.value.xyz(b.value + c.value)
 ```</p>
 
 <p>This almost gets us where we want to be, but not quite.</p>
