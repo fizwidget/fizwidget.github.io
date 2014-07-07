@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Lambda Calculus | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/lambda-calculus/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-07T22:36:04+09:30</updated>
+  <updated>2014-07-07T22:39:02+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Nothin' but Functions]]></title>
-    <link href="http://fizwidget.github.io/blog/2014/07/03/nothin-but-functions/"/>
-    <updated>2014-07-03T16:59:34+09:30</updated>
-    <id>http://fizwidget.github.io/blog/2014/07/03/nothin-but-functions</id>
+    <link href="http://fizwidget.github.io/blog/2014/07/06/nothin-but-functions/"/>
+    <updated>2014-07-06T16:59:34+09:30</updated>
+    <id>http://fizwidget.github.io/blog/2014/07/06/nothin-but-functions</id>
     <content type="html"><![CDATA[<p>Imagine we&rsquo;re using a programming language that doesn&rsquo;t give us any way of defining data structures. No arrays, no tuples, no structs, no classes. Nothing. All we can do is define and call functions.</p>
 
 <p>Now imagine we need to work with a collection of items. Are we screwed?</p>

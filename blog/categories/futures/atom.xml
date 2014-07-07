@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Futures | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/futures/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-07T22:36:04+09:30</updated>
+  <updated>2014-07-07T22:39:02+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Implicit Futures in Ruby]]></title>
-    <link href="http://fizwidget.github.io/blog/2014/07/06/implicit-futures-in-ruby/"/>
-    <updated>2014-07-06T02:20:05+09:30</updated>
-    <id>http://fizwidget.github.io/blog/2014/07/06/implicit-futures-in-ruby</id>
+    <link href="http://fizwidget.github.io/blog/2014/07/03/implicit-futures-in-ruby/"/>
+    <updated>2014-07-03T02:20:05+09:30</updated>
+    <id>http://fizwidget.github.io/blog/2014/07/03/implicit-futures-in-ruby</id>
     <content type="html"><![CDATA[<p>Say we&rsquo;re writing a program that performs several time-consuming operations, like network requests, disk accesses, or complex calculations. We want them to execute concurrently, but we also want our code to remain simple and easy to understand. There are many different ways of approaching this problem, but in this post I&rsquo;ll focus on <em>implicit futures</em> and how they can be implemented in Ruby.</p>
 
 <!-- more -->
