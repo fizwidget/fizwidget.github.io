@@ -6,7 +6,7 @@ comments: true
 categories: [concurrency, ruby, futures]
 ---
 
-Say we're writing a program that performs several time-consuming operations, like network requests, disk accesses, or complex calculations. We want them to execute concurrently, but we also want our code to remain simple and easy to understand. There are many ways of approaching this problem, but in this post I'll focus on *implicit futures* and they can be implemented in Ruby.
+Say we're writing a program that performs several time-consuming operations, like network requests, disk accesses, or complex calculations. We want them to execute concurrently, but we also want our code to remain simple and easy to understand. There are many ways of approaching this problem, but in this post I'll focus on *implicit futures* and how they can be implemented in Ruby.
 
 <!-- more -->
 
