@@ -3,7 +3,7 @@ layout: post
 title: "Implicit Futures in Ruby"
 date: 2014-07-03 02:20:05 +0930
 comments: true
-categories: [concurrency, ruby, futures]
+categories: [concurrency, ruby, futures, threads]
 ---
 
 Say we're writing a program that performs several time-consuming operations, like network requests, disk accesses, or complex calculations. We want them to execute concurrently, but we also want our code to remain simple and easy to understand. There are many different ways of approaching this problem, but in this post I'll focus on *implicit futures* and how they can be implemented in Ruby.
@@ -24,7 +24,7 @@ result = a + (b * c)
 
 We perform one or more time-consuming operations, potentially do something else, then use the results of the operations.
 
-In the code above, the time-consuming operations are executed sequentially. This results in very poor performance (the CPU might be forced to sit idle while a network request completes for example). Additionally, the call to `other_stuff` won't begin running until all three of the previous calls have finished, even though it doesn't depend on their results.
+In the code above, the time-consuming operations are executed sequentially. This results in very poor performance (the CPU might be forced to sit idle while a network request completes for example). Also, the call to `other_stuff` won't begin running until all three of the previous calls have finished, even though it doesn't depend on their results.
 
 This is the solution we're working towards:
 
@@ -42,7 +42,7 @@ result = a + (b * c)
 
 The expensive calls are now executed asynchronously, and `other_stuff` can begin running immediately. If line 7 is reached before all three results are available, the main thread will automatically block and wait for them to finish.
 
-Neat! How on Earth do we implement this though...? At first glance, it seems like we'd need to build it into the language itself. As we'll see though, that's not necessary - it's surprisingly quite easy to implement in a dynamic language like Ruby.
+Neat! How on Earth do we implement this though...? At first glance, it looks like we'd need to build it into the language itself. As we'll see though, that's not necessary - languages like Ruby and Python are already flexible enough to support this kind of thing.
 
 Threads in Ruby
 ---------------
@@ -56,7 +56,7 @@ t.value # => 4
 
 `Thread.new` spawns a thread to execute the given code block, and `t.value` returns the thread's result (waiting for it to finish if necessary).
 
-Let's try rewriting our original code to use `Thread`:
+Let's rewrite our original code to use `Thread`:
 
 ``` ruby
 a = Thread.new { foo.expensive_call_1 }
@@ -70,39 +70,39 @@ puts a.value + (b.value * c.value)
 
 This almost gets us where we want to be, but not quite.
 
-Explicit vs implicit futures
-----------------------------
+Explicit vs implicit
+--------------------
 
-In the code above, we have to explicitly retrieve the results by calling `value` on the futures. This isn't quite what we're after - they're *explicit* futures rather than *implicit* ones.
+In the code above, we have to explicitly retrieve the results by calling `value` on the futures. This isn't quite what we're after - they're *explicit* futures rather than *implicit* futures.
 
-This might not seem like much of an issue, but consider what would happen if we wanted to pass one of the results to another piece of code. We could either:
+This might not seem like much of an issue, but consider what would happen if we wanted to pass a result to another piece of code. We could either:
 
-1. Call `value` on the future and pass along the final result.
+1. Call `value` on the future and directly pass along the result.
 2. Pass along the future itself, and let the other piece of code call `value` when it needs the result.
 
 Neither of these options are very good. Option 1 can result in suboptimal performance, because we're calling `value` before we really need to (remember that `value` might block execution if the result isn't ready yet).
 
 Option 2 is isn't very good either, because it limits the reusability of the other piece of code (which would now only be able to work with futures).
 
-Implicit futures don't have either of these issues. The code that uses them can remain blissfully ignorant of what they are, and no blocking will occur until the result actually needs to be used (i.e. a method needs to be called on it).
+Implicit futures don't have either of these issues. The code that uses them can remain blissfully ignorant of what they are, and no blocking will occur until the result is actually used (i.e. a method is called on it).
 
 Delegating method calls
 -----------------------
 
 To summarise what we're trying to achieve, we want the future object to appear as though it were the result object. When we call a method on it, it should delegate the call to the result (blocking if necessary until the result becomes available).
 
-It's not immediately obvious how we can delegate methods like this. The future should be able to work with all types of result objects, so we don't know in advance which methods will need forwarding.
+It's not immediately obvious how we can delegate methods like this. The future should be able to work with all types of result objects, so we don't know in advance which methods need forwarding.
 
-Ruby has a rather interesting feature called `method_missing` that we can make use of here. Calling a non-existent method normally results in an error, but if we define a method called `method_missing`, Ruby will call that instead.
+Ruby has a rather interesting feature called `method_missing` that comes in handy here. Calling a non-existent method normally results in an error, but if we define a method called `method_missing`, Ruby will call that instead.
 
 Here's a quick demo:
 
 ``` ruby
 class Useless
   def method_missing(method_name, *args, &block)
-    puts "Someone called '#{method_name}' on me!"
+    puts "Someone called '#{method_name}' on me."
     puts "I was given arguments: #{args}"
-    puts "Now let's call the block I was given..."
+    puts "Now let's call the block I was given:"
     block.call
   end
 end
@@ -114,13 +114,13 @@ well.this_is_weird!("yup") { puts "I don't even..." }
 This gives the following output:
 
 ``` plain
-Someone called 'well_this_is_weird!' on me!
+Someone called 'well_this_is_weird!' on me.
 I was given arguments: ["yup"]
-Now let's call the block I was given...
+Now let's call the block I was given:
 I don't even...
 ```
 
-So, our future can use `method_missing` to intercept method calls. The last piece of the puzzle is the `send` method, which lets us dynamically call any method on an object:
+So, our future can use `method_missing` to intercept method calls. We still need to actually forward the intercepted method though - this is where `send` comes in. It's defined on all Ruby objects, and lets us dynamically call any method:
 
 ``` ruby
 some_object.send(method_name, args, &block)
@@ -131,12 +131,12 @@ To summarise, our future can intercept method calls with `method_missing` and fo
 Putting it all together
 -----------------------
 
-We now have everything we need to implement an implicit future:
+We now have everything we need to implement an implicit future. We can:
 
-1. We can use `Thread` to:
+1. Use `Thread` to:
     - Asynchronously compute the result.
     - Block execution if the result is requested before it's ready.
-2. We can use `method_missing` and `send` to delegate method calls to the result.
+2. Use `method_missing` and `send` to delegate method calls to the result.
 
 The code actually ends up being very simple:
 
@@ -162,7 +162,7 @@ def future(&block)
 end
 ```
 
-We can now create future objects as follows:
+We can now create future objects like this:
 
 ``` ruby
 f = future { expensive_call }
@@ -170,8 +170,8 @@ f = future { expensive_call }
 
 This looks exactly like what we set out to achieve. Brilliant! Might be a good idea to check if it works though...
 
-Testing time!
--------------
+Testing time
+------------
 
 Let's start with a sanity-check:
 
@@ -189,7 +189,7 @@ puts "Attempting to use the result."
 puts f.upcase
 ```
 
-The code given to the future should immediately begin executing, and the main thread should be forced to wait while it runs. To mimic an expensive operation, I've placed a call to `sleep` in the code given to the future. Here's the output we get:
+To mimic an expensive operation, I've placed a call to `sleep` in the code given to the future. The call to `f.upcase` should cause the main thread to block for several seconds until the result is ready. Here's the output we get:
 
 ``` plain
 Future: Started.
@@ -217,7 +217,7 @@ def download_with_futures(urls)
   pages = urls.map do |url|
     future { open(url) { |f| f.read } }
   end
-  # Wait until all downloads have finished by calling methods on the futures.
+  # Wait until all downloads have finished by calling a method on each future.
   pages.each { |page| page.length }
   pages
 end
@@ -242,7 +242,7 @@ And the results are...
    0.110000   0.030000   0.140000 ( 13.774315)
 ```
 
-13.8 seconds down to 2.6 seconds. Not bad!
+13.8 seconds down to 2.6 seconds. Neat!
 
 Caveats
 -------
