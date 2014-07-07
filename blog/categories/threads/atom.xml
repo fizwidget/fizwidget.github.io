@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Concurrency | fizwidget]]></title>
-  <link href="http://fizwidget.github.io/blog/categories/concurrency/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Threads | fizwidget]]></title>
+  <link href="http://fizwidget.github.io/blog/categories/threads/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
   <updated>2014-07-07T23:15:59+09:30</updated>
   <id>http://fizwidget.github.io/</id>
