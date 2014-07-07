@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Futures | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/futures/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-07T12:34:42+09:30</updated>
+  <updated>2014-07-07T12:37:09+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -300,7 +300,7 @@ end
 
 <h2>Conclusion</h2>
 
-<p>Futures are awesome. Ruby is awesome. That is all.</p>
+<p>Futures are awesome. Ruby is awesome.</p>
 ]]></content>
   </entry>
   
