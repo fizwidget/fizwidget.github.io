@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-07T23:15:59+09:30</updated>
+  <updated>2014-07-08T00:27:27+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -136,7 +136,7 @@ Now let's call the block I was given:
 I don't even...
 </code></p>
 
-<p>So, our future can use <code>method_missing</code> to intercept method calls. We still need to actually forward the intercepted method though &ndash; this is where <code>send</code> comes in. It&rsquo;s defined on all Ruby objects, and lets us dynamically call any method:</p>
+<p>So, our future class can use <code>method_missing</code> to intercept method calls. It still needs to actually forward the intercepted method though &ndash; this can be done using <code>send</code>, which lets us dynamically call any method on an object:</p>
 
 <p><code>ruby
 some_object.send(method_name, args, &amp;block)

@@ -255,7 +255,7 @@
 </span><span class='line'>I don't even...</span></code></pre></td></tr></table></div></figure>
 
 
-<p>So, our future can use <code>method_missing</code> to intercept method calls. We still need to actually forward the intercepted method though &ndash; this is where <code>send</code> comes in. It&rsquo;s defined on all Ruby objects, and lets us dynamically call any method:</p>
+<p>So, our future class can use <code>method_missing</code> to intercept method calls. It still needs to actually forward the intercepted method though &ndash; this can be done using <code>send</code>, which lets us dynamically call any method on an object:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">some_object</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">method_name</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
