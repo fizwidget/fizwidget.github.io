@@ -42,7 +42,7 @@ result = a + (b * c)
 
 The expensive calls are now executed asynchronously, and `other_stuff` can begin running immediately. If line 7 is reached before all three results have been calculated, the main thread will automatically block and wait for them to finish.
 
-Neat! How on Earth do we implement this though...? At first glance, it might seem like we'd need to built it into the language itself. As we'll see though, it's actually quite easy to implement in dynamic languages like Ruby and Python.
+Neat! How on Earth do we implement this though...? At first glance, it might seem like we'd need to build it into the language itself. As we'll see though, it's actually quite easy to implement in dynamic languages like Ruby and Python.
 
 Ruby's thread class
 -------------------
@@ -54,7 +54,7 @@ t = Thread.new { 2 + 2 }
 t.value # => 4
 ```
 
-`Thread.new` spawns a thread to execute the code block, and `t.value` returns the thread's result (waiting for the thread to finish running if necessary).
+`Thread.new` spawns a thread to execute the code block, and `t.value` returns the thread's result (it waits for the thread to finish running if necessary).
 
 This *almost* gets us where we want to be. Let's rewrite our original code using the `Thread` class:
 
@@ -68,11 +68,11 @@ other_stuff
 puts a.value + (b.value * c.value)
 ```
 
-Notice that we have to explicitly retrieve the results by calling the `value` method on `a`, `b`, and `c`. This isn't quite what we're after - they're *explicit* futures rather than *implicit* ones.
+Notice that we have to explicitly retrieve the results by calling the `value` method on `a`, `b`, and `c`. This isn't quite what we're after - these are *explicit* futures rather than *implicit* ones.
 
 This mightn't seem like much of an issue...calling `value` isn't exactly difficult. Consider this though: what if we wanted to pass `a`, `b`, or `c` into other functions or methods, or return them as results? Things would start getting messy, because every piece of code that touches them would need to know that they're explicit futures.
 
-This is why implicit futures are so nice - the code that uses them can remain blissfully ignorant of the fact that they're futures. If `a` were an implicit future representing a numeric result, we could freely pass it around to any piece of code that works with numbers.
+This is why implicit futures are so nice - the code that uses them can remain blissfully ignorant of the fact that they're futures. If `a` were an implicit future representing a result of type `String`, we could freely pass it around to any piece of code that works with strings. Everything would continue executing asynchronously until someone actually tried to call a method on it. If the future hadn't finished executing yet, the calling code would automatically block until the result became available.
 
 Transparent proxy objects
 -------------------------
@@ -83,11 +83,11 @@ To summarise what we're trying to achieve, we want to be able to treat `a` as th
 a = future { some_computation }
 ```
 
-We don't want to have to explicitly retrieve the result by calling `value`.
+We don't want to have to explicitly retrieve the result by calling `a.value`.
 
-To achieve this, we want `future` to return a *transparent proxy object*. A transparent proxy is a wrapper around an object that forwards all method calls to the object it's wrapping. Looking at it from the outside, it appears identical to the wrapped object.
+To achieve this, we want `a` to be a *transparent proxy object*. A transparent proxy is a wrapper around an object that forwards all method calls to the object it's wrapping. Looking at it from the outside, it would appear as though it were the wrapped object (in our case `a` would act as though it were the result, even though it would actually be an implicit future).
 
-It's not immediately obvious how we can achieve this, but it actually ends up being very easy in Ruby. Ruby allows us to define a special method called `method_missing`, which gets called automatically if an object can't otherwise respond to a method.
+It's not immediately obvious how a transparent proxy could be implemented, but it's actually very easy in Ruby. Ruby allows us to define a special method called `method_missing`, which gets called automatically if an object can't otherwise respond to a method.
 
 Here's a quick demo:
 
@@ -102,7 +102,7 @@ class Useless
 end
 
 well = Useless.new
-well.this_is_weird!("yup") { puts "I don't even" }
+well.this_is_weird!("yup") { puts "I don't even..." }
 ```
 
 Running this code produces the following output:
@@ -111,7 +111,7 @@ Running this code produces the following output:
 Someone called the 'well_this_is_weird!' method on me!
 I was given arguments: ["yup"]
 Now let's call the block I was given...
-I don't even
+I don't even...
 ```
 
 We can use `method_missing` to make a transparent proxy:
@@ -131,7 +131,7 @@ proxy = TransparentProxy.new("I'm being wrapped by the proxy!")
 proxy.reverse # => "!yxorp eht yb depparw gnieb m'I"
 ```
 
-We're able to treat `proxy` as though it were a string. The call to `reverse` was intercepted by `method_missing`, then forwarded to the wrapped object.
+We're able to treat `proxy` as though it were a string. The call to `reverse` was intercepted by `method_missing`, then forwarded to the wrapped string object.
 
 Implementing implicit futures
 -----------------------------
