@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-07T12:15:55+09:30</updated>
+  <updated>2014-07-07T12:34:42+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -243,34 +243,35 @@ require &lsquo;open-uri&rsquo;</p>
 <p>urls = [
   &ldquo;<a href="https://www.google.com">https://www.google.com</a>&rdquo;, &ldquo;<a href="https://www.microsoft.com">https://www.microsoft.com</a>&rdquo;, &ldquo;<a href="http://www.abc.net.au">http://www.abc.net.au</a>&rdquo;,
   &ldquo;<a href="http://www.reddit.com">http://www.reddit.com</a>&rdquo;, &ldquo;<a href="https://www.atlassian.com">https://www.atlassian.com</a>&rdquo;, &ldquo;<a href="https://www.duckduckgo.com">https://www.duckduckgo.com</a>&rdquo;,
-  &ldquo;<a href="https://www.facebook.com">https://www.facebook.com</a>&rdquo;, &ldquo;<a href="https://www.ruby-lang.org">https://www.ruby-lang.org</a>&rdquo;, &ldquo;<a href="http://whirlpool.net.au">http://whirlpool.net.au</a>&rdquo;
+  &ldquo;<a href="https://www.facebook.com">https://www.facebook.com</a>&rdquo;, &ldquo;<a href="https://www.ruby-lang.org">https://www.ruby-lang.org</a>&rdquo;, &ldquo;<a href="http://whirlpool.net.au">http://whirlpool.net.au</a>&rdquo;,
+  &ldquo;<a href="https://bitbucket.org">https://bitbucket.org</a>&rdquo;, &ldquo;<a href="https://github.com">https://github.com</a>&rdquo;, &ldquo;<a href="https://news.ycombinator.com">https://news.ycombinator.com</a>&rdquo;
 ]</p>
 
-<p>Benchmark.bm do |b|
-  # Without futures.
-  b.report do</p>
+<p>def with_futures(urls)
+  pages = urls.map do |url|</p>
 
-<pre><code>pages = urls.map do |url|
-  open(url) { |f| f.read }
-end
-pages.map { |page| page.length }
-</code></pre>
-
-<p>  end</p>
-
-<p>  # With futures.
-  b.report do</p>
-
-<pre><code>pages = urls.map do |url|
-  future { open(url) { |f| f.read } }
-end
-pages.map { |page| page.length }
+<pre><code>future { open(url) { |f| f.read } }
 </code></pre>
 
 <p>  end
+  pages.map { |page| page.length }
 end</p>
 
-<p>```</p>
+<p>def without_futures(urls)
+  pages = urls.map do |url|</p>
+
+<pre><code>open(url) { |f| f.read }
+</code></pre>
+
+<p>  end
+  pages.map { |page| page.length }
+end</p>
+
+<p>Benchmark.bm do |b|
+  b.report { with_futures(urls) }
+  b.report { without_futures(urls) }
+end
+```</p>
 
 <p>The results:</p>
 
@@ -279,11 +280,11 @@ end</p>
 <pre><code>   user     system      total        real
 </code></pre>
 
-<p>   0.120000   0.040000   0.160000 ( 11.494227)
-   0.070000   0.030000   0.100000 (  2.793592)
+<p>   0.160000   0.040000   0.200000 (  2.561927)
+   0.110000   0.030000   0.140000 ( 13.774315)
 ```</p>
 
-<p>Using futures resulted in a big speed-up (11.5 seconds down to 2.8 seconds). Great!</p>
+<p>Using futures resulted in a big speed-up: 13.8 seconds down to 2.6 seconds. Brilliant!</p>
 
 <h2>Caveats</h2>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[fizwidget]]></title>
   <link href="http://fizwidget.github.io/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-07T12:15:55+09:30</updated>
+  <updated>2014-07-07T12:34:42+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -324,31 +324,35 @@
 <span class='line-number'>24</span>
 <span class='line-number'>25</span>
 <span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;benchmark&#39;</span>
 </span><span class='line'><span class="nb">require</span> <span class="s1">&#39;open-uri&#39;</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">urls</span> <span class="o">=</span> <span class="o">[</span>
 </span><span class='line'>  <span class="s2">&quot;https://www.google.com&quot;</span><span class="p">,</span> <span class="s2">&quot;https://www.microsoft.com&quot;</span><span class="p">,</span> <span class="s2">&quot;http://www.abc.net.au&quot;</span><span class="p">,</span>
 </span><span class='line'>  <span class="s2">&quot;http://www.reddit.com&quot;</span><span class="p">,</span> <span class="s2">&quot;https://www.atlassian.com&quot;</span><span class="p">,</span> <span class="s2">&quot;https://www.duckduckgo.com&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="s2">&quot;https://www.facebook.com&quot;</span><span class="p">,</span> <span class="s2">&quot;https://www.ruby-lang.org&quot;</span><span class="p">,</span> <span class="s2">&quot;http://whirlpool.net.au&quot;</span>
+</span><span class='line'>  <span class="s2">&quot;https://www.facebook.com&quot;</span><span class="p">,</span> <span class="s2">&quot;https://www.ruby-lang.org&quot;</span><span class="p">,</span> <span class="s2">&quot;http://whirlpool.net.au&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;https://bitbucket.org&quot;</span><span class="p">,</span> <span class="s2">&quot;https://github.com&quot;</span><span class="p">,</span> <span class="s2">&quot;https://news.ycombinator.com&quot;</span>
 </span><span class='line'><span class="o">]</span>
 </span><span class='line'>
-</span><span class='line'><span class="no">Benchmark</span><span class="o">.</span><span class="n">bm</span> <span class="k">do</span> <span class="o">|</span><span class="n">b</span><span class="o">|</span>
-</span><span class='line'>  <span class="c1"># Without futures.</span>
-</span><span class='line'>  <span class="n">b</span><span class="o">.</span><span class="n">report</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">pages</span> <span class="o">=</span> <span class="n">urls</span><span class="o">.</span><span class="n">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">url</span><span class="o">|</span>
-</span><span class='line'>      <span class="nb">open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span> <span class="p">}</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>    <span class="n">pages</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">page</span><span class="o">|</span> <span class="n">page</span><span class="o">.</span><span class="n">length</span> <span class="p">}</span>
+</span><span class='line'><span class="k">def</span> <span class="nf">with_futures</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">pages</span> <span class="o">=</span> <span class="n">urls</span><span class="o">.</span><span class="n">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">url</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">future</span> <span class="p">{</span> <span class="nb">open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span> <span class="p">}</span> <span class="p">}</span>
 </span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="n">pages</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">page</span><span class="o">|</span> <span class="n">page</span><span class="o">.</span><span class="n">length</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="c1"># With futures.</span>
-</span><span class='line'>  <span class="n">b</span><span class="o">.</span><span class="n">report</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">pages</span> <span class="o">=</span> <span class="n">urls</span><span class="o">.</span><span class="n">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">url</span><span class="o">|</span>
-</span><span class='line'>      <span class="n">future</span> <span class="p">{</span> <span class="nb">open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span> <span class="p">}</span> <span class="p">}</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>    <span class="n">pages</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">page</span><span class="o">|</span> <span class="n">page</span><span class="o">.</span><span class="n">length</span> <span class="p">}</span>
+</span><span class='line'><span class="k">def</span> <span class="nf">without_futures</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">pages</span> <span class="o">=</span> <span class="n">urls</span><span class="o">.</span><span class="n">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">url</span><span class="o">|</span>
+</span><span class='line'>    <span class="nb">open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span> <span class="p">}</span>
 </span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="n">pages</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">page</span><span class="o">|</span> <span class="n">page</span><span class="o">.</span><span class="n">length</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Benchmark</span><span class="o">.</span><span class="n">bm</span> <span class="k">do</span> <span class="o">|</span><span class="n">b</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">b</span><span class="o">.</span><span class="n">report</span> <span class="p">{</span> <span class="n">with_futures</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">b</span><span class="o">.</span><span class="n">report</span> <span class="p">{</span> <span class="n">without_futures</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span> <span class="p">}</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -359,11 +363,11 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>   user     system      total        real
-</span><span class='line'>   0.120000   0.040000   0.160000 ( 11.494227)
-</span><span class='line'>   0.070000   0.030000   0.100000 (  2.793592)</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>   0.160000   0.040000   0.200000 (  2.561927)
+</span><span class='line'>   0.110000   0.030000   0.140000 ( 13.774315)</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Using futures resulted in a big speed-up (11.5 seconds down to 2.8 seconds). Great!</p>
+<p>Using futures resulted in a big speed-up: 13.8 seconds down to 2.6 seconds. Brilliant!</p>
 
 <h2>Caveats</h2>
 
