@@ -120,7 +120,7 @@ Now let's call the block I was given:
 I don't even...
 ```
 
-So, our future can use `method_missing` to intercept method calls. We still need to actually forward the intercepted method though - this is where `send` comes in. It's defined on all Ruby objects, and lets us dynamically call any method:
+So, our future class can use `method_missing` to intercept method calls. It still needs to actually forward the intercepted method though - this can be done using `send`, which lets us dynamically call any method on an object:
 
 ``` ruby
 some_object.send(method_name, args, &block)
