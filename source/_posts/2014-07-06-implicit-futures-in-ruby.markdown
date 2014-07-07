@@ -54,7 +54,7 @@ t = Thread.new { 2 + 2 }
 t.value # => 4
 ```
 
-`Thread.new` spawns a thread to execute the given code block, and `t.value` returns the thread's result (waiting for the thread to finish running if necessary).
+`Thread.new` spawns a thread to execute the given code block, and `t.value` returns the thread's result (waiting for the it to finish running if necessary).
 
 Let's try rewriting our original code using `Thread`:
 
@@ -78,13 +78,13 @@ In the code above, we have to explicitly retrieve the results by calling `value`
 This mightn't seem like much of an issue, but consider what would happen if we wanted to pass the results along to other pieces of code. We could either:
 
 2. Call `value` and pass the final result along.
-1. Pass along the future object, and let the other piece of code call `value` on it when it needs the final result.
+1. Pass along the future object, and let the other piece of code call `value` when it needs the final result.
 
-Neither of these options is very good. Option 1 can result in suboptimal performance, because we're calling `value` before we really need to (remember that `value` might block execution if the result isn't ready yet).
+Neither of these options are very good. Option 1 can result in suboptimal performance, because we're calling `value` before we really need to (remember that `value` might block execution if the result isn't ready yet).
 
-Option 2 is also bad, because it limits the reusability of the other piece of code. The other piece of code would now only be able to work with future objects.
+Option 2 is also bad, because it limits the reusability of the other piece of code (which would now only be able to work with future objects).
 
-Neither of these issues occur with implicit futures. The code that uses them can remain blissfully ignorant of what they are, and no blocking will occur until something actually needs to call a method on the result object.
+Implicit futures don't have either of those issues. The code that uses them can remain blissfully ignorant of what they are, and no blocking can occur until a method is actually called on the result object.
 
 Method missing
 --------------
@@ -148,7 +148,7 @@ def future(&block)
 end
 ```
 
-We can now create a future as follows:
+We can now create future objects as follows:
 
 ``` ruby
 f = future { expensive_call }

@@ -64,7 +64,7 @@ def print_list(lst):
 Closures
 --------
 
-What we've done above is only possible because Python supports *closures*. A closure is a function that has access to the variables from the scope it was defined in. The `node` function is a good example of this: `head` and `tail` aren't explicitly passed in as arguments, but it can access them all the same. Each time we call `make_list`, a new instance of `node` is returned that references the new versions of `head` and `tail`.
+What we've done above is only possible because Python supports *closures*. A closure is, roughly speaking, a function that has access to the variables from the scope it was defined in. The `node` function is a good example of this: `head` and `tail` aren't explicitly passed in as arguments, but it's still able to use them all the same. Each time we call `make_list`, a new instance of `node` is returned that references the new versions of `head` and `tail`.
 
 Our list is nothing more than a chain of nested closures. When we call the outermost closure and pass it `"tail"` as an argument, it returns the next closure in the chain (i.e. the next node in the list).
 
