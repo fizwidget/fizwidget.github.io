@@ -19,12 +19,12 @@ c = baz.expensive_call_3
 
 other_stuff
 
-result = a + (b * c)
+result = a.xyz(b + c)
 ```
 
 We perform one or more time-consuming operations, potentially do something else, then use the results of the operations.
 
-In the code above, the time-consuming operations are executed sequentially. This results in very poor performance (the CPU might be forced to sit idle while a network request completes for example). Also, the call to `other_stuff` won't begin running until all three of the previous calls have finished, even though it doesn't depend on their results.
+In the code above, the time-consuming operations are executed sequentially. This can result in very poor performance (e.g. CPU might be forced to sit idle while a network request completes). Also, the call to `other_stuff` won't begin running until all three of the previous calls have finished, even though it doesn't depend on their results.
 
 This is the solution we're working towards:
 
@@ -35,14 +35,14 @@ c = future { baz.expensive_call_3 }
 
 other_stuff
 
-result = a + (b * c)
+result = a.xyz(b + c)
 ```
 
 (*If you're unfamiliar with Ruby, `foo { bar }` is equivalent to `foo(lambda: bar())` in Python*)
 
 The expensive calls are now executed asynchronously, and `other_stuff` can begin running immediately. If line 7 is reached before all three results are available, the main thread will automatically block and wait for them to finish.
 
-Neat! How on Earth do we implement this though...? At first glance, it looks like we'd need to build it into the language itself. As we'll see though, that's not necessary - languages like Ruby and Python are already flexible enough to support this kind of thing.
+Nice! How on Earth do we implement this though...? At first glance, it looks like we'd need to build it into the language itself. As it turns out though, implementing this in Ruby is actually quite easy!
 
 Threads in Ruby
 ---------------
@@ -73,16 +73,16 @@ This almost gets us where we want to be, but not quite.
 Explicit vs implicit
 --------------------
 
-In the code above, we have to explicitly retrieve the results by calling `value` on the futures. This isn't quite what we're after - they're *explicit* futures rather than *implicit* futures.
+In the code above, we have to explicitly retrieve the results by calling `value` on the futures/threads. This isn't quite what we're after - they're *explicit* futures rather than *implicit* ones.
 
-This might not seem like much of an issue, but consider what would happen if we wanted to pass a result to another piece of code. We could either:
+This might not seem like much of an issue, but consider what would happen if we wanted to pass one of the results to another piece of code. We could either:
 
 1. Call `value` on the future and directly pass along the result.
-2. Pass along the future itself, and let the other piece of code call `value` when it needs the result.
+2. Pass along the future, and let the other piece of code call `value` when it needs the result.
 
-Neither of these options are very good. Option 1 can result in suboptimal performance, because we're calling `value` before we really need to (remember that `value` might block execution if the result isn't ready yet).
+Neither of these options is very good. The first can result in suboptimal performance, because we're calling `value` before we really need to (remember that `value` might block execution if the result isn't ready yet).
 
-Option 2 is isn't very good either, because it limits the reusability of the other piece of code (which would now only be able to work with futures).
+The second is isn't very good either, because it limits the reusability of the other piece of code (which would now only be able to work with futures).
 
 Implicit futures don't have either of these issues. The code that uses them can remain blissfully ignorant of what they are, and no blocking will occur until the result is actually used (i.e. a method is called on it).
 
@@ -91,9 +91,9 @@ Delegating method calls
 
 To summarise what we're trying to achieve, we want the future object to appear as though it were the result object. When we call a method on it, it should delegate the call to the result (blocking if necessary until the result becomes available).
 
-It's not immediately obvious how we can delegate methods like this. The future should be able to work with all types of result objects, so we don't know in advance which methods need forwarding.
+It's not immediately obvious how methods could be delegated like this. The future should be able to work with all types of result objects, so we don't know in advance which methods need forwarding.
 
-Ruby has a rather interesting feature called `method_missing` that comes in handy here. Calling a non-existent method normally results in an error, but if we define a method called `method_missing`, Ruby will call that instead.
+Ruby has a rather interesting feature called `method_missing` that comes in handy here. Calling a non-existent method would normally result in an error, but if we define a method called `method_missing`, Ruby will call that instead.
 
 Here's a quick demo:
 
@@ -120,13 +120,13 @@ Now let's call the block I was given:
 I don't even...
 ```
 
-So, our future class can use `method_missing` to intercept method calls. It still needs to actually forward the intercepted method though - this can be done using `send`, which lets us dynamically call any method on an object:
+So, our future class can use `method_missing` to intercept method calls. It still needs to actually forward the intercepted methods though - this can be done using `send`, which lets us dynamically call any method on an object:
 
 ``` ruby
 some_object.send(method_name, args, &block)
 ```
 
-To summarise, our future can intercept method calls with `method_missing` and forward them to the result using `send`.
+To summarise, our future can intercept all incoming method calls with `method_missing` and forward them to the result using `send`.
 
 Putting it all together
 -----------------------
@@ -136,9 +136,9 @@ We now have everything we need to implement an implicit future. We can:
 1. Use `Thread` to:
     - Asynchronously compute the result.
     - Block execution if the result is requested before it's ready.
-2. Use `method_missing` and `send` to delegate method calls to the result.
+2. Use `method_missing` and `send` to delegate all method calls to the result.
 
-The code actually ends up being very simple:
+The code ends up being surprisingly simple:
 
 ``` ruby
 class Future
@@ -146,8 +146,9 @@ class Future
     @thread = Thread.new { block.call }
   end
   
-  def method_missing(name, *args, &block)
-    @thread.value.send(name, *args, &block)
+  def method_missing(method_name, *args, &block)
+    result = @thread.value
+    result.send(method_name, *args, &block)
   end
 end
 ```
@@ -162,13 +163,13 @@ def future(&block)
 end
 ```
 
-We can now create future objects like this:
+We can now create futures like this:
 
 ``` ruby
 f = future { expensive_call }
 ```
 
-This looks exactly like what we set out to achieve. Brilliant! Might be a good idea to check if it works though...
+This looks exactly like what we set out to achieve! Might be a good idea to check if it works though...
 
 Testing time
 ------------
@@ -215,11 +216,13 @@ urls = [
 
 def download_with_futures(urls)
   pages = urls.map do |url|
-    future { open(url) { |f| f.read } }
+    future do
+      open(url) { |f| f.read }
+    end
   end
-  # Wait until all downloads have finished by calling a method on each future.
+  # For the purposes of the benchmark, wait until all downloads have
+  # finished by calling a method on each future.
   pages.each { |page| page.length }
-  pages
 end
 
 def download_without_futures(urls)
@@ -242,7 +245,7 @@ And the results are...
    0.110000   0.030000   0.140000 ( 13.774315)
 ```
 
-13.8 seconds down to 2.6 seconds. Neat!
+13.8 seconds down to 2.6 seconds. Not bad!
 
 Caveats
 -------
@@ -250,11 +253,11 @@ Caveats
 The `Future` class given above isn't exactly production-ready. If you were using it in a real project, you'd want it to:
 
 - Capture exceptions that occur during the thread's execution and re-throw them when the result is accessed.
-- Inherit from `BasicObject` instead of `Object`, so the methods defined on `Object` are also delegated to the result.
+- Inherit from `BasicObject` instead of `Object`, so methods defined on `Object` are also delegated to the result.
 - Use a thread pool to prevent the system from being overloaded by a large number of threads.
 - Probably a bunch of other things I haven't thought of.
 
-A basic implementation in 8 lines of code isn't too shabby though :P
+A basic implementation in 9 lines of code isn't too shabby though :P
 
 Conclusion
 ----------

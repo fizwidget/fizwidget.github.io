@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Nothin' but Functions"
+title: "Nothing but Functions"
 date: 2014-07-06 16:59:34 +0930
 comments: true
 categories: [functional programming, lambda calculus]
@@ -63,7 +63,7 @@ def print_list(lst):
     print_list(lst("tail"))
 ```
 
-Easy!
+It's just as easy to work with as a normal linked list.
 
 Closures
 --------
@@ -75,8 +75,8 @@ Our list is nothing more than a chain of nested closures. When we call the outer
 Conclusion
 ----------
 
-We've really just scratched the surface here - it's not hard to see that more complex data structures could be defined using similar techniques. We could even use functions to define *numbers* by representing the *n*th integer as a series of *n* nested functions.
+We've really just scratched the surface here - it's not hard to see that more complex data structures could be defined using similar techniques. We could even use functions to define *numbers* by representing the nth integer as a series of n nested functions.
 
-This is all hinting at a deeper fact: any language that allows us to define and apply functions is Turing-complete (meaning we can use it to compute *anything that can be computed*). Inbuilt constructs for arrays, classes, numbers, and even control structures are optional extras!
+This is all hinting at a deeper fact: any language that allows us to define and apply functions is Turing-complete (meaning we can use it to compute *anything that can be computed*). This means that inbuilt constructs for arrays, classes, numbers, and even control structures are optional extras!
 
 Check out the [lambda calculus](http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html) if this is even remotely interesting. Neat, huh?
