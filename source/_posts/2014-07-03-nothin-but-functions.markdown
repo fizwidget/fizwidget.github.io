@@ -12,10 +12,10 @@ Now imagine we need to work with a collection of items. Are we screwed?
 
 <!-- more -->
 
-A list made of functions
-------------------------
+Building data structures from functions
+---------------------------------------
 
-Turns out the answer is no. We can create linked lists, quite literally, out of functions:
+Turns out the answer is no. We can create data structures, quite literally, out of functions. Here's a linked list:
 
 ``` python
 def make_list(head, tail):
@@ -43,7 +43,7 @@ items("tail")("head")         # => 2
 items("tail")("tail")("head") # => 3
 ```
 
-Now let's examine the nodes themselves:
+Now let's look at the nodes themselves:
 
 ``` python
 items                         # => <function make_node.<locals>.node at 0x10341d620>
@@ -52,9 +52,9 @@ items("tail")("tail")         # => <function make_node.<locals>.node at 0x10341d
 items("tail")("tail")("tail") # => None
 ```
 
-So, we can retrieve the values from the list, and we've confirmed that the nodes are actually instances of the `node` function. We do indeed have a list made of functions.
+We do indeed have a linked list made of functions. A singly-linked, immutable, linked list to be precise.
 
-We could of course write utility functions to work with these lists. Here's a simple function that prints them for example:
+We can of course write any number of utility functions to work with these lists. Here's a simple function that prints them out for example:
 
 ``` python
 def print_list(items):
@@ -66,15 +66,15 @@ def print_list(items):
 Closures
 --------
 
-A closure is a function that has access to the variables from the scope it was defined in. The `node` function is a good example of this: `head` and `tail` aren't explicitly passed in as arguments, but it can access them all the same. Each time we call `make_list`, a new instance of `node` is returned that references the current `head` and `tail` arguments.
+A closure is a function that has access to the variables from the scope it was defined in. The `node` function is a good example of this: `head` and `tail` aren't explicitly passed in as arguments, but it accesses them all the same. Each time we call `make_list`, a new instance of `node` is returned that references the new versions of `head` and `tail`.
 
-So, our list is nothing more than a chain of nested closures. When we call the outermost closure and pass it `"tail"` as an argument, it returns the next closure in the chain (i.e. the next node in the list).
+Our list is nothing more than a chain of nested closures. When we call the outermost closure and pass it `"tail"` as an argument, it returns the next closure in the chain (i.e. the next node in the list).
 
 Conclusion
 ----------
 
-We've really just scratched the surface here - it's not hard to see that we could create more complex data structures using similar techniques. We could even use functions to define *numbers* by representing the *n*th integer as a series of *n* nested functions.
+We've really just scratched the surface here - it's not hard to see that more complex data structures could be defined using similar techniques. We could even use functions to define *numbers* by representing the *n*th integer as a series of *n* nested functions.
 
-This is all hinting at a deeper fact: any language allows us to define and apply functions is actually Turing-complete (meaning it lets us compute anything that can be computed). The [lambda calculus](http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html) is the canonical example of this.
+This is all hinting at a deeper fact: any language allows us to define and apply functions is Turing-complete (meaning we can use it to compute *anything that can be computed*). The [lambda calculus](http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html) is the ultimate example of this.
 
 Neat, huh?
