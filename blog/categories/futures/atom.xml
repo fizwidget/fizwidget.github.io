@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Futures | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/futures/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-07T12:37:09+09:30</updated>
+  <updated>2014-07-07T13:43:55+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -55,7 +55,7 @@ c = future { baz.expensive_call_3 }</p>
 
 <p>The expensive calls are now executed asynchronously, and <code>other_stuff</code> can begin running immediately. If line 7 is reached before all three results have been calculated, the main thread will automatically block and wait for them to finish.</p>
 
-<p>Neat! How on Earth do we implement this though&hellip;? At first glance, it might seem like we&rsquo;d need to built it into the language itself. As we&rsquo;ll see though, it&rsquo;s actually quite easy to implement in dynamic languages like Ruby and Python.</p>
+<p>Neat! How on Earth do we implement this though&hellip;? At first glance, it might seem like we&rsquo;d need to build it into the language itself. As we&rsquo;ll see though, it&rsquo;s actually quite easy to implement in dynamic languages like Ruby and Python.</p>
 
 <h2>Ruby&rsquo;s thread class</h2>
 
@@ -66,7 +66,7 @@ t = Thread.new { 2 + 2 }
 t.value # =&gt; 4
 </code></p>
 
-<p><code>Thread.new</code> spawns a thread to execute the code block, and <code>t.value</code> returns the thread&rsquo;s result (waiting for the thread to finish running if necessary).</p>
+<p><code>Thread.new</code> spawns a thread to execute the code block, and <code>t.value</code> returns the thread&rsquo;s result (it waits for the thread to finish running if necessary).</p>
 
 <p>This <em>almost</em> gets us where we want to be. Let&rsquo;s rewrite our original code using the <code>Thread</code> class:</p>
 
@@ -80,11 +80,11 @@ c = Thread.new { baz.expensive_call_3 }</p>
 <p>puts a.value + (b.value * c.value)
 ```</p>
 
-<p>Notice that we have to explicitly retrieve the results by calling the <code>value</code> method on <code>a</code>, <code>b</code>, and <code>c</code>. This isn&rsquo;t quite what we&rsquo;re after &ndash; they&rsquo;re <em>explicit</em> futures rather than <em>implicit</em> ones.</p>
+<p>Notice that we have to explicitly retrieve the results by calling the <code>value</code> method on <code>a</code>, <code>b</code>, and <code>c</code>. This isn&rsquo;t quite what we&rsquo;re after &ndash; these are <em>explicit</em> futures rather than <em>implicit</em> ones.</p>
 
 <p>This mightn&rsquo;t seem like much of an issue&hellip;calling <code>value</code> isn&rsquo;t exactly difficult. Consider this though: what if we wanted to pass <code>a</code>, <code>b</code>, or <code>c</code> into other functions or methods, or return them as results? Things would start getting messy, because every piece of code that touches them would need to know that they&rsquo;re explicit futures.</p>
 
-<p>This is why implicit futures are so nice &ndash; the code that uses them can remain blissfully ignorant of the fact that they&rsquo;re futures. If <code>a</code> were an implicit future representing a numeric result, we could freely pass it around to any piece of code that works with numbers.</p>
+<p>This is why implicit futures are so nice &ndash; the code that uses them can remain blissfully ignorant of the fact that they&rsquo;re futures. If <code>a</code> were an implicit future representing a result of type <code>String</code>, we could freely pass it around to any piece of code that works with strings. Everything would continue executing asynchronously until someone actually tried to call a method on it. If the future hadn&rsquo;t finished executing yet, the calling code would automatically block until the result became available.</p>
 
 <h2>Transparent proxy objects</h2>
 
@@ -94,11 +94,11 @@ c = Thread.new { baz.expensive_call_3 }</p>
 a = future { some_computation }
 </code></p>
 
-<p>We don&rsquo;t want to have to explicitly retrieve the result by calling <code>value</code>.</p>
+<p>We don&rsquo;t want to have to explicitly retrieve the result by calling <code>a.value</code>.</p>
 
-<p>To achieve this, we want <code>future</code> to return a <em>transparent proxy object</em>. A transparent proxy is a wrapper around an object that forwards all method calls to the object it&rsquo;s wrapping. Looking at it from the outside, it appears identical to the wrapped object.</p>
+<p>To achieve this, we want <code>a</code> to be a <em>transparent proxy object</em>. A transparent proxy is a wrapper around an object that forwards all method calls to the object it&rsquo;s wrapping. Looking at it from the outside, it would appear as though it were the wrapped object (in our case <code>a</code> would act as though it were the result, even though it would actually be an implicit future).</p>
 
-<p>It&rsquo;s not immediately obvious how we can achieve this, but it actually ends up being very easy in Ruby. Ruby allows us to define a special method called <code>method_missing</code>, which gets called automatically if an object can&rsquo;t otherwise respond to a method.</p>
+<p>It&rsquo;s not immediately obvious how a transparent proxy could be implemented, but it&rsquo;s actually very easy in Ruby. Ruby allows us to define a special method called <code>method_missing</code>, which gets called automatically if an object can&rsquo;t otherwise respond to a method.</p>
 
 <p>Here&rsquo;s a quick demo:</p>
 
@@ -116,7 +116,7 @@ block.call
 end</p>
 
 <p>well = Useless.new
-well.this_is_weird!(&ldquo;yup&rdquo;) { puts &ldquo;I don&rsquo;t even&rdquo; }
+well.this_is_weird!(&ldquo;yup&rdquo;) { puts &ldquo;I don&rsquo;t even&hellip;&rdquo; }
 ```</p>
 
 <p>Running this code produces the following output:</p>
@@ -125,7 +125,7 @@ well.this_is_weird!(&ldquo;yup&rdquo;) { puts &ldquo;I don&rsquo;t even&rdquo; }
 Someone called the 'well_this_is_weird!' method on me!
 I was given arguments: ["yup"]
 Now let's call the block I was given...
-I don't even
+I don't even...
 </code></p>
 
 <p>We can use <code>method_missing</code> to make a transparent proxy:</p>
@@ -151,7 +151,7 @@ end</p>
 proxy.reverse # => &ldquo;!yxorp eht yb depparw gnieb m'I&rdquo;
 ```</p>
 
-<p>We&rsquo;re able to treat <code>proxy</code> as though it were a string. The call to <code>reverse</code> was intercepted by <code>method_missing</code>, then forwarded to the wrapped object.</p>
+<p>We&rsquo;re able to treat <code>proxy</code> as though it were a string. The call to <code>reverse</code> was intercepted by <code>method_missing</code>, then forwarded to the wrapped string object.</p>
 
 <h2>Implementing implicit futures</h2>
 

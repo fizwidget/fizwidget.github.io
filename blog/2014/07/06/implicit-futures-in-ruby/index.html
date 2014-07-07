@@ -154,7 +154,7 @@
 
 <p>The expensive calls are now executed asynchronously, and <code>other_stuff</code> can begin running immediately. If line 7 is reached before all three results have been calculated, the main thread will automatically block and wait for them to finish.</p>
 
-<p>Neat! How on Earth do we implement this though&hellip;? At first glance, it might seem like we&rsquo;d need to built it into the language itself. As we&rsquo;ll see though, it&rsquo;s actually quite easy to implement in dynamic languages like Ruby and Python.</p>
+<p>Neat! How on Earth do we implement this though&hellip;? At first glance, it might seem like we&rsquo;d need to build it into the language itself. As we&rsquo;ll see though, it&rsquo;s actually quite easy to implement in dynamic languages like Ruby and Python.</p>
 
 <h2>Ruby&rsquo;s thread class</h2>
 
@@ -167,7 +167,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><code>Thread.new</code> spawns a thread to execute the code block, and <code>t.value</code> returns the thread&rsquo;s result (waiting for the thread to finish running if necessary).</p>
+<p><code>Thread.new</code> spawns a thread to execute the code block, and <code>t.value</code> returns the thread&rsquo;s result (it waits for the thread to finish running if necessary).</p>
 
 <p>This <em>almost</em> gets us where we want to be. Let&rsquo;s rewrite our original code using the <code>Thread</code> class:</p>
 
@@ -188,11 +188,11 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Notice that we have to explicitly retrieve the results by calling the <code>value</code> method on <code>a</code>, <code>b</code>, and <code>c</code>. This isn&rsquo;t quite what we&rsquo;re after &ndash; they&rsquo;re <em>explicit</em> futures rather than <em>implicit</em> ones.</p>
+<p>Notice that we have to explicitly retrieve the results by calling the <code>value</code> method on <code>a</code>, <code>b</code>, and <code>c</code>. This isn&rsquo;t quite what we&rsquo;re after &ndash; these are <em>explicit</em> futures rather than <em>implicit</em> ones.</p>
 
 <p>This mightn&rsquo;t seem like much of an issue&hellip;calling <code>value</code> isn&rsquo;t exactly difficult. Consider this though: what if we wanted to pass <code>a</code>, <code>b</code>, or <code>c</code> into other functions or methods, or return them as results? Things would start getting messy, because every piece of code that touches them would need to know that they&rsquo;re explicit futures.</p>
 
-<p>This is why implicit futures are so nice &ndash; the code that uses them can remain blissfully ignorant of the fact that they&rsquo;re futures. If <code>a</code> were an implicit future representing a numeric result, we could freely pass it around to any piece of code that works with numbers.</p>
+<p>This is why implicit futures are so nice &ndash; the code that uses them can remain blissfully ignorant of the fact that they&rsquo;re futures. If <code>a</code> were an implicit future representing a result of type <code>String</code>, we could freely pass it around to any piece of code that works with strings. Everything would continue executing asynchronously until someone actually tried to call a method on it. If the future hadn&rsquo;t finished executing yet, the calling code would automatically block until the result became available.</p>
 
 <h2>Transparent proxy objects</h2>
 
@@ -203,11 +203,11 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>We don&rsquo;t want to have to explicitly retrieve the result by calling <code>value</code>.</p>
+<p>We don&rsquo;t want to have to explicitly retrieve the result by calling <code>a.value</code>.</p>
 
-<p>To achieve this, we want <code>future</code> to return a <em>transparent proxy object</em>. A transparent proxy is a wrapper around an object that forwards all method calls to the object it&rsquo;s wrapping. Looking at it from the outside, it appears identical to the wrapped object.</p>
+<p>To achieve this, we want <code>a</code> to be a <em>transparent proxy object</em>. A transparent proxy is a wrapper around an object that forwards all method calls to the object it&rsquo;s wrapping. Looking at it from the outside, it would appear as though it were the wrapped object (in our case <code>a</code> would act as though it were the result, even though it would actually be an implicit future).</p>
 
-<p>It&rsquo;s not immediately obvious how we can achieve this, but it actually ends up being very easy in Ruby. Ruby allows us to define a special method called <code>method_missing</code>, which gets called automatically if an object can&rsquo;t otherwise respond to a method.</p>
+<p>It&rsquo;s not immediately obvious how a transparent proxy could be implemented, but it&rsquo;s actually very easy in Ruby. Ruby allows us to define a special method called <code>method_missing</code>, which gets called automatically if an object can&rsquo;t otherwise respond to a method.</p>
 
 <p>Here&rsquo;s a quick demo:</p>
 
@@ -232,7 +232,7 @@
 </span><span class='line'><span class="k">end</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">well</span> <span class="o">=</span> <span class="no">Useless</span><span class="o">.</span><span class="n">new</span>
-</span><span class='line'><span class="n">well</span><span class="o">.</span><span class="n">this_is_weird!</span><span class="p">(</span><span class="s2">&quot;yup&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="nb">puts</span> <span class="s2">&quot;I don&#39;t even&quot;</span> <span class="p">}</span>
+</span><span class='line'><span class="n">well</span><span class="o">.</span><span class="n">this_is_weird!</span><span class="p">(</span><span class="s2">&quot;yup&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="nb">puts</span> <span class="s2">&quot;I don&#39;t even...&quot;</span> <span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -245,7 +245,7 @@
 </pre></td><td class='code'><pre><code class=''><span class='line'>Someone called the 'well_this_is_weird!' method on me!
 </span><span class='line'>I was given arguments: ["yup"]
 </span><span class='line'>Now let's call the block I was given...
-</span><span class='line'>I don't even</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>I don't even...</span></code></pre></td></tr></table></div></figure>
 
 
 <p>We can use <code>method_missing</code> to make a transparent proxy:</p>
@@ -277,7 +277,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>We&rsquo;re able to treat <code>proxy</code> as though it were a string. The call to <code>reverse</code> was intercepted by <code>method_missing</code>, then forwarded to the wrapped object.</p>
+<p>We&rsquo;re able to treat <code>proxy</code> as though it were a string. The call to <code>reverse</code> was intercepted by <code>method_missing</code>, then forwarded to the wrapped string object.</p>
 
 <h2>Implementing implicit futures</h2>
 
