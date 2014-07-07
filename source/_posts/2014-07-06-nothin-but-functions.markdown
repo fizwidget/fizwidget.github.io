@@ -54,7 +54,7 @@ numbers("tail")("tail")("tail") # => None
 
 We do indeed have a list made of functions (an immutable, singly-linked list to be precise).
 
-It's a bit tedious to work with at the moment, but there's nothing stopping us from writing utility functions to work with it. Here's a function that print it for example:
+It's a bit tedious to work with at the moment, but there's nothing stopping us from writing utility functions to work with it. Here's a function that'd print it for example:
 
 ``` python
 def print_list(lst):
