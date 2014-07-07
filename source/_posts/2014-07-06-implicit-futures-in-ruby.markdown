@@ -42,21 +42,21 @@ result = a + (b * c)
 
 The expensive calls are now executed asynchronously, and `other_stuff` can begin running immediately. If line 7 is reached before all three results have been calculated, the main thread will automatically block and wait for them to finish.
 
-Neat! How on Earth do we implement this though...? At first glance, it might seem like we'd need to build it into the language itself. As we'll see though, it's actually quite easy to implement in dynamic languages like Ruby and Python.
+Neat! How on Earth do we implement this though...? At first glance, it might seem like we'd need to build it into the language itself. As we'll see though, it's actually quite easy to implement in a dynamic language like Ruby.
 
 Ruby's thread class
 -------------------
 
-It turns out that Ruby's `Thread` class does a lot of the work for us. Here's a quick primer on it:
+It turns out that Ruby's `Thread` class can do a lot of the work for us. Here's a quick primer on it:
 
 ``` ruby
 t = Thread.new { 2 + 2 }
 t.value # => 4
 ```
 
-`Thread.new` spawns a thread to execute the code block, and `t.value` returns the thread's result (it waits for the thread to finish running if necessary).
+`Thread.new` spawns a thread to execute the given code block, and `t.value` returns the thread's result (waiting for the thread to finish running if necessary).
 
-This *almost* gets us where we want to be. Let's rewrite our original code using the `Thread` class:
+Let's try rewriting our original code using `Thread`:
 
 ``` ruby
 a = Thread.new { foo.expensive_call_1 }
@@ -68,31 +68,35 @@ other_stuff
 puts a.value + (b.value * c.value)
 ```
 
-Notice that we have to explicitly retrieve the results by calling the `value` method on `a`, `b`, and `c`. This isn't quite what we're after - these are *explicit* futures rather than *implicit* ones.
+This *almost* gets us where we want to be. 
 
-This mightn't seem like much of an issue...calling `value` isn't exactly difficult. Consider this though: what if we wanted to pass `a`, `b`, or `c` into other functions or methods, or return them as results? Things would start getting messy, because every piece of code that touches them would need to know that they're explicit futures.
+Explicit vs implicit
+--------------------
 
-This is why implicit futures are so nice - the code that uses them can remain blissfully ignorant of the fact that they're futures. If `a` were an implicit future representing a result of type `String`, we could freely pass it around to any piece of code that works with strings. Everything would continue executing asynchronously until someone actually tried to call a method on it. If the future hadn't finished executing yet, the calling code would automatically block until the result became available.
+In the code above, we have to explicitly retrieve the results by calling `value` on `a`, `b`, and `c`. This isn't quite what we're after - these are *explicit* futures rather than *implicit* ones.
 
-Transparent proxy objects
--------------------------
+This mightn't seem like much of an issue, but consider what would happen if we wanted to pass the results along to other pieces of code. We could either:
 
-To summarise what we're trying to achieve, we want to be able to treat `a` as though it were the result of the computation:
+2. Call `value` and pass the final result along.
+1. Pass along the future object, and let the other piece of code call `value` on it when it needs the final result.
 
-``` ruby
-a = future { some_computation }
-```
+Neither of these options is very good. Option 1 can result in suboptimal performance, because we're calling `value` before we really need to (remember that `value` might block execution if the result isn't ready yet).
 
-We don't want to have to explicitly retrieve the result by calling `a.value`.
+Option 2 is also bad, because it limits the reusability of the other piece of code. The other piece of code would now only be able to work with future objects.
 
-To achieve this, we want `a` to be a *transparent proxy object*. A transparent proxy is a wrapper around an object that forwards all method calls to the object it's wrapping. Looking at it from the outside, it would appear as though it were the wrapped object (in our case `a` would act as though it were the result, even though it would actually be an implicit future).
+Neither of these issues occur with implicit futures. The code that uses them can remain blissfully ignorant of what they are, and no blocking will occur until something actually needs to call a method on the result object.
 
-It's not immediately obvious how a transparent proxy could be implemented, but it's actually very easy in Ruby. Ruby allows us to define a special method called `method_missing`, which gets called automatically if an object can't otherwise respond to a method.
+Method missing
+--------------
+
+To summarise what we're trying to achieve, we want the future object to appear as though it were the final result. When we call a method on it, it should delegate the call to the result object (blocking if necessary until the result becomes available).
+
+It's not immediately obvious how we can delegate methods like this. The future should be able to work with all types of result objects, so we don't know in advance which methods need forwarding. Luckily, Ruby lets us intercept calls to undefined methods. If we define a method called `method_missing`, Ruby will call it if the object can't otherwise respond to the method.
 
 Here's a quick demo:
 
 ``` ruby
-class Useless
+class Foo
   def method_missing(name, *args, &block)
     puts "Someone called the '#{name}' method on me!"
     puts "I was given arguments: #{args}"
@@ -101,11 +105,11 @@ class Useless
   end
 end
 
-well = Useless.new
+well = Foo.new
 well.this_is_weird!("yup") { puts "I don't even..." }
 ```
 
-Running this code produces the following output:
+If we run this, we get the following output:
 
 ``` plain
 Someone called the 'well_this_is_weird!' method on me!
@@ -114,36 +118,15 @@ Now let's call the block I was given...
 I don't even...
 ```
 
-We can use `method_missing` to make a transparent proxy:
-
-``` ruby
-class TransparentProxy
-  def initialize(target)
-    @target = target
-  end
-
-  def method_missing(name, *args, &block)
-    @target.send(name, *args, &block)
-  end
-end
-
-proxy = TransparentProxy.new("I'm being wrapped by the proxy!")
-proxy.reverse # => "!yxorp eht yb depparw gnieb m'I"
-```
-
-We're able to treat `proxy` as though it were a string. The call to `reverse` was intercepted by `method_missing`, then forwarded to the wrapped string object.
-
 Implementing implicit futures
 -----------------------------
 
-Using the building blocks described above, we can write a `Future` class that:
+We've now got everything we need to implement a `Future` class that:
 
-1. Uses a `Thread` to:
-    - Asynchronously execute a block of code.
-    - Block execution if we attempt to use the result before it's available.
-2. Acts as a transparent proxy, forwarding all methods calls to the thread's result.
+1. Uses a `Thread` to asynchronously execute the computation.
+2. Uses `method_missing` to transparently forward all methods calls to the thread's result.
 
-The code for this ends up being surprisingly simple:
+The code actually ends up being very simple:
 
 ``` ruby
 class Future
@@ -157,7 +140,7 @@ class Future
 end
 ```
 
-To make it slightly easier to use, we'll define standalone `future` function that creates and returns a `Future` object:
+To make it slightly easier to use, we'll define a standalone `future` function that creates and returns a `Future` object:
 
 ``` ruby
 def future(&block)
@@ -165,18 +148,18 @@ def future(&block)
 end
 ```
 
-We can then use it as follows:
+We can now create a future as follows:
 
 ``` ruby
 f = future { expensive_call }
 ```
 
-This looks exactly like what we set out to achieve - yay! Might be a good idea to check if it works though...
+This looks exactly like what we set out to achieve. Brilliant! Might be a good idea to check if it works though...
 
 Testing time!
 -------------
 
-Let's start with a sanity-check...
+Let's start with a sanity-check:
 
 ``` ruby
 f = future do
@@ -203,7 +186,7 @@ YEEEEAAAAAAAAHH
 
 It worked!
 
-Now let's try a real-world example. We'll download a bunch of webpages and report how long it took, with and without futures:
+Now let's try a real-world example. We'll download a bunch of webpages and record how long it took, with and without futures:
 
 ``` ruby
 require 'benchmark'
@@ -211,7 +194,7 @@ require 'open-uri'
 
 urls = [
   "https://www.google.com", "https://www.microsoft.com", "http://www.abc.net.au",
-  "http://www.reddit.com", "https://www.atlassian.com", "https://www.duckduckgo.com",
+  "http://www.reddit.com", "https://www.atlassian.com", "https://duckduckgo.com",
   "https://www.facebook.com", "https://www.ruby-lang.org", "http://whirlpool.net.au",
   "https://bitbucket.org", "https://github.com", "https://news.ycombinator.com"
 ]
@@ -244,7 +227,7 @@ The results:
    0.110000   0.030000   0.140000 ( 13.774315)
 ```
 
-Using futures resulted in a big speed-up: 13.8 seconds down to 2.6 seconds. Brilliant!
+13.8 seconds down to 2.6 seconds. Nice!
 
 Caveats
 -------
@@ -259,4 +242,4 @@ The above code isn't exactly production-ready. If you were using this in a real 
 Conclusion
 ----------
 
-Futures are awesome. Ruby is awesome.
+Futures are awesome. Ruby is awesome. That is all.
