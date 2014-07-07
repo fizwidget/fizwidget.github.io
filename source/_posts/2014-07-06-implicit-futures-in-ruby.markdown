@@ -212,38 +212,39 @@ require 'open-uri'
 urls = [
   "https://www.google.com", "https://www.microsoft.com", "http://www.abc.net.au",
   "http://www.reddit.com", "https://www.atlassian.com", "https://www.duckduckgo.com",
-  "https://www.facebook.com", "https://www.ruby-lang.org", "http://whirlpool.net.au"
+  "https://www.facebook.com", "https://www.ruby-lang.org", "http://whirlpool.net.au",
+  "https://bitbucket.org", "https://github.com", "https://news.ycombinator.com"
 ]
 
-Benchmark.bm do |b|
-  # Without futures.
-  b.report do
-    pages = urls.map do |url|
-      open(url) { |f| f.read }
-    end
-    pages.map { |page| page.length }
+def with_futures(urls)
+  pages = urls.map do |url|
+    future { open(url) { |f| f.read } }
   end
-
-  # With futures.
-  b.report do
-    pages = urls.map do |url|
-      future { open(url) { |f| f.read } }
-    end
-    pages.map { |page| page.length }
-  end
+  pages.map { |page| page.length }
 end
 
+def without_futures(urls)
+  pages = urls.map do |url|
+    open(url) { |f| f.read }
+  end
+  pages.map { |page| page.length }
+end
+
+Benchmark.bm do |b|
+  b.report { with_futures(urls) }
+  b.report { without_futures(urls) }
+end
 ```
 
 The results:
 
 ``` plain
        user     system      total        real
-   0.120000   0.040000   0.160000 ( 11.494227)
-   0.070000   0.030000   0.100000 (  2.793592)
+   0.160000   0.040000   0.200000 (  2.561927)
+   0.110000   0.030000   0.140000 ( 13.774315)
 ```
 
-Using futures resulted in a big speed-up (11.5 seconds down to 2.8 seconds). Great!
+Using futures resulted in a big speed-up: 13.8 seconds down to 2.6 seconds. Brilliant!
 
 Caveats
 -------
@@ -258,4 +259,4 @@ The above code isn't exactly production-ready. If you were using this in a real 
 Conclusion
 ----------
 
-Futures are awesome. Ruby is awesome. That is all.
+Futures are awesome. Ruby is awesome.
