@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Lambda Calculus | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/lambda-calculus/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-06T23:33:55+09:30</updated>
+  <updated>2014-07-07T12:12:02+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -25,9 +25,9 @@
 <!-- more -->
 
 
-<h2>A list made of functions</h2>
+<h2>Building data structures from functions</h2>
 
-<p>Turns out the answer is no. We can create linked lists, quite literally, out of functions:</p>
+<p>Turns out the answer is no. We can create data structures, quite literally, out of functions. Here&rsquo;s a linked list:</p>
 
 <p>``` python
 def make_list(head, tail):
@@ -58,7 +58,7 @@ items("tail")("head")         # =&gt; 2
 items("tail")("tail")("head") # =&gt; 3
 </code></p>
 
-<p>Now let&rsquo;s examine the nodes themselves:</p>
+<p>Now let&rsquo;s look at the nodes themselves:</p>
 
 <p><code>python
 items                         # =&gt; &lt;function make_node.&lt;locals&gt;.node at 0x10341d620&gt;
@@ -67,9 +67,9 @@ items("tail")("tail")         # =&gt; &lt;function make_node.&lt;locals&gt;.node
 items("tail")("tail")("tail") # =&gt; None
 </code></p>
 
-<p>So, we can retrieve the values from the list, and we&rsquo;ve confirmed that the nodes are actually instances of the <code>node</code> function. We do indeed have a list made of functions.</p>
+<p>We do indeed have a linked list made of functions. A singly-linked, immutable, linked list to be precise.</p>
 
-<p>We could of course write utility functions to work with these lists. Here&rsquo;s a simple function that prints them for example:</p>
+<p>We can of course write any number of utility functions to work with these lists. Here&rsquo;s a simple function that prints them out for example:</p>
 
 <p>``` python
 def print_list(items):
@@ -83,15 +83,15 @@ print_list(items("tail"))
 
 <h2>Closures</h2>
 
-<p>A closure is a function that has access to the variables from the scope it was defined in. The <code>node</code> function is a good example of this: <code>head</code> and <code>tail</code> aren&rsquo;t explicitly passed in as arguments, but it can access them all the same. Each time we call <code>make_list</code>, a new instance of <code>node</code> is returned that references the current <code>head</code> and <code>tail</code> arguments.</p>
+<p>A closure is a function that has access to the variables from the scope it was defined in. The <code>node</code> function is a good example of this: <code>head</code> and <code>tail</code> aren&rsquo;t explicitly passed in as arguments, but it accesses them all the same. Each time we call <code>make_list</code>, a new instance of <code>node</code> is returned that references the new versions of <code>head</code> and <code>tail</code>.</p>
 
-<p>So, our list is nothing more than a chain of nested closures. When we call the outermost closure and pass it <code>"tail"</code> as an argument, it returns the next closure in the chain (i.e. the next node in the list).</p>
+<p>Our list is nothing more than a chain of nested closures. When we call the outermost closure and pass it <code>"tail"</code> as an argument, it returns the next closure in the chain (i.e. the next node in the list).</p>
 
 <h2>Conclusion</h2>
 
-<p>We&rsquo;ve really just scratched the surface here &ndash; it&rsquo;s not hard to see that we could create more complex data structures using similar techniques. We could even use functions to define <em>numbers</em> by representing the <em>n</em>th integer as a series of <em>n</em> nested functions.</p>
+<p>We&rsquo;ve really just scratched the surface here &ndash; it&rsquo;s not hard to see that more complex data structures could be defined using similar techniques. We could even use functions to define <em>numbers</em> by representing the <em>n</em>th integer as a series of <em>n</em> nested functions.</p>
 
-<p>This is all hinting at a deeper fact: any language allows us to define and apply functions is actually Turing-complete (meaning it lets us compute anything that can be computed). The <a href="http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html">lambda calculus</a> is the canonical example of this.</p>
+<p>This is all hinting at a deeper fact: any language allows us to define and apply functions is Turing-complete (meaning we can use it to compute <em>anything that can be computed</em>). The <a href="http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html">lambda calculus</a> is the ultimate example of this.</p>
 
 <p>Neat, huh?</p>
 ]]></content>

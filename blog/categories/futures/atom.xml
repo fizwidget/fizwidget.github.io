@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Futures | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/futures/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-06T23:33:55+09:30</updated>
+  <updated>2014-07-07T12:12:02+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -14,16 +14,16 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Implicit Futures]]></title>
+    <title type="html"><![CDATA[Implicit Futures in Ruby]]></title>
     <link href="http://fizwidget.github.io/blog/2014/07/06/implicit-futures/"/>
     <updated>2014-07-06T02:20:05+09:30</updated>
     <id>http://fizwidget.github.io/blog/2014/07/06/implicit-futures</id>
-    <content type="html"><![CDATA[<p>Say we&rsquo;re writing a program that performs several time-consuming operations, like network requests, disk accesses, and complex calculations. We want them to execute concurrently, but we also want our code to be simple and easy to understand. There are many ways of approaching this problem, but in this post I&rsquo;ll focus on implicit futures and how we can implement them in Ruby.</p>
+    <content type="html"><![CDATA[<p>Say we&rsquo;re writing a program that performs several time-consuming operations, like network requests, disk accesses, or complex calculations. We want them to execute concurrently, but we also want our code to remain simple and easy to understand. There are many ways of approaching this problem, but in this post I&rsquo;ll focus on <em>implicit futures</em> and they can be implemented in Ruby.</p>
 
 <!-- more -->
 
 
-<p>This snippet of code demonstrates the basic scenario we&rsquo;re dealing with:</p>
+<p>This snippet of code demonstrates the scenario we&rsquo;re dealing with:</p>
 
 <p>``` ruby
 a = foo.expensive_call_1
@@ -35,9 +35,9 @@ c = baz.expensive_call_3</p>
 <p>result = a + (b * c)
 ```</p>
 
-<p>We initiate one or more time-consuming operations, do some other stuff, then use the results of the operations.</p>
+<p>We perform one or more time-consuming operations, potentially do some other things, then use the results of the operations.</p>
 
-<p>In the code above, the expensive calls are executed sequentially. This can lead to <em>very</em> poor performance &ndash; for example, the CPU might be forced to sit completely idle while a network request is in progress. Additionally, the call to <code>other_stuff</code> won&rsquo;t begin running until all three of the calls have finished, even though it doesn&rsquo;t depend on their results.</p>
+<p>In the code above, the expensive calls are executed sequentially. This can lead to <em>very</em> poor performance &ndash; for example, the CPU might be forced to sit completely idle while a network request completes. Additionally, the call to <code>other_stuff</code> won&rsquo;t begin running until all three of the previous calls have finished, even though it doesn&rsquo;t depend on their results.</p>
 
 <p>This is the solution we&rsquo;re working towards:</p>
 
@@ -51,13 +51,13 @@ c = future { baz.expensive_call_3 }</p>
 <p>result = a + (b * c)
 ```</p>
 
-<p><em>If you&rsquo;re unfamiliar with Ruby&rsquo;s block syntax, <code>foo { bar }</code> is equivalent to <code>foo(lambda: bar())</code> in Python.</em></p>
+<p>(<em>If you&rsquo;re unfamiliar with Ruby, <code>foo { bar }</code> is equivalent to <code>foo(lambda: bar())</code> in Python</em>)</p>
 
-<p>In the code above, the expensive calls are executed asynchronously and <code>other_stuff</code> can begin running immediately. If line 7 is reached before all three results have been calculated, the main thread will automatically block and wait for them to finish.</p>
+<p>The expensive calls are now executed asynchronously, and <code>other_stuff</code> can begin running immediately. If line 7 is reached before all three results have been calculated, the main thread will automatically block and wait for them to finish.</p>
 
-<p>Neat! How on Earth can we implement this though..?</p>
+<p>Neat! How on Earth do we implement this though&hellip;? At first glance, it might seem like we&rsquo;d need to built it into the language itself. As we&rsquo;ll see though, it&rsquo;s actually quite easy to implement in dynamic languages like Ruby and Python.</p>
 
-<h2>Explicit Futures</h2>
+<h2>Ruby&rsquo;s thread class</h2>
 
 <p>It turns out that Ruby&rsquo;s <code>Thread</code> class does a lot of the work for us. Here&rsquo;s a quick primer on it:</p>
 
@@ -66,7 +66,7 @@ t = Thread.new { 2 + 2 }
 t.value # =&gt; 4
 </code></p>
 
-<p><code>Thread.new</code> spawns a thread to execute the code block, and <code>t.value</code> returns the thread&rsquo;s result (blocking if necessary to wait for it to finish running).</p>
+<p><code>Thread.new</code> spawns a thread to execute the code block, and <code>t.value</code> returns the thread&rsquo;s result (waiting for the thread to finish running if necessary).</p>
 
 <p>This <em>almost</em> gets us where we want to be. Let&rsquo;s rewrite our original code using the <code>Thread</code> class:</p>
 
@@ -80,15 +80,15 @@ c = Thread.new { baz.expensive_call_3 }</p>
 <p>puts a.value + (b.value * c.value)
 ```</p>
 
-<p>Notice that we have to explicitly retrieve the results by calling the <code>value</code> method on <code>a</code>, <code>b</code>, and <code>c</code>. This isn&rsquo;t quite what we&rsquo;re after &ndash; we want to be able to treat them as though they actually are the results.</p>
+<p>Notice that we have to explicitly retrieve the results by calling the <code>value</code> method on <code>a</code>, <code>b</code>, and <code>c</code>. This isn&rsquo;t quite what we&rsquo;re after &ndash; they&rsquo;re <em>explicit</em> futures rather than <em>implicit</em> ones.</p>
 
-<p>This mightn&rsquo;t seem like much of an issue&hellip;calling <code>value</code> isn&rsquo;t exactly difficult. Consider this though: what would happen if we wanted to pass <code>a</code>, <code>b</code>, or <code>c</code> into other functions or methods, or return them as results? Things would start getting messy, because every piece of code that touches them would need to know that they&rsquo;re not <em>actually</em> the results, they&rsquo;re objects we call <code>value</code> on to get the results.</p>
+<p>This mightn&rsquo;t seem like much of an issue&hellip;calling <code>value</code> isn&rsquo;t exactly difficult. Consider this though: what if we wanted to pass <code>a</code>, <code>b</code>, or <code>c</code> into other functions or methods, or return them as results? Things would start getting messy, because every piece of code that touches them would need to know that they&rsquo;re explicit futures.</p>
 
-<p>This is why implicit futures are so nice &ndash; the code that uses them remains blissfully ignorant of what they are. If <code>a</code> were an implicit future, we could freely pass it around to code that doesn&rsquo;t know anything about futures.</p>
+<p>This is why implicit futures are so nice &ndash; the code that uses them can remain blissfully ignorant of the fact that they&rsquo;re futures. If <code>a</code> were an implicit future representing a numeric result, we could freely pass it around to any piece of code that works with numbers.</p>
 
-<h2>Transparent Proxy Objects</h2>
+<h2>Transparent proxy objects</h2>
 
-<p>To summarise the problem, we want to be able to treat <code>a</code> as though it were the result of the computation:</p>
+<p>To summarise what we&rsquo;re trying to achieve, we want to be able to treat <code>a</code> as though it were the result of the computation:</p>
 
 <p><code>ruby
 a = future { some_computation }
@@ -96,9 +96,9 @@ a = future { some_computation }
 
 <p>We don&rsquo;t want to have to explicitly retrieve the result by calling <code>value</code>.</p>
 
-<p>In order to achieve this, we want <code>future</code> to return a <em>transparent proxy object</em>. A transparent proxy is a wrapper around an object that forwards all method calls to the object it&rsquo;s wrapping. Looking at it from the outside, it appears identical to the object it&rsquo;s wrapping.</p>
+<p>To achieve this, we want <code>future</code> to return a <em>transparent proxy object</em>. A transparent proxy is a wrapper around an object that forwards all method calls to the object it&rsquo;s wrapping. Looking at it from the outside, it appears identical to the wrapped object.</p>
 
-<p>It&rsquo;s not immediately obvious how we can achieve this, but in a dynamic language like Ruby, it actually ends up being quite easy. In Ruby, we can define a special method called <code>method_missing</code>. As the name suggests, this method gets called automatically if an object can&rsquo;t otherwise respond to a method. Normally this would result in a runtime error, but if <code>method_missing</code> is defined, it&rsquo;ll be called instead.</p>
+<p>It&rsquo;s not immediately obvious how we can achieve this, but it actually ends up being very easy in Ruby. Ruby allows us to define a special method called <code>method_missing</code>, which gets called automatically if an object can&rsquo;t otherwise respond to a method.</p>
 
 <p>Here&rsquo;s a quick demo:</p>
 
@@ -107,7 +107,7 @@ class Useless
   def method_missing(name, *args, &amp;block)</p>
 
 <pre><code>puts "Someone called the '#{name}' method on me!"
-puts "I was given #{args} as arguments."
+puts "I was given arguments: #{args}"
 puts "Now let's call the block I was given..."
 block.call
 </code></pre>
@@ -115,20 +115,20 @@ block.call
 <p>  end
 end</p>
 
-<p>u = Useless.new
-u.well_this_is_weird(1, 2, 3) { puts &ldquo;wat&rdquo; }
+<p>well = Useless.new
+well.this_is_weird!(&ldquo;yup&rdquo;) { puts &ldquo;I don&rsquo;t even&rdquo; }
 ```</p>
 
 <p>Running this code produces the following output:</p>
 
 <p><code>plain
-Someone called the 'well_this_is_weird' method on me!
-I was given [1, 2, 3] as arguments.
+Someone called the 'well_this_is_weird!' method on me!
+I was given arguments: ["yup"]
 Now let's call the block I was given...
-wat
+I don't even
 </code></p>
 
-<p>Using <code>method_missing</code>, creating a transparent proxy becomes quite easy:</p>
+<p>We can use <code>method_missing</code> to make a transparent proxy:</p>
 
 <p>``` ruby
 class TransparentProxy
@@ -151,19 +151,25 @@ end</p>
 proxy.reverse # => &ldquo;!yxorp eht yb depparw gnieb m'I&rdquo;
 ```</p>
 
-<p>The call to <code>reverse</code> was intercepted by <code>method_missing</code>, then forwarded to the wrapped object (via the <code>send</code> method, which allows us to call arbitrary methods on objects at runtime).</p>
+<p>We&rsquo;re able to treat <code>proxy</code> as though it were a string. The call to <code>reverse</code> was intercepted by <code>method_missing</code>, then forwarded to the wrapped object.</p>
 
-<h2>Implementing Implicit Futures</h2>
+<h2>Implementing implicit futures</h2>
 
-<p>Things are starting to come together now. Using the building blocks described above, we can write a <code>Future</code> class that:</p>
+<p>Using the building blocks described above, we can write a <code>Future</code> class that:</p>
 
 <ol>
-<li>Uses a <code>Thread</code> to asynchronously execute a block of code.</li>
-<li>Acts as a transparent proxy, forwarding all methods to the thread&rsquo;s result.</li>
+<li>Uses a <code>Thread</code> to:
+
+<ul>
+<li>Asynchronously execute a block of code.</li>
+<li>Block execution if we attempt to use the result before it&rsquo;s available.</li>
+</ul>
+</li>
+<li>Acts as a transparent proxy, forwarding all methods calls to the thread&rsquo;s result.</li>
 </ol>
 
 
-<p>The code for this is actually quite simple:</p>
+<p>The code for this ends up being surprisingly simple:</p>
 
 <p>``` ruby
 class Future
@@ -191,15 +197,17 @@ def future(&amp;block)
 end
 </code></p>
 
-<p>This looks exactly like what we set out to achieve. Yay!</p>
+<p>We can then use it as follows:</p>
 
 <p><code>ruby
-f = future { 20 * 2 + 2 }
+f = future { expensive_call }
 </code></p>
 
-<p>Might be a good idea to check if it works though&hellip;</p>
+<p>This looks exactly like what we set out to achieve &ndash; yay! Might be a good idea to check if it works though&hellip;</p>
 
-<h2>Sanity check</h2>
+<h2>Testing time!</h2>
+
+<p>Let&rsquo;s start with a sanity-check&hellip;</p>
 
 <p>``` ruby
 f = future do
@@ -209,13 +217,13 @@ f = future do
   &ldquo;yeeeeaaaaaaaahh&rdquo;
 end</p>
 
-<p>sleep(1)</p>
+<p>sleep(2)</p>
 
 <p>puts &ldquo;Attempting to use the result&hellip;&rdquo;
 puts f.upcase
 ```</p>
 
-<p>This gives us the output:</p>
+<p>The future should begin executing immediately, and the main thread should be forced to wait couple of seconds before it can access the result. Here&rsquo;s the output we get:</p>
 
 <p><code>plain
 Future: Started.
@@ -224,32 +232,66 @@ Future: Finished.
 YEEEEAAAAAAAAHH
 </code></p>
 
-<p>When we attempted to use the result, the main thread blocked until it became available. Great! Now let&rsquo;s try a real-world example to see if we see any speedup:</p>
+<p>It worked!</p>
+
+<p>Now let&rsquo;s try a real-world example. We&rsquo;ll download a bunch of webpages and report how long it took, with and without futures:</p>
 
 <p>``` ruby
+require &lsquo;benchmark&rsquo;
 require &lsquo;open-uri&rsquo;</p>
 
-<p>urls = [&ldquo;<a href="https://www.google.com">https://www.google.com</a>&rdquo;, &ldquo;<a href="https://www.bing.com">https://www.bing.com</a>&rdquo;, &ldquo;<a href="https://duckduckgo.com">https://duckduckgo.com</a>&rdquo;]</p>
+<p>urls = [
+  &ldquo;<a href="https://www.google.com">https://www.google.com</a>&rdquo;, &ldquo;<a href="https://www.microsoft.com">https://www.microsoft.com</a>&rdquo;, &ldquo;<a href="http://www.abc.net.au">http://www.abc.net.au</a>&rdquo;,
+  &ldquo;<a href="http://www.reddit.com">http://www.reddit.com</a>&rdquo;, &ldquo;<a href="https://www.atlassian.com">https://www.atlassian.com</a>&rdquo;, &ldquo;<a href="https://www.duckduckgo.com">https://www.duckduckgo.com</a>&rdquo;,
+  &ldquo;<a href="https://www.facebook.com">https://www.facebook.com</a>&rdquo;, &ldquo;<a href="https://www.ruby-lang.org">https://www.ruby-lang.org</a>&rdquo;, &ldquo;<a href="http://whirlpool.net.au">http://whirlpool.net.au</a>&rdquo;
+]</p>
 
-<p>pages = urls.map do |url|
-  future do</p>
+<p>Benchmark.bm do |b|
+  # Without futures.
+  b.report do</p>
 
-<pre><code>open(url) { |f| f.read }
+<pre><code>pages = urls.map do |url|
+  open(url) { |f| f.read }
+end
+pages.map { |page| page.length }
+</code></pre>
+
+<p>  end</p>
+
+<p>  # With futures.
+  b.report do</p>
+
+<pre><code>pages = urls.map do |url|
+  future { open(url) { |f| f.read } }
+end
+pages.map { |page| page.length }
 </code></pre>
 
 <p>  end
 end</p>
 
-<p>pages.each { |page| puts page.lines.first }
+<p>```</p>
+
+<p>The results:</p>
+
+<p>``` plain</p>
+
+<pre><code>   user     system      total        real
+</code></pre>
+
+<p>   0.120000   0.040000   0.160000 ( 11.494227)
+   0.070000   0.030000   0.100000 (  2.793592)
 ```</p>
+
+<p>Using futures resulted in a big speed-up (11.5 seconds down to 2.8 seconds). Great!</p>
 
 <h2>Caveats</h2>
 
-<p>I should probably mention that the above code isn&rsquo;t exactly production-ready. If you were going to use this in a real project, you&rsquo;d want the <code>Future</code> class to:</p>
+<p>The above code isn&rsquo;t exactly production-ready. If you were using this in a real project, you&rsquo;d want the <code>Future</code> class to:</p>
 
 <ul>
-<li>Capture exceptions and re-throw them when the future is used.</li>
-<li>Inherit from <code>BasicObject</code> instead of <code>Object</code> (so <code>Object</code>&rsquo;s methods also get forwarded).</li>
+<li>Capture exceptions that occur during the computation and re-throw them when the result is accessed.</li>
+<li>Inherit from <code>BasicObject</code> instead of <code>Object</code> (so methods defined on <code>Object</code> are forwarded to the result).</li>
 <li>Use a thread-pool to prevent the system from being overloaded by a large number of threads.</li>
 <li>Probably a bunch of other things I haven&rsquo;t thought of.</li>
 </ul>

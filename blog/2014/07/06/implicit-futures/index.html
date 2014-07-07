@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Implicit Futures - fizwidget</title>
+  <title>Implicit Futures in Ruby - fizwidget</title>
   <meta name="author" content="James Russell">
 
   
-  <meta name="description" content="Say we&rsquo;re writing a program that performs several time-consuming operations, like network requests, disk accesses, and complex calculations. We &hellip;">
+  <meta name="description" content="Say we&rsquo;re writing a program that performs several time-consuming operations, like network requests, disk accesses, or complex calculations. We &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,7 +80,7 @@
   
   <header>
     
-      <h1 class="entry-title">Implicit Futures</h1>
+      <h1 class="entry-title">Implicit Futures in Ruby</h1>
     
     
       <p class="meta">
@@ -103,12 +103,12 @@
   </header>
 
 
-<div class="entry-content"><p>Say we&rsquo;re writing a program that performs several time-consuming operations, like network requests, disk accesses, and complex calculations. We want them to execute concurrently, but we also want our code to be simple and easy to understand. There are many ways of approaching this problem, but in this post I&rsquo;ll focus on implicit futures and how we can implement them in Ruby.</p>
+<div class="entry-content"><p>Say we&rsquo;re writing a program that performs several time-consuming operations, like network requests, disk accesses, or complex calculations. We want them to execute concurrently, but we also want our code to remain simple and easy to understand. There are many ways of approaching this problem, but in this post I&rsquo;ll focus on <em>implicit futures</em> and they can be implemented in Ruby.</p>
 
 <!-- more -->
 
 
-<p>This snippet of code demonstrates the basic scenario we&rsquo;re dealing with:</p>
+<p>This snippet of code demonstrates the scenario we&rsquo;re dealing with:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -127,9 +127,9 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>We initiate one or more time-consuming operations, do some other stuff, then use the results of the operations.</p>
+<p>We perform one or more time-consuming operations, potentially do some other things, then use the results of the operations.</p>
 
-<p>In the code above, the expensive calls are executed sequentially. This can lead to <em>very</em> poor performance &ndash; for example, the CPU might be forced to sit completely idle while a network request is in progress. Additionally, the call to <code>other_stuff</code> won&rsquo;t begin running until all three of the calls have finished, even though it doesn&rsquo;t depend on their results.</p>
+<p>In the code above, the expensive calls are executed sequentially. This can lead to <em>very</em> poor performance &ndash; for example, the CPU might be forced to sit completely idle while a network request completes. Additionally, the call to <code>other_stuff</code> won&rsquo;t begin running until all three of the previous calls have finished, even though it doesn&rsquo;t depend on their results.</p>
 
 <p>This is the solution we&rsquo;re working towards:</p>
 
@@ -150,13 +150,13 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><em>If you&rsquo;re unfamiliar with Ruby&rsquo;s block syntax, <code>foo { bar }</code> is equivalent to <code>foo(lambda: bar())</code> in Python.</em></p>
+<p>(<em>If you&rsquo;re unfamiliar with Ruby, <code>foo { bar }</code> is equivalent to <code>foo(lambda: bar())</code> in Python</em>)</p>
 
-<p>In the code above, the expensive calls are executed asynchronously and <code>other_stuff</code> can begin running immediately. If line 7 is reached before all three results have been calculated, the main thread will automatically block and wait for them to finish.</p>
+<p>The expensive calls are now executed asynchronously, and <code>other_stuff</code> can begin running immediately. If line 7 is reached before all three results have been calculated, the main thread will automatically block and wait for them to finish.</p>
 
-<p>Neat! How on Earth can we implement this though..?</p>
+<p>Neat! How on Earth do we implement this though&hellip;? At first glance, it might seem like we&rsquo;d need to built it into the language itself. As we&rsquo;ll see though, it&rsquo;s actually quite easy to implement in dynamic languages like Ruby and Python.</p>
 
-<h2>Explicit Futures</h2>
+<h2>Ruby&rsquo;s thread class</h2>
 
 <p>It turns out that Ruby&rsquo;s <code>Thread</code> class does a lot of the work for us. Here&rsquo;s a quick primer on it:</p>
 
@@ -167,7 +167,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><code>Thread.new</code> spawns a thread to execute the code block, and <code>t.value</code> returns the thread&rsquo;s result (blocking if necessary to wait for it to finish running).</p>
+<p><code>Thread.new</code> spawns a thread to execute the code block, and <code>t.value</code> returns the thread&rsquo;s result (waiting for the thread to finish running if necessary).</p>
 
 <p>This <em>almost</em> gets us where we want to be. Let&rsquo;s rewrite our original code using the <code>Thread</code> class:</p>
 
@@ -188,15 +188,15 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Notice that we have to explicitly retrieve the results by calling the <code>value</code> method on <code>a</code>, <code>b</code>, and <code>c</code>. This isn&rsquo;t quite what we&rsquo;re after &ndash; we want to be able to treat them as though they actually are the results.</p>
+<p>Notice that we have to explicitly retrieve the results by calling the <code>value</code> method on <code>a</code>, <code>b</code>, and <code>c</code>. This isn&rsquo;t quite what we&rsquo;re after &ndash; they&rsquo;re <em>explicit</em> futures rather than <em>implicit</em> ones.</p>
 
-<p>This mightn&rsquo;t seem like much of an issue&hellip;calling <code>value</code> isn&rsquo;t exactly difficult. Consider this though: what would happen if we wanted to pass <code>a</code>, <code>b</code>, or <code>c</code> into other functions or methods, or return them as results? Things would start getting messy, because every piece of code that touches them would need to know that they&rsquo;re not <em>actually</em> the results, they&rsquo;re objects we call <code>value</code> on to get the results.</p>
+<p>This mightn&rsquo;t seem like much of an issue&hellip;calling <code>value</code> isn&rsquo;t exactly difficult. Consider this though: what if we wanted to pass <code>a</code>, <code>b</code>, or <code>c</code> into other functions or methods, or return them as results? Things would start getting messy, because every piece of code that touches them would need to know that they&rsquo;re explicit futures.</p>
 
-<p>This is why implicit futures are so nice &ndash; the code that uses them remains blissfully ignorant of what they are. If <code>a</code> were an implicit future, we could freely pass it around to code that doesn&rsquo;t know anything about futures.</p>
+<p>This is why implicit futures are so nice &ndash; the code that uses them can remain blissfully ignorant of the fact that they&rsquo;re futures. If <code>a</code> were an implicit future representing a numeric result, we could freely pass it around to any piece of code that works with numbers.</p>
 
-<h2>Transparent Proxy Objects</h2>
+<h2>Transparent proxy objects</h2>
 
-<p>To summarise the problem, we want to be able to treat <code>a</code> as though it were the result of the computation:</p>
+<p>To summarise what we&rsquo;re trying to achieve, we want to be able to treat <code>a</code> as though it were the result of the computation:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="n">future</span> <span class="p">{</span> <span class="n">some_computation</span> <span class="p">}</span>
@@ -205,9 +205,9 @@
 
 <p>We don&rsquo;t want to have to explicitly retrieve the result by calling <code>value</code>.</p>
 
-<p>In order to achieve this, we want <code>future</code> to return a <em>transparent proxy object</em>. A transparent proxy is a wrapper around an object that forwards all method calls to the object it&rsquo;s wrapping. Looking at it from the outside, it appears identical to the object it&rsquo;s wrapping.</p>
+<p>To achieve this, we want <code>future</code> to return a <em>transparent proxy object</em>. A transparent proxy is a wrapper around an object that forwards all method calls to the object it&rsquo;s wrapping. Looking at it from the outside, it appears identical to the wrapped object.</p>
 
-<p>It&rsquo;s not immediately obvious how we can achieve this, but in a dynamic language like Ruby, it actually ends up being quite easy. In Ruby, we can define a special method called <code>method_missing</code>. As the name suggests, this method gets called automatically if an object can&rsquo;t otherwise respond to a method. Normally this would result in a runtime error, but if <code>method_missing</code> is defined, it&rsquo;ll be called instead.</p>
+<p>It&rsquo;s not immediately obvious how we can achieve this, but it actually ends up being very easy in Ruby. Ruby allows us to define a special method called <code>method_missing</code>, which gets called automatically if an object can&rsquo;t otherwise respond to a method.</p>
 
 <p>Here&rsquo;s a quick demo:</p>
 
@@ -225,14 +225,14 @@
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Useless</span>
 </span><span class='line'>  <span class="k">def</span> <span class="nf">method_missing</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
 </span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Someone called the &#39;</span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">&#39; method on me!&quot;</span>
-</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;I was given </span><span class="si">#{</span><span class="n">args</span><span class="si">}</span><span class="s2"> as arguments.&quot;</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;I was given arguments: </span><span class="si">#{</span><span class="n">args</span><span class="si">}</span><span class="s2">&quot;</span>
 </span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Now let&#39;s call the block I was given...&quot;</span>
 </span><span class='line'>    <span class="n">block</span><span class="o">.</span><span class="n">call</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">u</span> <span class="o">=</span> <span class="no">Useless</span><span class="o">.</span><span class="n">new</span>
-</span><span class='line'><span class="n">u</span><span class="o">.</span><span class="n">well_this_is_weird</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span> <span class="nb">puts</span> <span class="s2">&quot;wat&quot;</span> <span class="p">}</span>
+</span><span class='line'><span class="n">well</span> <span class="o">=</span> <span class="no">Useless</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">well</span><span class="o">.</span><span class="n">this_is_weird!</span><span class="p">(</span><span class="s2">&quot;yup&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="nb">puts</span> <span class="s2">&quot;I don&#39;t even&quot;</span> <span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -242,13 +242,13 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Someone called the 'well_this_is_weird' method on me!
-</span><span class='line'>I was given [1, 2, 3] as arguments.
+</pre></td><td class='code'><pre><code class=''><span class='line'>Someone called the 'well_this_is_weird!' method on me!
+</span><span class='line'>I was given arguments: ["yup"]
 </span><span class='line'>Now let's call the block I was given...
-</span><span class='line'>wat</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>I don't even</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Using <code>method_missing</code>, creating a transparent proxy becomes quite easy:</p>
+<p>We can use <code>method_missing</code> to make a transparent proxy:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -277,19 +277,25 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The call to <code>reverse</code> was intercepted by <code>method_missing</code>, then forwarded to the wrapped object (via the <code>send</code> method, which allows us to call arbitrary methods on objects at runtime).</p>
+<p>We&rsquo;re able to treat <code>proxy</code> as though it were a string. The call to <code>reverse</code> was intercepted by <code>method_missing</code>, then forwarded to the wrapped object.</p>
 
-<h2>Implementing Implicit Futures</h2>
+<h2>Implementing implicit futures</h2>
 
-<p>Things are starting to come together now. Using the building blocks described above, we can write a <code>Future</code> class that:</p>
+<p>Using the building blocks described above, we can write a <code>Future</code> class that:</p>
 
 <ol>
-<li>Uses a <code>Thread</code> to asynchronously execute a block of code.</li>
-<li>Acts as a transparent proxy, forwarding all methods to the thread&rsquo;s result.</li>
+<li>Uses a <code>Thread</code> to:
+
+<ul>
+<li>Asynchronously execute a block of code.</li>
+<li>Block execution if we attempt to use the result before it&rsquo;s available.</li>
+</ul>
+</li>
+<li>Acts as a transparent proxy, forwarding all methods calls to the thread&rsquo;s result.</li>
 </ol>
 
 
-<p>The code for this is actually quite simple:</p>
+<p>The code for this ends up being surprisingly simple:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -323,16 +329,18 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>This looks exactly like what we set out to achieve. Yay!</p>
+<p>We can then use it as follows:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">f</span> <span class="o">=</span> <span class="n">future</span> <span class="p">{</span> <span class="mi">20</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span> <span class="p">}</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">f</span> <span class="o">=</span> <span class="n">future</span> <span class="p">{</span> <span class="n">expensive_call</span> <span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Might be a good idea to check if it works though&hellip;</p>
+<p>This looks exactly like what we set out to achieve &ndash; yay! Might be a good idea to check if it works though&hellip;</p>
 
-<h2>Sanity check</h2>
+<h2>Testing time!</h2>
+
+<p>Let&rsquo;s start with a sanity-check&hellip;</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -352,14 +360,14 @@
 </span><span class='line'>  <span class="s2">&quot;yeeeeaaaaaaaahh&quot;</span>
 </span><span class='line'><span class="k">end</span>
 </span><span class='line'>
-</span><span class='line'><span class="nb">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'><span class="nb">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;Attempting to use the result...&quot;</span>
 </span><span class='line'><span class="nb">puts</span> <span class="n">f</span><span class="o">.</span><span class="n">upcase</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>This gives us the output:</p>
+<p>The future should begin executing immediately, and the main thread should be forced to wait couple of seconds before it can access the result. Here&rsquo;s the output we get:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -371,7 +379,9 @@
 </span><span class='line'>YEEEEAAAAAAAAHH</span></code></pre></td></tr></table></div></figure>
 
 
-<p>When we attempted to use the result, the main thread blocked until it became available. Great! Now let&rsquo;s try a real-world example to see if we see any speedup:</p>
+<p>It worked!</p>
+
+<p>Now let&rsquo;s try a real-world example. We&rsquo;ll download a bunch of webpages and report how long it took, with and without futures:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -384,27 +394,69 @@
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;open-uri&#39;</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;benchmark&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;open-uri&#39;</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">urls</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;https://www.google.com&quot;</span><span class="p">,</span> <span class="s2">&quot;https://www.bing.com&quot;</span><span class="p">,</span> <span class="s2">&quot;https://duckduckgo.com&quot;</span><span class="o">]</span>
+</span><span class='line'><span class="n">urls</span> <span class="o">=</span> <span class="o">[</span>
+</span><span class='line'>  <span class="s2">&quot;https://www.google.com&quot;</span><span class="p">,</span> <span class="s2">&quot;https://www.microsoft.com&quot;</span><span class="p">,</span> <span class="s2">&quot;http://www.abc.net.au&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;http://www.reddit.com&quot;</span><span class="p">,</span> <span class="s2">&quot;https://www.atlassian.com&quot;</span><span class="p">,</span> <span class="s2">&quot;https://www.duckduckgo.com&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;https://www.facebook.com&quot;</span><span class="p">,</span> <span class="s2">&quot;https://www.ruby-lang.org&quot;</span><span class="p">,</span> <span class="s2">&quot;http://whirlpool.net.au&quot;</span>
+</span><span class='line'><span class="o">]</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">pages</span> <span class="o">=</span> <span class="n">urls</span><span class="o">.</span><span class="n">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">url</span><span class="o">|</span>
-</span><span class='line'>  <span class="n">future</span> <span class="k">do</span>
-</span><span class='line'>    <span class="nb">open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span> <span class="p">}</span>
+</span><span class='line'><span class="no">Benchmark</span><span class="o">.</span><span class="n">bm</span> <span class="k">do</span> <span class="o">|</span><span class="n">b</span><span class="o">|</span>
+</span><span class='line'>  <span class="c1"># Without futures.</span>
+</span><span class='line'>  <span class="n">b</span><span class="o">.</span><span class="n">report</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">pages</span> <span class="o">=</span> <span class="n">urls</span><span class="o">.</span><span class="n">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">url</span><span class="o">|</span>
+</span><span class='line'>      <span class="nb">open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">pages</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">page</span><span class="o">|</span> <span class="n">page</span><span class="o">.</span><span class="n">length</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># With futures.</span>
+</span><span class='line'>  <span class="n">b</span><span class="o">.</span><span class="n">report</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">pages</span> <span class="o">=</span> <span class="n">urls</span><span class="o">.</span><span class="n">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">url</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">future</span> <span class="p">{</span> <span class="nb">open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span> <span class="p">}</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">pages</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">page</span><span class="o">|</span> <span class="n">page</span><span class="o">.</span><span class="n">length</span> <span class="p">}</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">pages</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span> <span class="o">|</span><span class="n">page</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">page</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">first</span> <span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p>The results:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>   user     system      total        real
+</span><span class='line'>   0.120000   0.040000   0.160000 ( 11.494227)
+</span><span class='line'>   0.070000   0.030000   0.100000 (  2.793592)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using futures resulted in a big speed-up (11.5 seconds down to 2.8 seconds). Great!</p>
+
 <h2>Caveats</h2>
 
-<p>I should probably mention that the above code isn&rsquo;t exactly production-ready. If you were going to use this in a real project, you&rsquo;d want the <code>Future</code> class to:</p>
+<p>The above code isn&rsquo;t exactly production-ready. If you were using this in a real project, you&rsquo;d want the <code>Future</code> class to:</p>
 
 <ul>
-<li>Capture exceptions and re-throw them when the future is used.</li>
-<li>Inherit from <code>BasicObject</code> instead of <code>Object</code> (so <code>Object</code>&rsquo;s methods also get forwarded).</li>
+<li>Capture exceptions that occur during the computation and re-throw them when the result is accessed.</li>
+<li>Inherit from <code>BasicObject</code> instead of <code>Object</code> (so methods defined on <code>Object</code> are forwarded to the result).</li>
 <li>Use a thread-pool to prevent the system from being overloaded by a large number of threads.</li>
 <li>Probably a bunch of other things I haven&rsquo;t thought of.</li>
 </ul>
@@ -482,7 +534,7 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/07/06/implicit-futures/">Implicit Futures</a>
+        <a href="/blog/2014/07/06/implicit-futures/">Implicit Futures in Ruby</a>
       </li>
     
       <li class="post">
