@@ -4,7 +4,7 @@
   <title><![CDATA[fizwidget]]></title>
   <link href="http://fizwidget.github.io/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-08T00:27:27+09:30</updated>
+  <updated>2014-07-08T09:20:06+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -14,10 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Nothin' but Functions]]></title>
-    <link href="http://fizwidget.github.io/blog/2014/07/06/nothin-but-functions/"/>
+    <title type="html"><![CDATA[Nothing but Functions]]></title>
+    <link href="http://fizwidget.github.io/blog/2014/07/06/nothing-but-functions/"/>
     <updated>2014-07-06T16:59:34+09:30</updated>
-    <id>http://fizwidget.github.io/blog/2014/07/06/nothin-but-functions</id>
+    <id>http://fizwidget.github.io/blog/2014/07/06/nothing-but-functions</id>
     <content type="html"><![CDATA[<p>Imagine we&rsquo;re using a programming language that doesn&rsquo;t give us any way of defining data structures. No arrays, no tuples, no structs, no classes. Nothing. All we can do is define and call functions.</p>
 
 <p>Now imagine we need to work with a collection of items. Are we screwed?</p>
@@ -94,7 +94,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Easy!</p>
+<p>It&rsquo;s just as easy to work with as a normal linked list.</p>
 
 <h2>Closures</h2>
 
@@ -104,9 +104,9 @@
 
 <h2>Conclusion</h2>
 
-<p>We&rsquo;ve really just scratched the surface here &ndash; it&rsquo;s not hard to see that more complex data structures could be defined using similar techniques. We could even use functions to define <em>numbers</em> by representing the <em>n</em>th integer as a series of <em>n</em> nested functions.</p>
+<p>We&rsquo;ve really just scratched the surface here &ndash; it&rsquo;s not hard to see that more complex data structures could be defined using similar techniques. We could even use functions to define <em>numbers</em> by representing the nth integer as a series of n nested functions.</p>
 
-<p>This is all hinting at a deeper fact: any language that allows us to define and apply functions is Turing-complete (meaning we can use it to compute <em>anything that can be computed</em>). Inbuilt constructs for arrays, classes, numbers, and even control structures are optional extras!</p>
+<p>This is all hinting at a deeper fact: any language that allows us to define and apply functions is Turing-complete (meaning we can use it to compute <em>anything that can be computed</em>). This means that inbuilt constructs for arrays, classes, numbers, and even control structures are optional extras!</p>
 
 <p>Check out the <a href="http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html">lambda calculus</a> if this is even remotely interesting. Neat, huh?</p>
 ]]></content>
@@ -137,13 +137,13 @@
 </span><span class='line'>
 </span><span class='line'><span class="n">other_stuff</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">result</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">*</span> <span class="n">c</span><span class="p">)</span>
+</span><span class='line'><span class="n">result</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">xyz</span><span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>We perform one or more time-consuming operations, potentially do something else, then use the results of the operations.</p>
 
-<p>In the code above, the time-consuming operations are executed sequentially. This results in very poor performance (the CPU might be forced to sit idle while a network request completes for example). Also, the call to <code>other_stuff</code> won&rsquo;t begin running until all three of the previous calls have finished, even though it doesn&rsquo;t depend on their results.</p>
+<p>In the code above, the time-consuming operations are executed sequentially. This can result in very poor performance (e.g. CPU might be forced to sit idle while a network request completes). Also, the call to <code>other_stuff</code> won&rsquo;t begin running until all three of the previous calls have finished, even though it doesn&rsquo;t depend on their results.</p>
 
 <p>This is the solution we&rsquo;re working towards:</p>
 
@@ -160,7 +160,7 @@
 </span><span class='line'>
 </span><span class='line'><span class="n">other_stuff</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">result</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">*</span> <span class="n">c</span><span class="p">)</span>
+</span><span class='line'><span class="n">result</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">xyz</span><span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -168,7 +168,7 @@
 
 <p>The expensive calls are now executed asynchronously, and <code>other_stuff</code> can begin running immediately. If line 7 is reached before all three results are available, the main thread will automatically block and wait for them to finish.</p>
 
-<p>Neat! How on Earth do we implement this though&hellip;? At first glance, it looks like we&rsquo;d need to build it into the language itself. As we&rsquo;ll see though, that&rsquo;s not necessary &ndash; languages like Ruby and Python are already flexible enough to support this kind of thing.</p>
+<p>Nice! How on Earth do we implement this though&hellip;? At first glance, it looks like we&rsquo;d need to build it into the language itself. As it turns out though, implementing this in Ruby is actually quite easy!</p>
 
 <h2>Threads in Ruby</h2>
 
@@ -206,19 +206,19 @@
 
 <h2>Explicit vs implicit</h2>
 
-<p>In the code above, we have to explicitly retrieve the results by calling <code>value</code> on the futures. This isn&rsquo;t quite what we&rsquo;re after &ndash; they&rsquo;re <em>explicit</em> futures rather than <em>implicit</em> futures.</p>
+<p>In the code above, we have to explicitly retrieve the results by calling <code>value</code> on the futures/threads. This isn&rsquo;t quite what we&rsquo;re after &ndash; they&rsquo;re <em>explicit</em> futures rather than <em>implicit</em> ones.</p>
 
-<p>This might not seem like much of an issue, but consider what would happen if we wanted to pass a result to another piece of code. We could either:</p>
+<p>This might not seem like much of an issue, but consider what would happen if we wanted to pass one of the results to another piece of code. We could either:</p>
 
 <ol>
 <li>Call <code>value</code> on the future and directly pass along the result.</li>
-<li>Pass along the future itself, and let the other piece of code call <code>value</code> when it needs the result.</li>
+<li>Pass along the future, and let the other piece of code call <code>value</code> when it needs the result.</li>
 </ol>
 
 
-<p>Neither of these options are very good. Option 1 can result in suboptimal performance, because we&rsquo;re calling <code>value</code> before we really need to (remember that <code>value</code> might block execution if the result isn&rsquo;t ready yet).</p>
+<p>Neither of these options is very good. The first can result in suboptimal performance, because we&rsquo;re calling <code>value</code> before we really need to (remember that <code>value</code> might block execution if the result isn&rsquo;t ready yet).</p>
 
-<p>Option 2 is isn&rsquo;t very good either, because it limits the reusability of the other piece of code (which would now only be able to work with futures).</p>
+<p>The second is isn&rsquo;t very good either, because it limits the reusability of the other piece of code (which would now only be able to work with futures).</p>
 
 <p>Implicit futures don&rsquo;t have either of these issues. The code that uses them can remain blissfully ignorant of what they are, and no blocking will occur until the result is actually used (i.e. a method is called on it).</p>
 
@@ -226,9 +226,9 @@
 
 <p>To summarise what we&rsquo;re trying to achieve, we want the future object to appear as though it were the result object. When we call a method on it, it should delegate the call to the result (blocking if necessary until the result becomes available).</p>
 
-<p>It&rsquo;s not immediately obvious how we can delegate methods like this. The future should be able to work with all types of result objects, so we don&rsquo;t know in advance which methods need forwarding.</p>
+<p>It&rsquo;s not immediately obvious how methods could be delegated like this. The future should be able to work with all types of result objects, so we don&rsquo;t know in advance which methods need forwarding.</p>
 
-<p>Ruby has a rather interesting feature called <code>method_missing</code> that comes in handy here. Calling a non-existent method normally results in an error, but if we define a method called <code>method_missing</code>, Ruby will call that instead.</p>
+<p>Ruby has a rather interesting feature called <code>method_missing</code> that comes in handy here. Calling a non-existent method would normally result in an error, but if we define a method called <code>method_missing</code>, Ruby will call that instead.</p>
 
 <p>Here&rsquo;s a quick demo:</p>
 
@@ -269,14 +269,14 @@
 </span><span class='line'>I don't even...</span></code></pre></td></tr></table></div></figure>
 
 
-<p>So, our future class can use <code>method_missing</code> to intercept method calls. It still needs to actually forward the intercepted method though &ndash; this can be done using <code>send</code>, which lets us dynamically call any method on an object:</p>
+<p>So, our future class can use <code>method_missing</code> to intercept method calls. It still needs to actually forward the intercepted methods though &ndash; this can be done using <code>send</code>, which lets us dynamically call any method on an object:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">some_object</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">method_name</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>To summarise, our future can intercept method calls with <code>method_missing</code> and forward them to the result using <code>send</code>.</p>
+<p>To summarise, our future can intercept all incoming method calls with <code>method_missing</code> and forward them to the result using <code>send</code>.</p>
 
 <h2>Putting it all together</h2>
 
@@ -290,11 +290,11 @@
 <li>Block execution if the result is requested before it&rsquo;s ready.</li>
 </ul>
 </li>
-<li>Use <code>method_missing</code> and <code>send</code> to delegate method calls to the result.</li>
+<li>Use <code>method_missing</code> and <code>send</code> to delegate all method calls to the result.</li>
 </ol>
 
 
-<p>The code actually ends up being very simple:</p>
+<p>The code ends up being surprisingly simple:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -305,13 +305,15 @@
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
+<span class='line-number'>10</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Future</span>
 </span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
 </span><span class='line'>    <span class="vi">@thread</span> <span class="o">=</span> <span class="no">Thread</span><span class="o">.</span><span class="n">new</span> <span class="p">{</span> <span class="n">block</span><span class="o">.</span><span class="n">call</span> <span class="p">}</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">method_missing</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-</span><span class='line'>    <span class="vi">@thread</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">method_missing</span><span class="p">(</span><span class="n">method_name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">result</span> <span class="o">=</span> <span class="vi">@thread</span><span class="o">.</span><span class="n">value</span>
+</span><span class='line'>    <span class="n">result</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">method_name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -330,14 +332,14 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>We can now create future objects like this:</p>
+<p>We can now create futures like this:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">f</span> <span class="o">=</span> <span class="n">future</span> <span class="p">{</span> <span class="n">expensive_call</span> <span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>This looks exactly like what we set out to achieve. Brilliant! Might be a good idea to check if it works though&hellip;</p>
+<p>This looks exactly like what we set out to achieve! Might be a good idea to check if it works though&hellip;</p>
 
 <h2>Testing time</h2>
 
@@ -413,6 +415,8 @@
 <span class='line-number'>27</span>
 <span class='line-number'>28</span>
 <span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;benchmark&#39;</span>
 </span><span class='line'><span class="nb">require</span> <span class="s1">&#39;open-uri&#39;</span>
 </span><span class='line'>
@@ -425,11 +429,13 @@
 </span><span class='line'>
 </span><span class='line'><span class="k">def</span> <span class="nf">download_with_futures</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span>
 </span><span class='line'>  <span class="n">pages</span> <span class="o">=</span> <span class="n">urls</span><span class="o">.</span><span class="n">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">url</span><span class="o">|</span>
-</span><span class='line'>    <span class="n">future</span> <span class="p">{</span> <span class="nb">open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span> <span class="p">}</span> <span class="p">}</span>
+</span><span class='line'>    <span class="n">future</span> <span class="k">do</span>
+</span><span class='line'>      <span class="nb">open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">end</span>
 </span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>  <span class="c1"># Wait until all downloads have finished by calling a method on each future.</span>
+</span><span class='line'>  <span class="c1"># For the purposes of the benchmark, wait until all downloads have</span>
+</span><span class='line'>  <span class="c1"># finished by calling a method on each future.</span>
 </span><span class='line'>  <span class="n">pages</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span> <span class="o">|</span><span class="n">page</span><span class="o">|</span> <span class="n">page</span><span class="o">.</span><span class="n">length</span> <span class="p">}</span>
-</span><span class='line'>  <span class="n">pages</span>
 </span><span class='line'><span class="k">end</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">def</span> <span class="nf">download_without_futures</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span>
@@ -455,7 +461,7 @@
 </span><span class='line'>   0.110000   0.030000   0.140000 ( 13.774315)</span></code></pre></td></tr></table></div></figure>
 
 
-<p>13.8 seconds down to 2.6 seconds. Neat!</p>
+<p>13.8 seconds down to 2.6 seconds. Not bad!</p>
 
 <h2>Caveats</h2>
 
@@ -463,13 +469,13 @@
 
 <ul>
 <li>Capture exceptions that occur during the thread&rsquo;s execution and re-throw them when the result is accessed.</li>
-<li>Inherit from <code>BasicObject</code> instead of <code>Object</code>, so the methods defined on <code>Object</code> are also delegated to the result.</li>
+<li>Inherit from <code>BasicObject</code> instead of <code>Object</code>, so methods defined on <code>Object</code> are also delegated to the result.</li>
 <li>Use a thread pool to prevent the system from being overloaded by a large number of threads.</li>
 <li>Probably a bunch of other things I haven&rsquo;t thought of.</li>
 </ul>
 
 
-<p>A basic implementation in 8 lines of code isn&rsquo;t too shabby though :P</p>
+<p>A basic implementation in 9 lines of code isn&rsquo;t too shabby though :P</p>
 
 <h2>Conclusion</h2>
 

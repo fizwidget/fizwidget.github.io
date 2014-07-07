@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Functional Programming | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/functional-programming/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-08T00:27:27+09:30</updated>
+  <updated>2014-07-08T09:20:06+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -14,10 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Nothin' but Functions]]></title>
-    <link href="http://fizwidget.github.io/blog/2014/07/06/nothin-but-functions/"/>
+    <title type="html"><![CDATA[Nothing but Functions]]></title>
+    <link href="http://fizwidget.github.io/blog/2014/07/06/nothing-but-functions/"/>
     <updated>2014-07-06T16:59:34+09:30</updated>
-    <id>http://fizwidget.github.io/blog/2014/07/06/nothin-but-functions</id>
+    <id>http://fizwidget.github.io/blog/2014/07/06/nothing-but-functions</id>
     <content type="html"><![CDATA[<p>Imagine we&rsquo;re using a programming language that doesn&rsquo;t give us any way of defining data structures. No arrays, no tuples, no structs, no classes. Nothing. All we can do is define and call functions.</p>
 
 <p>Now imagine we need to work with a collection of items. Are we screwed?</p>
@@ -81,7 +81,7 @@ print_list(lst("tail"))
 
 <p>```</p>
 
-<p>Easy!</p>
+<p>It&rsquo;s just as easy to work with as a normal linked list.</p>
 
 <h2>Closures</h2>
 
@@ -91,9 +91,9 @@ print_list(lst("tail"))
 
 <h2>Conclusion</h2>
 
-<p>We&rsquo;ve really just scratched the surface here &ndash; it&rsquo;s not hard to see that more complex data structures could be defined using similar techniques. We could even use functions to define <em>numbers</em> by representing the <em>n</em>th integer as a series of <em>n</em> nested functions.</p>
+<p>We&rsquo;ve really just scratched the surface here &ndash; it&rsquo;s not hard to see that more complex data structures could be defined using similar techniques. We could even use functions to define <em>numbers</em> by representing the nth integer as a series of n nested functions.</p>
 
-<p>This is all hinting at a deeper fact: any language that allows us to define and apply functions is Turing-complete (meaning we can use it to compute <em>anything that can be computed</em>). Inbuilt constructs for arrays, classes, numbers, and even control structures are optional extras!</p>
+<p>This is all hinting at a deeper fact: any language that allows us to define and apply functions is Turing-complete (meaning we can use it to compute <em>anything that can be computed</em>). This means that inbuilt constructs for arrays, classes, numbers, and even control structures are optional extras!</p>
 
 <p>Check out the <a href="http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html">lambda calculus</a> if this is even remotely interesting. Neat, huh?</p>
 ]]></content>
