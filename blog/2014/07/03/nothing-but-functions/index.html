@@ -179,11 +179,9 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>It&rsquo;s just as easy to work with as a normal linked list.</p>
-
 <h2>Closures</h2>
 
-<p>What we&rsquo;ve done above is only possible because Python supports <em>closures</em>. A closure is, roughly speaking, a function that has access to the variables from the scope it was defined in. The <code>node</code> function is a good example of this: <code>head</code> and <code>tail</code> aren&rsquo;t explicitly passed in as arguments, but it&rsquo;s able to use them all the same. Each time we call <code>make_list</code>, a new instance of <code>node</code> is created that references the new versions of <code>head</code> and <code>tail</code>.</p>
+<p>The <code>make_list</code> code only works because Python supports closures. A closure is, roughly speaking, a function that has access to the variables from the scope it was defined in. The <code>node</code> function is a good example of this: <code>head</code> and <code>tail</code> aren&rsquo;t explicitly passed in as arguments, but it&rsquo;s able to use them all the same. Each time we call <code>make_list</code>, a new instance of <code>node</code> is created that references the new versions of <code>head</code> and <code>tail</code>.</p>
 
 <p>Our list is nothing more than a chain of nested closures. When we call the outermost closure and pass it <code>"tail"</code>, it returns the next closure in the chain (i.e. the next node in the list).</p>
 
@@ -191,7 +189,7 @@
 
 <p>We&rsquo;ve really just scratched the surface here &ndash; it&rsquo;s not hard to see that more complex data structures could be defined using similar techniques. We could even use functions to define <em>numbers</em> by representing the nth integer as a series of n nested functions.</p>
 
-<p>This is all hinting at a deeper fact: any language that allows us to define and apply functions is Turing-complete (meaning we can use it to compute <em>anything that can be computed</em>). This means that inbuilt constructs for arrays, classes, numbers, and even control structures are optional extras!</p>
+<p>This is all hinting at a deeper fact: any language that allows us to define and apply functions is Turing-complete (meaning we can use it to compute <em>anything that can be computed</em>). This means that inbuilt constructs for arrays, classes, numbers, and even control structures are optional extras for a programming language!</p>
 
 <p>Check out the <a href="http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html">lambda calculus</a> if this is even remotely interesting. Neat, huh?</p>
 </div>

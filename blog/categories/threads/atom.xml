@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Threads | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/threads/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-08T11:04:54+09:30</updated>
+  <updated>2014-07-08T16:48:43+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -55,7 +55,7 @@ c = future { baz.expensive_call_3 }</p>
 
 <p>The expensive calls are now executed asynchronously, and <code>other_stuff</code> can begin running immediately. If line 7 is reached before all three results are available, the main thread will automatically block and wait for them to finish.</p>
 
-<p>Nice! How on Earth do we implement this though&hellip;? At first glance, it looks like we&rsquo;d need to build it into the language itself. As it turns out though, implementing this in Ruby is actually quite easy!</p>
+<p>Nice! How on Earth can this be implemented though&hellip;? At first glance, it looks like we&rsquo;d need to modify the language itself. As we&rsquo;ll see, there&rsquo;s actually a much simpler approach.</p>
 
 <h2>Threads in Ruby</h2>
 
@@ -84,19 +84,17 @@ c = Thread.new { baz.expensive_call_3 }</p>
 
 <h2>Explicit vs implicit</h2>
 
-<p>In the code above, we have to explicitly retrieve the results by calling <code>value</code> on the futures/threads. This isn&rsquo;t quite what we&rsquo;re after &ndash; they&rsquo;re <em>explicit</em> futures rather than <em>implicit</em> ones.</p>
+<p>In the code above, we have to explicitly retrieve the results by calling <code>value</code> on the futures/threads. This means they&rsquo;re <em>explicit</em> futures rather than <em>implicit</em> ones.</p>
 
-<p>This might not seem like much of an issue, but consider what would happen if we wanted to pass one of the results to another piece of code. We could either:</p>
+<p>This might not seem like much of an issue, but let&rsquo;s say we want to pass one of the results on to another piece of code. We could either:</p>
 
 <ol>
-<li>Call <code>value</code> on the future and directly pass along the result.</li>
+<li>Call <code>value</code> on the future, and pass along the result directly.</li>
 <li>Pass along the future, and let the other piece of code call <code>value</code> when it needs the result.</li>
 </ol>
 
 
-<p>Neither of these options is very good. The first can result in suboptimal performance, because we&rsquo;re calling <code>value</code> before we really need to (remember that <code>value</code> might block execution if the result isn&rsquo;t ready yet).</p>
-
-<p>The second is isn&rsquo;t very good either, because it limits the reusability of the other piece of code (which would now only be able to work with futures).</p>
+<p>Neither of these options are very good. The first can result in suboptimal performance, because we&rsquo;re calling <code>value</code> before we really need to (remember that <code>value</code> might block execution if the result isn&rsquo;t ready yet). The second option limits the reusability of the other piece of code, as it would now only work with futures.</p>
 
 <p>Implicit futures don&rsquo;t have either of these issues. The code that uses them can remain blissfully ignorant of what they are, and no blocking will occur until the result is actually used (i.e. a method is called on it).</p>
 
@@ -104,7 +102,7 @@ c = Thread.new { baz.expensive_call_3 }</p>
 
 <p>To summarise what we&rsquo;re trying to achieve, we want the future object to appear as though it were the result object. When we call a method on it, it should delegate the call to the result (blocking if necessary until the result becomes available).</p>
 
-<p>It&rsquo;s not immediately obvious how methods could be delegated like this. The future should be able to work with all types of result objects, so we don&rsquo;t know in advance which methods need forwarding.</p>
+<p>It&rsquo;s not immediately obvious how methods could be delegated like this. The future should be able to work with all types of result objects, so we don&rsquo;t know in advance which methods will need forwarding.</p>
 
 <p>Ruby has a rather interesting feature called <code>method_missing</code> that comes in handy here. Calling a non-existent method would normally result in an error, but if we define a method called <code>method_missing</code>, Ruby will call that instead.</p>
 
@@ -123,26 +121,26 @@ block.call
 <p>  end
 end</p>
 
-<p>well = Useless.new
-well.this_is_weird!(&ldquo;yup&rdquo;) { puts &ldquo;I don&rsquo;t even&hellip;&rdquo; }
+<p>u = Useless.new
+u.this_is_weird!(&ldquo;yup&rdquo;) { puts &ldquo;I don&rsquo;t even&hellip;&rdquo; }
 ```</p>
 
 <p>This gives the following output:</p>
 
 <p><code>plain
-Someone called 'well_this_is_weird!' on me.
+Someone called 'this_is_weird!' on me.
 I was given arguments: ["yup"]
 Now let's call the block I was given:
 I don't even...
 </code></p>
 
-<p>So, our future class can use <code>method_missing</code> to intercept method calls. It still needs to actually forward the intercepted methods though &ndash; this can be done using <code>send</code>, which lets us dynamically call any method on an object:</p>
+<p>Our future class can use <code>method_missing</code> to intercept method calls, but it still needs to actually forward the intercepted methods to the result. This can be done using <code>send</code>, which lets us dynamically call any method on an object:</p>
 
 <p><code>ruby
 some_object.send(method_name, args, &amp;block)
 </code></p>
 
-<p>To summarise, our future can intercept all incoming method calls with <code>method_missing</code> and forward them to the result using <code>send</code>.</p>
+<p>So, our future can intercept all incoming method calls with <code>method_missing</code> and forward them to the result using <code>send</code>.</p>
 
 <h2>Putting it all together</h2>
 
@@ -160,7 +158,7 @@ some_object.send(method_name, args, &amp;block)
 </ol>
 
 
-<p>The code ends up being surprisingly simple:</p>
+<p>The code ends up being very simple:</p>
 
 <p>``` ruby
 class Future
@@ -181,7 +179,7 @@ result.send(method_name, *args, &amp;block)
 end
 ```</p>
 
-<p>When a future is created, a thread is immediately spawned to execute the given code block. When a method is called on the future, it simply forwards it to <code>@thread.value</code> (which will block if the thread hasn&rsquo;t finished running yet).</p>
+<p>When a future is created, a thread is immediately spawned to execute the given code block. When a method is called on the future, it simply forwards it to <code>@thread.value</code> (which will block execution if the thread hasn&rsquo;t finished running yet).</p>
 
 <p>To make it slightly easier to use, we&rsquo;ll define a standalone <code>future</code> function that creates and returns a <code>Future</code> object:</p>
 
@@ -208,7 +206,7 @@ f = future do
   puts &ldquo;Future: Started.&rdquo;
   sleep(4)
   puts &ldquo;Future: Finished.&rdquo;
-  &ldquo;yeeeeaaaaaaaahh&rdquo;
+  &ldquo;I&rsquo;m the result!&rdquo;
 end</p>
 
 <p>sleep(2)</p>
@@ -223,7 +221,7 @@ puts f.upcase
 Future: Started.
 Attempting to use the result.
 Future: Finished.
-YEEEEAAAAAAAAHH
+I'M THE RESULT!
 </code></p>
 
 <p>It worked!</p>
