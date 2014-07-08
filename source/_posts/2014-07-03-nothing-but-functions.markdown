@@ -63,12 +63,10 @@ def print_list(lst):
     print_list(lst("tail"))
 ```
 
-It's just as easy to work with as a normal linked list.
-
 Closures
 --------
 
-What we've done above is only possible because Python supports *closures*. A closure is, roughly speaking, a function that has access to the variables from the scope it was defined in. The `node` function is a good example of this: `head` and `tail` aren't explicitly passed in as arguments, but it's able to use them all the same. Each time we call `make_list`, a new instance of `node` is created that references the new versions of `head` and `tail`.
+The `make_list` code only works because Python supports closures. A closure is, roughly speaking, a function that has access to the variables from the scope it was defined in. The `node` function is a good example of this: `head` and `tail` aren't explicitly passed in as arguments, but it's able to use them all the same. Each time we call `make_list`, a new instance of `node` is created that references the new versions of `head` and `tail`.
 
 Our list is nothing more than a chain of nested closures. When we call the outermost closure and pass it `"tail"`, it returns the next closure in the chain (i.e. the next node in the list).
 
@@ -77,6 +75,6 @@ Conclusion
 
 We've really just scratched the surface here - it's not hard to see that more complex data structures could be defined using similar techniques. We could even use functions to define *numbers* by representing the nth integer as a series of n nested functions.
 
-This is all hinting at a deeper fact: any language that allows us to define and apply functions is Turing-complete (meaning we can use it to compute *anything that can be computed*). This means that inbuilt constructs for arrays, classes, numbers, and even control structures are optional extras!
+This is all hinting at a deeper fact: any language that allows us to define and apply functions is Turing-complete (meaning we can use it to compute *anything that can be computed*). This means that inbuilt constructs for arrays, classes, numbers, and even control structures are optional extras for a programming language!
 
 Check out the [lambda calculus](http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html) if this is even remotely interesting. Neat, huh?

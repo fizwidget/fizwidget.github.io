@@ -42,7 +42,7 @@ result = a.xyz(b + c)
 
 The expensive calls are now executed asynchronously, and `other_stuff` can begin running immediately. If line 7 is reached before all three results are available, the main thread will automatically block and wait for them to finish.
 
-Nice! How on Earth do we implement this though...? At first glance, it looks like we'd need to build it into the language itself. As it turns out though, implementing this in Ruby is actually quite easy!
+Nice! How on Earth can this be implemented though...? At first glance, it looks like we'd need to modify the language itself. As we'll see, there's actually a much simpler approach.
 
 Threads in Ruby
 ---------------
@@ -73,16 +73,14 @@ This almost gets us where we want to be, but not quite.
 Explicit vs implicit
 --------------------
 
-In the code above, we have to explicitly retrieve the results by calling `value` on the futures/threads. This isn't quite what we're after - they're *explicit* futures rather than *implicit* ones.
+In the code above, we have to explicitly retrieve the results by calling `value` on the futures/threads. This means they're *explicit* futures rather than *implicit* ones.
 
-This might not seem like much of an issue, but consider what would happen if we wanted to pass one of the results to another piece of code. We could either:
+This might not seem like much of an issue, but let's say we want to pass one of the results on to another piece of code. We could either:
 
-1. Call `value` on the future and directly pass along the result.
+1. Call `value` on the future, and pass along the result directly.
 2. Pass along the future, and let the other piece of code call `value` when it needs the result.
 
-Neither of these options is very good. The first can result in suboptimal performance, because we're calling `value` before we really need to (remember that `value` might block execution if the result isn't ready yet).
-
-The second is isn't very good either, because it limits the reusability of the other piece of code (which would now only be able to work with futures).
+Neither of these options are very good. The first can result in suboptimal performance, because we're calling `value` before we really need to (remember that `value` might block execution if the result isn't ready yet). The second option limits the reusability of the other piece of code, as it would now only work with futures.
 
 Implicit futures don't have either of these issues. The code that uses them can remain blissfully ignorant of what they are, and no blocking will occur until the result is actually used (i.e. a method is called on it).
 
@@ -91,7 +89,7 @@ Delegating method calls
 
 To summarise what we're trying to achieve, we want the future object to appear as though it were the result object. When we call a method on it, it should delegate the call to the result (blocking if necessary until the result becomes available).
 
-It's not immediately obvious how methods could be delegated like this. The future should be able to work with all types of result objects, so we don't know in advance which methods need forwarding.
+It's not immediately obvious how methods could be delegated like this. The future should be able to work with all types of result objects, so we don't know in advance which methods will need forwarding.
 
 Ruby has a rather interesting feature called `method_missing` that comes in handy here. Calling a non-existent method would normally result in an error, but if we define a method called `method_missing`, Ruby will call that instead.
 
@@ -107,26 +105,26 @@ class Useless
   end
 end
 
-well = Useless.new
-well.this_is_weird!("yup") { puts "I don't even..." }
+u = Useless.new
+u.this_is_weird!("yup") { puts "I don't even..." }
 ```
 
 This gives the following output:
 
 ``` plain
-Someone called 'well_this_is_weird!' on me.
+Someone called 'this_is_weird!' on me.
 I was given arguments: ["yup"]
 Now let's call the block I was given:
 I don't even...
 ```
 
-So, our future class can use `method_missing` to intercept method calls. It still needs to actually forward the intercepted methods though - this can be done using `send`, which lets us dynamically call any method on an object:
+Our future class can use `method_missing` to intercept method calls, but it still needs to actually forward the intercepted methods to the result. This can be done using `send`, which lets us dynamically call any method on an object:
 
 ``` ruby
 some_object.send(method_name, args, &block)
 ```
 
-To summarise, our future can intercept all incoming method calls with `method_missing` and forward them to the result using `send`.
+So, our future can intercept all incoming method calls with `method_missing` and forward them to the result using `send`.
 
 Putting it all together
 -----------------------
@@ -138,7 +136,7 @@ We now have everything we need to implement an implicit future. We can:
     - Block execution if the result is requested before it's ready.
 2. Use `method_missing` and `send` to delegate all method calls to the result.
 
-The code ends up being surprisingly simple:
+The code ends up being very simple:
 
 ``` ruby
 class Future
@@ -153,7 +151,7 @@ class Future
 end
 ```
 
-When a future is created, a thread is immediately spawned to execute the given code block. When a method is called on the future, it simply forwards it to `@thread.value` (which will block if the thread hasn't finished running yet).
+When a future is created, a thread is immediately spawned to execute the given code block. When a method is called on the future, it simply forwards it to `@thread.value` (which will block execution if the thread hasn't finished running yet).
 
 To make it slightly easier to use, we'll define a standalone `future` function that creates and returns a `Future` object:
 
@@ -181,7 +179,7 @@ f = future do
   puts "Future: Started."
   sleep(4)
   puts "Future: Finished."
-  "yeeeeaaaaaaaahh"
+  "I'm the result!"
 end
 
 sleep(2)
@@ -196,7 +194,7 @@ To mimic an expensive operation, I've placed a call to `sleep` in the code given
 Future: Started.
 Attempting to use the result.
 Future: Finished.
-YEEEEAAAAAAAAHH
+I'M THE RESULT!
 ```
 
 It worked!
