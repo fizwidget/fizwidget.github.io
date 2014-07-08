@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Implicit Futures in Ruby"
-date: 2014-07-03 02:20:05 +0930
+date: 2014-07-06 02:20:05 +0930
 comments: true
 categories: [concurrency, ruby, futures, threads]
 ---

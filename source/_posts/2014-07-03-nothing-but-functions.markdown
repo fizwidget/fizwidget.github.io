@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Nothing but Functions"
-date: 2014-07-06 16:59:34 +0930
+date: 2014-07-03 16:59:34 +0930
 comments: true
 categories: [functional programming, lambda calculus]
 ---
