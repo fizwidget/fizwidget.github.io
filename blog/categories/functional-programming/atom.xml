@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Functional Programming | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/functional-programming/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-25T16:37:58+09:30</updated>
+  <updated>2014-07-25T16:39:55+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -24,7 +24,7 @@
 
 
 <p><code>bash
-cat students | grep "fred" | uniq | sort
+cat names | grep "fred" | uniq | sort
 </code></p>
 
 <p>Pipelining is also commonly used as a high-level system architecture. Consider a program that captures images from a camera, tags them with metadata, compresses them, then writes them to disk. It&rsquo;s not hard to see how this program could be structured as a series of four modules connected together in a pipeline.</p>

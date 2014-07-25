@@ -4,7 +4,7 @@
   <title><![CDATA[fizwidget]]></title>
   <link href="http://fizwidget.github.io/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-25T16:37:58+09:30</updated>
+  <updated>2014-07-25T16:39:55+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -26,7 +26,7 @@
 
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>cat students <span class="p">|</span> grep <span class="s2">&quot;fred&quot;</span> <span class="p">|</span> uniq <span class="p">|</span> sort
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>cat names <span class="p">|</span> grep <span class="s2">&quot;fred&quot;</span> <span class="p">|</span> uniq <span class="p">|</span> sort
 </span></code></pre></td></tr></table></div></figure>
 
 
