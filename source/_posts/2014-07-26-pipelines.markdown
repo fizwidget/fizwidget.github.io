@@ -11,7 +11,7 @@ The concept of pipelining is pretty simple - a series of components are chained 
 <!-- more -->
 
 ``` bash
-cat students | grep "fred" | uniq | sort
+cat names | grep "fred" | uniq | sort
 ```
 
 Pipelining is also commonly used as a high-level system architecture. Consider a program that captures images from a camera, tags them with metadata, compresses them, then writes them to disk. It's not hard to see how this program could be structured as a series of four modules connected together in a pipeline.
