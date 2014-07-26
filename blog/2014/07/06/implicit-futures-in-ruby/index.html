@@ -123,7 +123,7 @@
 </span><span class='line'>
 </span><span class='line'><span class="n">other_stuff</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">result</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">xyz</span><span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span>
+</span><span class='line'><span class="n">result</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">some_method</span><span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -146,7 +146,7 @@
 </span><span class='line'>
 </span><span class='line'><span class="n">other_stuff</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">result</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">xyz</span><span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span>
+</span><span class='line'><span class="n">result</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">some_method</span><span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -184,7 +184,7 @@
 </span><span class='line'>
 </span><span class='line'><span class="n">other_stuff</span>
 </span><span class='line'>
-</span><span class='line'><span class="nb">puts</span> <span class="n">a</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">xyz</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+</span><span class='line'><span class="n">result</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">some_method</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -194,7 +194,7 @@
 
 <p>In the code above, we have to explicitly retrieve the results by calling <code>value</code> on the futures/threads. This means they&rsquo;re <em>explicit</em> futures rather than <em>implicit</em> ones.</p>
 
-<p>This might not seem like much of an issue, but let&rsquo;s say we want to pass one of the results on to another piece of code. We could either:</p>
+<p>This might not seem like much of an issue, but what if we wanted to pass one of the results on to another piece of code? We could either:</p>
 
 <ol>
 <li>Call <code>value</code> on the future, and pass along the result directly.</li>
@@ -202,15 +202,15 @@
 </ol>
 
 
-<p>Neither of these options are very good. The first can result in suboptimal performance, because we&rsquo;re calling <code>value</code> before we really need to (remember that <code>value</code> might block execution if the result isn&rsquo;t ready yet). The second option limits the reusability of the other piece of code, as it would now only work with futures.</p>
+<p>Neither of these options are very good. The first can result in suboptimal performance, because we&rsquo;re calling <code>value</code> before we really need to (remember that <code>value</code> might block execution if the result isn&rsquo;t ready yet). The second option limits the reusability of the other piece of code, as it will now only be able to work with futures.</p>
 
-<p>Implicit futures don&rsquo;t have either of these issues. The code that uses them can remain blissfully ignorant of what they are, and no blocking will occur until the result is actually used (i.e. a method is called on it).</p>
+<p>Implicit futures don&rsquo;t have either of these issues. The code that uses them can remain blissfully ignorant of the fact that they&rsquo;re futures, and no blocking will occur until the result is actually needed (i.e. a method is called on it).</p>
 
 <h2>Delegating method calls</h2>
 
-<p>To summarise what we&rsquo;re trying to achieve, we want the future object to appear as though it were the result object. When we call a method on it, it should delegate the call to the result (blocking if necessary until the result becomes available).</p>
+<p>To summarise what we&rsquo;re trying to achieve, we want the future object to behave as though it were the result object. When we call a method on it, it should delegate the call to the result (blocking if necessary until the result becomes available).</p>
 
-<p>It&rsquo;s not immediately obvious how methods could be delegated like this. The future should be able to work with all types of result objects, so we don&rsquo;t know in advance which methods will need forwarding.</p>
+<p>It&rsquo;s not immediately obvious how methods can be delegated like this. The future should be able to work with all types of result objects, so we don&rsquo;t know in advance which methods need forwarding.</p>
 
 <p>Ruby has a rather interesting feature called <code>method_missing</code> that comes in handy here. Calling a non-existent method would normally result in an error, but if we define a method called <code>method_missing</code>, Ruby will call that instead.</p>
 
@@ -253,28 +253,26 @@
 </span><span class='line'>I don't even...</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Our future class can use <code>method_missing</code> to intercept method calls, but it still needs to actually forward the intercepted methods to the result. This can be done using <code>send</code>, which lets us dynamically call any method on an object:</p>
+<p>Our future class can use <code>method_missing</code> to intercept method calls. However, it still needs to actually forward the intercepted methods to the result. This can be done using <code>send</code>, which lets us dynamically call any method on an object:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">some_object</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">method_name</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>So, our future can intercept all incoming method calls with <code>method_missing</code> and forward them to the result using <code>send</code>.</p>
-
 <h2>Putting it all together</h2>
 
-<p>We now have everything we need to implement an implicit future. We can:</p>
+<p>We now have everything we need to implement implicit futures. We can define a <code>Future</code> class that:</p>
 
 <ol>
-<li>Use <code>Thread</code> to:
+<li>Uses <code>Thread</code> to:
 
 <ul>
 <li>Asynchronously compute the result.</li>
 <li>Block execution if the result is requested before it&rsquo;s ready.</li>
 </ul>
 </li>
-<li>Use <code>method_missing</code> and <code>send</code> to delegate all method calls to the result.</li>
+<li>Uses <code>method_missing</code> and <code>send</code> to delegate all method calls to the result.</li>
 </ol>
 
 
@@ -325,9 +323,9 @@
 
 <p>This looks exactly like what we set out to achieve! Might be a good idea to check if it works though&hellip;</p>
 
-<h2>Testing time</h2>
+<h2>Testing!</h2>
 
-<p>Let&rsquo;s start with a sanity-check:</p>
+<p>Let&rsquo;s start with a quick sanity-check. To mimic an expensive operation, I&rsquo;ve placed a call to <code>sleep</code> in the code given to the future:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -354,7 +352,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>To mimic an expensive operation, I&rsquo;ve placed a call to <code>sleep</code> in the code given to the future. The call to <code>f.upcase</code> should cause the main thread to block for several seconds until the result is ready. Here&rsquo;s the output we get:</p>
+<p>The call to <code>f.upcase</code> should cause the main thread to block for several seconds until the result is ready. If we run the code, this is exactly what we see happen. Here&rsquo;s the output:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -399,8 +397,6 @@
 <span class='line-number'>27</span>
 <span class='line-number'>28</span>
 <span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;benchmark&#39;</span>
 </span><span class='line'><span class="nb">require</span> <span class="s1">&#39;open-uri&#39;</span>
 </span><span class='line'>
@@ -413,9 +409,7 @@
 </span><span class='line'>
 </span><span class='line'><span class="k">def</span> <span class="nf">download_with_futures</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span>
 </span><span class='line'>  <span class="n">pages</span> <span class="o">=</span> <span class="n">urls</span><span class="o">.</span><span class="n">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">url</span><span class="o">|</span>
-</span><span class='line'>    <span class="n">future</span> <span class="k">do</span>
-</span><span class='line'>      <span class="nb">open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span> <span class="p">}</span>
-</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">future</span> <span class="p">{</span> <span class="nb">open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span> <span class="p">}</span> <span class="p">}</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'>  <span class="c1"># For the purposes of the benchmark, wait until all downloads have</span>
 </span><span class='line'>  <span class="c1"># finished by calling a method on each future.</span>
@@ -459,7 +453,7 @@
 </ul>
 
 
-<p>A basic implementation in 9 lines of code isn&rsquo;t too shabby though :P</p>
+<p>A basic implementation in 9 lines of code isn&rsquo;t too shabby though!</p>
 
 <h2>Conclusion</h2>
 
