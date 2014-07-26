@@ -4,10 +4,9 @@ title: "Python or Ruby?"
 date: 2014-07-25 22:10:23 +0930
 comments: true
 categories: [ruby, python]
-published: true
 ---
 
-Python and Ruby are the two heavyweights in the general-purpose, high-level, dynamic language category. They're both awesome, but given the choice, I'll generally go with Ruby. What follows is my attempt at explaining why...
+Python and Ruby are the two heavyweights in the general-purpose, high-level, dynamic language category. They're both awesome, but given the choice, I'll generally go with Ruby. This is my attempt at explaining why...
 
 <!-- more -->
 
@@ -43,28 +42,28 @@ file.close()          # Closes file object.
 One of the benefits of Ruby's consistency is that we can always read code left-to-right. This makes functional-style pipelines much easier to read and write:
 
 ``` ruby
-"world hello".split.reverse.join(' ') # => "hello world"
+"world hello".split.reverse.join(" ") # => "hello world"
 ```
 
 The equivalent Python code is much harder to make sense of. We have to read some parts left-to-right and other parts inside-out. Yuk!
 
 ``` python
-' '.join(reversed("world hello".split())) # => "hello world"
+" ".join(reversed("world hello".split())) # => "hello world"
 ```
 
-Ruby's blocks are awesome
--------------------------
+Blocks are awesome
+------------------
 
 One of Ruby's best features is the elegant syntax it has for passing anonymous functions ("blocks") as arguments to methods. Blocks are like Python's lambda expressions, only more powerful, more widely used, and visually cleaner.
 
-Blocks allow us to perform many different tasks using a simple, uniform syntax. For example:
+Blocks allow us to perform many different tasks using a single uniform syntax. For example:
 
 ``` ruby
 [1, 2, 3].each   { |x| puts x }         # Iteration using blocks.
 File.open('a')   { |f| puts f.read }    # Automatic resource management using blocks.
 [1, 2, 3].select { |x| x > 2 }          # List processing using blocks.
-data.sort_by     { |x| x[1] }           # Sorting using blocks.
-files.lazy.map   { |f| Image.new(f) }   # Lazy evaluation using blocks.
+data.sort_by     { |x| foo.bar(x) }     # Sorting using blocks.
+urls.lazy.map    { |u| download(u) }    # Lazy evaluation using blocks.
 ```
 
 In Python, we'd typically use no fewer than *five* different language constructs to perform the same tasks:
@@ -73,8 +72,8 @@ In Python, we'd typically use no fewer than *five* different language constructs
 for x in [1, 2, 3]: print(x)            # Iteration using 'for'.
 with f as open('a'): print(f.read())    # Automatic resource management using 'with'.
 [x for x in [1, 2, 3] if x > 2]         # List processing using list comprehensions.
-sorted(data, key=lambda x: x[1])        # Sorting using 'lambda'.
-(Image(f) for f in files)               # Lazy evaluation using generator expressions.
+sorted(data, key=lambda x: foo.bar(x))  # Sorting using 'lambda'.
+(download(u) for u in urls)             # Lazy evaluation using generator expressions.
 ```
 
 One flexible construct is preferable to multiple rigid ones in my book.
@@ -82,7 +81,7 @@ One flexible construct is preferable to multiple rigid ones in my book.
 Clear conditionals
 ------------------
 
-Pretty much everything with a length/size/magnitude of zero evaluates to 'false' in Python. This isn't just a quirk of the language, it's promoted in [PEP 8](http://legacy.python.org/dev/peps/pep-0008/#programming-recommendations) as the Pythonic way of checking whether a sequence is empty:
+Pretty much everything with a length/size/magnitude of zero evaluates to 'false' in Python. This isn't just a quirk of the language, it's promoted in [PEP 8](http://legacy.python.org/dev/peps/pep-0008/#programming-recommendations) as the Pythonic way of checking for an empty sequence:
 
 ``` python
 if not some_sequence:
@@ -163,7 +162,7 @@ ASCII region.
 
 Unless you were paying close attention, you might have missed the fact that `str.capitalize` converts the remainder of the string to lowercase (e.g. "ABC" goes to "Abc"). The Ruby documentation makes this behaviour much clearer, and clarifying examples are also given.
 
-This is just one method of course, but these kinds of differences are not atypical in my experience.
+This is just one example of course, but these kinds of differences are not atypical in my experience.
 
 Ruby's pretty!
 --------------
@@ -204,4 +203,4 @@ The Ruby code has fewer parentheses, colons, and underscores, and doesn't need t
 Conclusion
 ----------
 
-So those are a few of the reasons why I like Ruby. Admittedly this was a rather one sided comparison - Ruby has plenty of downsides and Python plenty of benefits that I neglected to mention! Perhaps those will be the topic of a future post...
+So those are a few of the reasons why I prefer Ruby to Python. Admittedly this was a rather one sided comparison - Ruby has plenty of downsides and Python plenty of upsides that I neglected to mention. Perhaps those will be the topic of a future post!
