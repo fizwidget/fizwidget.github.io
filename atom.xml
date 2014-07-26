@@ -4,7 +4,7 @@
   <title><![CDATA[fizwidget]]></title>
   <link href="http://fizwidget.github.io/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-25T16:39:55+09:30</updated>
+  <updated>2014-07-26T12:13:23+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -12,100 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Pipelines!]]></title>
-    <link href="http://fizwidget.github.io/blog/2014/07/26/pipelines/"/>
-    <updated>2014-07-26T12:45:10+09:30</updated>
-    <id>http://fizwidget.github.io/blog/2014/07/26/pipelines</id>
-    <content type="html"><![CDATA[<p>The concept of pipelining is pretty simple &ndash; a series of components are chained together such that the output from one flows into the input of the next. In the world of software, Unix shell scripting is perhaps the canonical example:</p>
-
-<!-- more -->
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>cat names <span class="p">|</span> grep <span class="s2">&quot;fred&quot;</span> <span class="p">|</span> uniq <span class="p">|</span> sort
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Pipelining is also commonly used as a high-level system architecture. Consider a program that captures images from a camera, tags them with metadata, compresses them, then writes them to disk. It&rsquo;s not hard to see how this program could be structured as a series of four modules connected together in a pipeline.</p>
-
-<p>So, pipelining&rsquo;s a neat idea, and it&rsquo;s used quite commonly. Unfortunately though, there&rsquo;s one area where it isn&rsquo;t used anywhere near as much as it should be: the lower-level implementation details of programs.</p>
-
-<h2>An example</h2>
-
-<p>Say we&rsquo;ve got a list of student objects, and we want to retrieve the email addresses of the ten youngest first-year CS students. How do we go about doing this? Most programmers would probably write something along these lines:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">emails</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'><span class="n">sorted_students</span> <span class="o">=</span> <span class="n">students</span><span class="o">.</span><span class="n">sort_by</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:age</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">for</span> <span class="n">student</span> <span class="k">in</span> <span class="n">sorted_students</span>
-</span><span class='line'>  <span class="k">if</span> <span class="n">student</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">student</span><span class="o">.</span><span class="n">degree</span> <span class="o">==</span> <span class="s2">&quot;CS&quot;</span>
-</span><span class='line'>    <span class="n">email</span> <span class="o">=</span> <span class="n">student</span><span class="o">.</span><span class="n">email</span>
-</span><span class='line'>    <span class="n">emails</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">email</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>  <span class="k">if</span> <span class="n">emails</span><span class="o">.</span><span class="n">length</span> <span class="o">==</span> <span class="mi">10</span>
-</span><span class='line'>    <span class="k">break</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">return</span> <span class="n">emails</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This code works, but it&rsquo;s difficult to read, error-prone, and relatively verbose. If we instead try to structure our solution as a pipeline, we&rsquo;ll see that what we really want to do is:</p>
-
-<ol>
-<li>Start with the list of all students.</li>
-<li>Select the first-year students.</li>
-<li>Select the students enrolled in CS degrees.</li>
-<li>Take the 10 youngest students.</li>
-<li>Retrieve their email addresses.</li>
-</ol>
-
-
-<p>Translating this into Ruby, we get:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">students</span><span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">s</span><span class="o">|</span> <span class="n">s</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">}</span>
-</span><span class='line'>        <span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">s</span><span class="o">|</span> <span class="n">s</span><span class="o">.</span><span class="n">degree</span> <span class="o">==</span> <span class="s2">&quot;CS&quot;</span> <span class="p">}</span>
-</span><span class='line'>        <span class="o">.</span><span class="n">sort_by</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:age</span><span class="p">)</span>
-</span><span class='line'>        <span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-</span><span class='line'>        <span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:email</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Ruby is particularly well suited to this style of coding, but it&rsquo;s also practical in many other languages. In Python for example, list comprehensions and the <code>itertools</code> module will come in handy.</p>
-
-<p>It shouldn&rsquo;t be hard to see that the second code snippet is a big improvement over the first. It&rsquo;s easier to understand, easier to modify, and is therefore less error-prone. It also has the <em>potential</em> to run more efficiently (the runtime system could theoretically distribute the <code>select</code> and <code>collect</code> operations over multiple cores).</p>
-
-<p>The difference here is really procedural vs functional, or more broadly, imperative vs declarative. The functional pipeline approach is declarative because we&rsquo;re describing <em>what</em> we want, rather than spelling out the details of <em>how</em> to achieve it.</p>
-
-<h2>Conclusion</h2>
-
-<p>The next time you think about writing a for-loop or an if-statement, consider whether you&rsquo;d be better served by a <code>collect</code> or a <code>select</code> ;)</p>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[Implicit Futures in Ruby]]></title>
