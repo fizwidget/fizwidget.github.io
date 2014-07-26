@@ -19,7 +19,7 @@ c = baz.expensive_call_3
 
 other_stuff
 
-result = a.xyz(b + c)
+result = a.some_method(b + c)
 ```
 
 We perform one or more time-consuming operations, potentially do something else, then use the results of the operations.
@@ -35,7 +35,7 @@ c = future { baz.expensive_call_3 }
 
 other_stuff
 
-result = a.xyz(b + c)
+result = a.some_method(b + c)
 ```
 
 (*If you're unfamiliar with Ruby, `foo { bar }` is equivalent to `foo(lambda: bar())` in Python*)
@@ -65,7 +65,7 @@ c = Thread.new { baz.expensive_call_3 }
 
 other_stuff
 
-puts a.value.xyz(b.value + c.value)
+result = a.value.some_method(b.value + c.value)
 ```
 
 This almost gets us where we want to be, but not quite.
@@ -75,21 +75,21 @@ Explicit vs implicit
 
 In the code above, we have to explicitly retrieve the results by calling `value` on the futures/threads. This means they're *explicit* futures rather than *implicit* ones.
 
-This might not seem like much of an issue, but let's say we want to pass one of the results on to another piece of code. We could either:
+This might not seem like much of an issue, but what if we wanted to pass one of the results on to another piece of code? We could either:
 
 1. Call `value` on the future, and pass along the result directly.
 2. Pass along the future, and let the other piece of code call `value` when it needs the result.
 
-Neither of these options are very good. The first can result in suboptimal performance, because we're calling `value` before we really need to (remember that `value` might block execution if the result isn't ready yet). The second option limits the reusability of the other piece of code, as it would now only work with futures.
+Neither of these options are very good. The first can result in suboptimal performance, because we're calling `value` before we really need to (remember that `value` might block execution if the result isn't ready yet). The second option limits the reusability of the other piece of code, as it will now only be able to work with futures.
 
-Implicit futures don't have either of these issues. The code that uses them can remain blissfully ignorant of what they are, and no blocking will occur until the result is actually used (i.e. a method is called on it).
+Implicit futures don't have either of these issues. The code that uses them can remain blissfully ignorant of the fact that they're futures, and no blocking will occur until the result is actually needed (i.e. a method is called on it).
 
 Delegating method calls
 -----------------------
 
-To summarise what we're trying to achieve, we want the future object to appear as though it were the result object. When we call a method on it, it should delegate the call to the result (blocking if necessary until the result becomes available).
+To summarise what we're trying to achieve, we want the future object to behave as though it were the result object. When we call a method on it, it should delegate the call to the result (blocking if necessary until the result becomes available).
 
-It's not immediately obvious how methods could be delegated like this. The future should be able to work with all types of result objects, so we don't know in advance which methods will need forwarding.
+It's not immediately obvious how methods can be delegated like this. The future should be able to work with all types of result objects, so we don't know in advance which methods need forwarding.
 
 Ruby has a rather interesting feature called `method_missing` that comes in handy here. Calling a non-existent method would normally result in an error, but if we define a method called `method_missing`, Ruby will call that instead.
 
@@ -118,23 +118,21 @@ Now let's call the block I was given:
 I don't even...
 ```
 
-Our future class can use `method_missing` to intercept method calls, but it still needs to actually forward the intercepted methods to the result. This can be done using `send`, which lets us dynamically call any method on an object:
+Our future class can use `method_missing` to intercept method calls. However, it still needs to actually forward the intercepted methods to the result. This can be done using `send`, which lets us dynamically call any method on an object:
 
 ``` ruby
 some_object.send(method_name, args, &block)
 ```
 
-So, our future can intercept all incoming method calls with `method_missing` and forward them to the result using `send`.
-
 Putting it all together
 -----------------------
 
-We now have everything we need to implement an implicit future. We can:
+We now have everything we need to implement implicit futures. We can define a `Future` class that:
 
-1. Use `Thread` to:
+1. Uses `Thread` to:
     - Asynchronously compute the result.
     - Block execution if the result is requested before it's ready.
-2. Use `method_missing` and `send` to delegate all method calls to the result.
+2. Uses `method_missing` and `send` to delegate all method calls to the result.
 
 The code ends up being very simple:
 
@@ -169,10 +167,10 @@ f = future { expensive_call }
 
 This looks exactly like what we set out to achieve! Might be a good idea to check if it works though...
 
-Testing time
-------------
+Testing!
+--------
 
-Let's start with a sanity-check:
+Let's start with a quick sanity-check. To mimic an expensive operation, I've placed a call to `sleep` in the code given to the future:
 
 ``` ruby
 f = future do
@@ -188,7 +186,7 @@ puts "Attempting to use the result."
 puts f.upcase
 ```
 
-To mimic an expensive operation, I've placed a call to `sleep` in the code given to the future. The call to `f.upcase` should cause the main thread to block for several seconds until the result is ready. Here's the output we get:
+The call to `f.upcase` should cause the main thread to block for several seconds until the result is ready. If we run the code, this is exactly what we see happen. Here's the output:
 
 ``` plain
 Future: Started.
@@ -214,9 +212,7 @@ urls = [
 
 def download_with_futures(urls)
   pages = urls.map do |url|
-    future do
-      open(url) { |f| f.read }
-    end
+    future { open(url) { |f| f.read } }
   end
   # For the purposes of the benchmark, wait until all downloads have
   # finished by calling a method on each future.
@@ -255,7 +251,7 @@ The `Future` class given above isn't exactly production-ready. If you were using
 - Use a thread pool to prevent the system from being overloaded by a large number of threads.
 - Probably a bunch of other things I haven't thought of.
 
-A basic implementation in 9 lines of code isn't too shabby though :P
+A basic implementation in 9 lines of code isn't too shabby though!
 
 Conclusion
 ----------
