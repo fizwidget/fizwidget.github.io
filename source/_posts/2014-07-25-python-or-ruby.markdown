@@ -22,11 +22,12 @@ Pretty much everything we do in Ruby involves calling methods on objects:
 [1, 2, 3].reverse!    # Reverses list in-place.
 [1, 2, 3].min         # => 1
 "foo".capitalize      # => "Foo"
+"foo".reverse         # => "oof"
 File.new("bar")       # => File object
 file.close            # Closes file object.
 ```
 
-In Python though, a mixture of functions and methods is the norm:
+In Python though, a mixture of functions and methods are typically used:
 
 ``` python
 abs(-42)              # => 42
@@ -35,6 +36,7 @@ reversed([1, 2, 3])   # => [3, 2, 1]
 [1, 2, 3].reverse()   # Reverses list in-place.
 min([1, 2, 3])        # => 1
 "foo".capitalize()    # => "Foo"
+"foo"[::-1]           # => "oof"
 open("bar")           # => File object
 file.close()          # Closes file object.
 ```
@@ -76,32 +78,30 @@ sorted(data, key=lambda x: foo.bar(x))  # Sorting using 'lambda'.
 (download(u) for u in urls)             # Lazy evaluation using generator expressions.
 ```
 
-One flexible construct is preferable to multiple rigid ones in my book.
+One flexible construct seems preferable to multiple rigid ones.
 
 Clear conditionals
 ------------------
 
-Pretty much everything with a length/size/magnitude of zero evaluates to 'false' in Python. This isn't just a quirk of the language, it's promoted in [PEP 8](http://legacy.python.org/dev/peps/pep-0008/#programming-recommendations) as the Pythonic way of checking for an empty sequence:
+Pretty much everything with a length/size/magnitude of zero evaluates to 'false' in Python. This isn't just a quirk of the language, it's promoted in [PEP 8](http://legacy.python.org/dev/peps/pep-0008/#programming-recommendations) as the Pythonic way of checking for empty sequences:
 
 ``` python
 if not some_sequence:
     # Whatever happened to "explicit is better than implicit"??
 ```
 
-In Ruby, `false` and `nil` are the only values that evaluate to 'false'. This means we must explicitly ask objects questions:
+In Ruby, `false` and `nil` are the only values that evaluate to 'false'. This means we must explicitly ask objects questions, which is both more readable and less error-prone:
 
 ``` ruby
-if some_sequence.empty? 
+if some_sequence.empty?
   # Obvious meaning is obvious.
 end
 ```
 
-Ruby's approach seems both more readable and less error-prone.
-
 Private parts
 -------------
 
-Instance variables are private by default in Ruby. This encourages proper encapsulation of implementation details.
+Instance variables are private by default in Ruby, which encourages proper encapsulation of implementation details.
 
 ``` ruby
 class Foo
@@ -113,7 +113,7 @@ end
 Foo.new.secret # => Error!
 ```
 
-In Python though, everything defaults to public. This means we're more likely to end up with nasty dependencies on implementation details.
+In Python though, everything defaults to public. This means we're much more likely to end up with dependencies on implementation details.
 
 ``` python
 class Foo:
@@ -122,47 +122,6 @@ class Foo:
 
 Foo().not_so_secret # => 42
 ```
-
-Naming and documentation
-------------------------
-
-The names used in Python's standard library are a bit of a mess (even [PEP 8](http://legacy.python.org/dev/peps/pep-0008/#naming-conventions) admits as much). Cryptic abbreviations and inconsistent naming conventions are not an uncommon sight. Ruby's standard libraries are much nicer to work with in comparison.
-
-In terms of documentation quality, Ruby also has the edge. Descriptions are clearer and more detailed, and usage examples are almost always given.
-
-Consider the documentation for `str.capitalize` in Python:
-
-``` plain
-str.capitalize = capitalize(...)
-    S.capitalize() -> string
-    
-    Return a copy of the string S with only its first character
-    capitalized.
-```
-
-Then compare it with Ruby's `String#capitalize` documentation:
-
-``` plain
-= String#capitalize
-
-(from ruby core)
-------------------------------------------------------------------------------
-  str.capitalize   -> new_str
-
-------------------------------------------------------------------------------
-
-Returns a copy of str with the first character converted to uppercase
-and the remainder to lowercase. Note: case conversion is effective only in
-ASCII region.
-
-  "hello".capitalize    #=> "Hello"
-  "HELLO".capitalize    #=> "Hello"
-  "123ABC".capitalize   #=> "123abc"
-```
-
-Unless you were paying close attention, you might have missed the fact that `str.capitalize` converts the remainder of the string to lowercase (e.g. "ABC" goes to "Abc"). The Ruby documentation makes this behaviour much clearer, and clarifying examples are also given.
-
-This is just one example of course, but these kinds of differences are not atypical in my experience.
 
 Ruby's pretty!
 --------------
@@ -199,6 +158,47 @@ print(person)
 ```
 
 The Ruby code has fewer parentheses, colons, and underscores, and doesn't need to specify `object`, `self`, or `return`. Python's whitespace sensitivity does allow it to omit `end`, but this doesn't make up for all the other clutter in my opinion.
+
+Naming and documentation
+------------------------
+
+The nameing conventions used in Python's standard library are a bit of a mess (even [PEP 8](http://legacy.python.org/dev/peps/pep-0008/#naming-conventions) admits as much). Ruby's standard library is much more consistent in comparison.
+
+In terms of documentation quality, Ruby also has the edge. Descriptions are clearer and more detailed, and usage examples are almost always given.
+
+Consider the documentation for `str.capitalize` in Python:
+
+``` plain
+str.capitalize = capitalize(...)
+    S.capitalize() -> string
+    
+    Return a copy of the string S with only its first character
+    capitalized.
+```
+
+Then compare it with Ruby's `String#capitalize` documentation:
+
+``` plain
+= String#capitalize
+
+(from ruby core)
+------------------------------------------------------------------------------
+  str.capitalize   -> new_str
+
+------------------------------------------------------------------------------
+
+Returns a copy of str with the first character converted to uppercase
+and the remainder to lowercase. Note: case conversion is effective only in
+ASCII region.
+
+  "hello".capitalize    #=> "Hello"
+  "HELLO".capitalize    #=> "Hello"
+  "123ABC".capitalize   #=> "123abc"
+```
+
+Unless you were paying close attention, you might have missed the fact that `str.capitalize` converts the remainder of the string to lowercase (e.g. "ABC" goes to "Abc"). The Ruby documentation makes this behaviour much clearer, and clarifying examples are also given.
+
+This is just one example of course, but these kinds of differences are not atypical in my experience.
 
 Conclusion
 ----------
