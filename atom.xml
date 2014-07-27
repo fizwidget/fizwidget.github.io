@@ -4,7 +4,7 @@
   <title><![CDATA[fizwidget]]></title>
   <link href="http://fizwidget.github.io/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-26T22:17:59+09:30</updated>
+  <updated>2014-07-27T18:04:57+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -12,6 +12,487 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Function Pipelines]]></title>
+    <link href="http://fizwidget.github.io/blog/2014/07/27/function-pipelines/"/>
+    <updated>2014-07-27T12:45:10+09:30</updated>
+    <id>http://fizwidget.github.io/blog/2014/07/27/function-pipelines</id>
+    <content type="html"><![CDATA[<p>The concept of pipelining is pretty simple &ndash; components are connected in series such that the output from one flows into the input of the next. Piping data in shell scripts is an example most programmers are familiar with:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>cat logs <span class="p">|</span> grep <span class="s1">&#39;ERROR&#39;</span> <span class="p">|</span> sed <span class="s1">&#39;s/shit/darn/g&#39;</span> <span class="p">|</span> sort <span class="p">|</span> uniq &gt; bad_things
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This style of programming doesn&rsquo;t have to be relegated to shell scripts though &ndash; it&rsquo;s a universal concept that can help us write better code in many different languages. Instead of piping data from one program to another, we&rsquo;ll compose functions (or equivalently, chain methods).</p>
+
+<!-- more -->
+
+
+<p>Let&rsquo;s jump straight into some Ruby examples, then I&rsquo;ll discuss how these ideas apply to other languages.</p>
+
+<h2>Example #1</h2>
+
+<p>Say we&rsquo;ve got a list of student objects, and we want to get the email addresses of the ten youngest third-year compsci students (perhaps to send them a survey or something). Using a traditional imperative approach, we might write something along these lines:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Select all the third-year CS students.</span>
+</span><span class='line'><span class="n">third_year_cs_students</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'><span class="k">for</span> <span class="n">student</span> <span class="k">in</span> <span class="n">students</span>
+</span><span class='line'>  <span class="k">if</span> <span class="n">student</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">student</span><span class="o">.</span><span class="n">degree</span> <span class="o">==</span> <span class="s2">&quot;CS&quot;</span>
+</span><span class='line'>    <span class="n">third_year_cs_students</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">student</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Take the 10 youngest of these students.</span>
+</span><span class='line'><span class="n">third_year_cs_students</span><span class="o">.</span><span class="n">sort_by!</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:age</span><span class="p">)</span>
+</span><span class='line'><span class="n">youngest_third_year_cs_students</span> <span class="o">=</span> <span class="n">third_year_cs_students</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Collect their email addresses.</span>
+</span><span class='line'><span class="n">emails</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'><span class="k">for</span> <span class="n">student</span> <span class="k">in</span> <span class="n">youngest_third_year_cs_students</span>
+</span><span class='line'>  <span class="n">email</span> <span class="o">=</span> <span class="n">student</span><span class="o">.</span><span class="n">email_address</span>
+</span><span class='line'>  <span class="n">emails</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">email</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">return</span> <span class="n">emails</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This works, but the code is quite verbose, and it&rsquo;s not particularly easy to understand or modify.</p>
+
+<p>Let&rsquo;s instead try structuring our solution as a pipeline. We can translate the problem description almost directly into code by chaining together methods from Ruby&rsquo;s <a href="http://www.ruby-doc.org/core-2.1.1/Enumerable.html"><code>Enumerable</code></a> module:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">students</span><span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">s</span><span class="o">|</span> <span class="n">s</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="mi">3</span> <span class="p">}</span>
+</span><span class='line'>        <span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">s</span><span class="o">|</span> <span class="n">s</span><span class="o">.</span><span class="n">degree</span> <span class="o">==</span> <span class="s2">&quot;CS&quot;</span> <span class="p">}</span>
+</span><span class='line'>        <span class="o">.</span><span class="n">sort_by</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:age</span><span class="p">)</span>
+</span><span class='line'>        <span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</span><span class='line'>        <span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:email_address</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is clearly a big improvement over the previous attempt. It&rsquo;s concise, easy to understand, and easy to modify. It also has the potential to run more efficiently, as the <code>select</code> and <code>collect</code> operations could potentially be distributed over multiple cores.</p>
+
+<p>A key thing to note is that none of these methods are modifying the objects they&rsquo;re called on. They&rsquo;re instead applying some kind of filter or transformation, then outputting a new sequence to the next stage of the pipeline.</p>
+
+<h2>Example #2</h2>
+
+<p>For this example, we want to get the extensions of the smallest file and the largest file in a directory (example output might be <code>[".txt", ".mkv"]</code>). Taking an imperative approach, we might write something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">min_extension</span> <span class="o">=</span> <span class="kp">nil</span>
+</span><span class='line'><span class="n">max_extension</span> <span class="o">=</span> <span class="kp">nil</span>
+</span><span class='line'><span class="n">min_size</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'><span class="n">max_size</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Dir</span><span class="o">.</span><span class="n">foreach</span><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">path</span><span class="o">|</span>
+</span><span class='line'>  <span class="k">if</span> <span class="no">File</span><span class="o">.</span><span class="n">file?</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">size</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">size</span> <span class="o">&lt;</span> <span class="n">min_size</span> <span class="o">||</span> <span class="n">min_extension</span><span class="o">.</span><span class="n">nil?</span>
+</span><span class='line'>      <span class="n">min_extension</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">extname</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">min_size</span> <span class="o">=</span> <span class="n">size</span>
+</span><span class='line'>    <span class="k">elsif</span> <span class="n">size</span> <span class="o">&gt;</span> <span class="n">max_size</span> <span class="o">||</span> <span class="n">max_extension</span><span class="o">.</span><span class="n">nil?</span>
+</span><span class='line'>      <span class="n">max_extension</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">extname</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">max_size</span> <span class="o">=</span> <span class="n">size</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">return</span> <span class="o">[</span><span class="n">min_extension</span><span class="p">,</span> <span class="n">max_extension</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Conceptually, there are four distinct stages to the computation: list all directory entries, select the entries that correspond to files, select the smallest and largest of these files, and lastly, get their extensions. In the code above, these stages are all intermingled. This makes it harder to understand, and limits the reusability of the logic.</p>
+
+<p>Taking a pipelined approach with <code>Enumerable</code> methods, we can cleanly separate the stages and reuse existing logic:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Dir</span><span class="o">.</span><span class="n">entries</span><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span>
+</span><span class='line'>   <span class="o">.</span><span class="n">select</span>    <span class="p">{</span> <span class="o">|</span><span class="n">path</span><span class="o">|</span> <span class="no">File</span><span class="o">.</span><span class="n">file?</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>   <span class="o">.</span><span class="n">minmax_by</span> <span class="p">{</span> <span class="o">|</span><span class="n">path</span><span class="o">|</span> <span class="no">File</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>   <span class="o">.</span><span class="n">collect</span>   <span class="p">{</span> <span class="o">|</span><span class="n">path</span><span class="o">|</span> <span class="no">File</span><span class="o">.</span><span class="n">extname</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Much nicer!</p>
+
+<p>It&rsquo;s worth pointing out that we can use intermediate variables and/or helper methods if we wish &ndash; the code doesn&rsquo;t <em>have</em> to be an unbroken chain of method calls. So long as we cleanly separate the stages and avoid mutating state (reassigning variables, appending to lists, etc), we&rsquo;re still using a pipelined approach.</p>
+
+<h2>In other languages</h2>
+
+<p>The examples above are written in Ruby, but the concepts are universal. In Python, list comprehensions, generator expressions, and the <code>itertools</code> module all come in handy (plus builtins like <code>map</code> and <code>filter</code>). In Java 8, the Streams API provides a similar toolbox. In C#, check out <code>Enumerable</code> and LINQ. Your language of choice probably supports these concepts in one form or another.</p>
+
+<p>This style of coding has its roots in functional programming, and it&rsquo;s the standard way of doing things in languages like Haskell and Scheme. There are also obvious similarities to SQL &ndash; this is no coincidence, as functional languages and SQL are both <a href="http://en.wikipedia.org/wiki/Declarative_programming">declarative</a> rather than <a href="http://en.wikipedia.org/wiki/Imperative_programming">imperative</a> in nature (meaning we describe <em>what</em> we want rather than spell out exactly <em>how</em> to achieve it).</p>
+
+<h2>Conclusion</h2>
+
+<p>The next time you find yourself writing loops and if-statements, consider whether a more functional approach would be more appropriate. Once you&rsquo;re familiar with this style of programming, you&rsquo;ll notice lots of new opportunities to simplify and streamline your code.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Python or Ruby?]]></title>
+    <link href="http://fizwidget.github.io/blog/2014/07/25/python-or-ruby/"/>
+    <updated>2014-07-25T22:10:23+09:30</updated>
+    <id>http://fizwidget.github.io/blog/2014/07/25/python-or-ruby</id>
+    <content type="html"><![CDATA[<p>Python and Ruby are the two heavyweights in the general-purpose, high-level, dynamic language category. They&rsquo;re both awesome, but given the choice, I&rsquo;ll generally go with Ruby. This is my attempt at explaining why&hellip;</p>
+
+<!-- more -->
+
+
+<h2>Ruby is consistently object-oriented</h2>
+
+<p>Pretty much everything we do in Ruby involves calling methods on objects:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">-</span><span class="mi">42</span><span class="o">.</span><span class="n">abs</span>               <span class="c1"># =&gt; 42</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">length</span>      <span class="c1"># =&gt; 3</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">reverse</span>     <span class="c1"># =&gt; [3, 2, 1]</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">reverse!</span>    <span class="c1"># Reverses list in-place.</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">min</span>         <span class="c1"># =&gt; 1</span>
+</span><span class='line'><span class="s2">&quot;foo&quot;</span><span class="o">.</span><span class="n">capitalize</span>      <span class="c1"># =&gt; &quot;Foo&quot;</span>
+</span><span class='line'><span class="no">File</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">)</span>       <span class="c1"># =&gt; File object</span>
+</span><span class='line'><span class="n">file</span><span class="o">.</span><span class="n">close</span>            <span class="c1"># Closes file object.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In Python though, a mixture of functions and methods are typically used:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="nb">abs</span><span class="p">(</span><span class="o">-</span><span class="mi">42</span><span class="p">)</span>              <span class="c"># =&gt; 42</span>
+</span><span class='line'><span class="nb">len</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>        <span class="c"># =&gt; 3</span>
+</span><span class='line'><span class="nb">reversed</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>   <span class="c"># =&gt; [3, 2, 1]</span>
+</span><span class='line'><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>   <span class="c"># Reverses list in-place.</span>
+</span><span class='line'><span class="nb">min</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>        <span class="c"># =&gt; 1</span>
+</span><span class='line'><span class="s">&quot;foo&quot;</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>    <span class="c"># =&gt; &quot;Foo&quot;</span>
+</span><span class='line'><span class="nb">open</span><span class="p">(</span><span class="s">&quot;bar&quot;</span><span class="p">)</span>           <span class="c"># =&gt; File object</span>
+</span><span class='line'><span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>          <span class="c"># Closes file object.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>One of the benefits of Ruby&rsquo;s consistency is that we can always read code left-to-right. This makes functional-style pipelines much easier to read and write:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="s2">&quot;world hello&quot;</span><span class="o">.</span><span class="n">split</span><span class="o">.</span><span class="n">reverse</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span> <span class="c1"># =&gt; &quot;hello world&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The equivalent Python code is much harder to make sense of. We have to read some parts left-to-right and other parts inside-out. Yuk!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="s">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="s">&quot;world hello&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span> <span class="c"># =&gt; &quot;hello world&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Blocks are awesome</h2>
+
+<p>One of Ruby&rsquo;s best features is the elegant syntax it has for passing anonymous functions (&ldquo;blocks&rdquo;) as arguments to methods. Blocks are like Python&rsquo;s lambda expressions, only more powerful, more widely used, and visually cleaner.</p>
+
+<p>Blocks allow us to perform many different tasks using a single uniform syntax. For example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">each</span>   <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">x</span> <span class="p">}</span>         <span class="c1"># Iteration using blocks.</span>
+</span><span class='line'><span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>   <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span> <span class="p">}</span>    <span class="c1"># Automatic resource management using blocks.</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">].</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="p">}</span>          <span class="c1"># List processing using blocks.</span>
+</span><span class='line'><span class="n">data</span><span class="o">.</span><span class="n">sort_by</span>     <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">foo</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">}</span>     <span class="c1"># Sorting using blocks.</span>
+</span><span class='line'><span class="n">urls</span><span class="o">.</span><span class="n">lazy</span><span class="o">.</span><span class="n">map</span>    <span class="p">{</span> <span class="o">|</span><span class="n">u</span><span class="o">|</span> <span class="n">download</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="p">}</span>    <span class="c1"># Lazy evaluation using blocks.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In Python, we&rsquo;d typically use no fewer than <em>five</em> language constructs to perform the same tasks:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span> <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>            <span class="c"># Iteration using &#39;for&#39;.</span>
+</span><span class='line'><span class="k">with</span> <span class="n">f</span> <span class="k">as</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">):</span> <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>    <span class="c"># Automatic resource management using &#39;with&#39;.</span>
+</span><span class='line'><span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">]</span>         <span class="c"># List processing using list comprehensions.</span>
+</span><span class='line'><span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">foo</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>  <span class="c"># Sorting using &#39;lambda&#39;.</span>
+</span><span class='line'><span class="p">(</span><span class="n">download</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">)</span>             <span class="c"># Lazy evaluation using generator expressions.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>One flexible construct > multiple rigid ones in my book.</p>
+
+<h2>Clear conditionals</h2>
+
+<p>In Python, empty collections, empty strings, and certain other objects are logically false. This isn&rsquo;t just a quirk of the language, it&rsquo;s promoted in <a href="http://legacy.python.org/dev/peps/pep-0008/#programming-recommendations">PEP 8</a> as the Pythonic way of checking for empty sequences. In addition to this, the number zero is logically false, and non-zero numbers are logically true.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">if</span> <span class="ow">not</span> <span class="n">some_sequence</span><span class="p">:</span>
+</span><span class='line'>    <span class="c"># Whatever happened to &quot;explicit is better than implicit&quot;??</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">some_number</span><span class="p">:</span>
+</span><span class='line'>    <span class="c"># Admittedly this one isn&#39;t very Pythonic, but it does work.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ruby doesn&rsquo;t allow these shenanigans, so the equivalent code is much more explicit:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">if</span> <span class="n">some_sequence</span><span class="o">.</span><span class="n">empty?</span>
+</span><span class='line'>  <span class="c1"># Obvious meaning is obvious.</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">unless</span> <span class="n">some_number</span><span class="o">.</span><span class="n">zero?</span>
+</span><span class='line'>  <span class="c1"># Could use &#39;if some_number != 0&#39;, but this is nicer ;)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It&rsquo;s also worth noting that we can use <code>unless</code> and <code>until</code> in Ruby instead of <code>if not</code> and <code>while not</code> in Python. Method names can also include the &lsquo;?&rsquo; character, further improving readability. Compare this Python snippet:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">while</span> <span class="ow">not</span> <span class="nb">buffer</span><span class="o">.</span><span class="n">is_full</span><span class="p">():</span>
+</span><span class='line'>    <span class="c"># Add data to buffer.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>With this Ruby one:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">until</span> <span class="n">buffer</span><span class="o">.</span><span class="n">full?</span>
+</span><span class='line'>  <span class="c1"># Add data to buffer.</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Private parts</h2>
+
+<p>Instance variables are private by default in Ruby, which encourages proper encapsulation of implementation details.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
+</span><span class='line'>    <span class="vi">@secret</span> <span class="o">=</span> <span class="mi">42</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Foo</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">secret</span> <span class="c1"># =&gt; Error!</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Everything defaults to public in Python, and privacy can only be suggested a naming convention. This means we&rsquo;re more likely to end up with inappropriate dependencies on implementation details.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">not_so_secret</span> <span class="o">=</span> <span class="mi">42</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Foo</span><span class="p">()</span><span class="o">.</span><span class="n">not_so_secret</span> <span class="c"># =&gt; 42</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ruby&rsquo;s approach seems the wiser one to me. Encapsulation is a Good Idea™, so why shouldn&rsquo;t the language support and encourage it?</p>
+
+<p><em>(By the way, Ruby&rsquo;s approach doesn&rsquo;t result in C++/Java-style boilerplate. We can generate default getters/setters by placing <code>attr_accessor :property_name</code> in the class body, and override them later if need be.)</em></p>
+
+<h2>Ruby&rsquo;s pretty!</h2>
+
+<p>OK, I&rsquo;ll admit this one is ever so slightly subjective. Having said that, compare this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Person</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">age</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@age</span> <span class="o">=</span> <span class="n">age</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">to_s</span>
+</span><span class='line'>    <span class="s2">&quot;Person is </span><span class="si">#{</span><span class="vi">@age</span><span class="si">}</span><span class="s2"> years old.&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">person</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">34</span><span class="p">)</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">person</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">age</span><span class="p">):</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class='line'>        <span class="k">return</span> <span class="s">&quot;Person is {} years old.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">34</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The Ruby code has fewer parentheses, colons, and underscores, and doesn&rsquo;t need to specify <code>object</code>, <code>self</code>, or <code>return</code>. Python&rsquo;s whitespace sensitivity does allow it to omit <code>end</code>, but this doesn&rsquo;t make up for all the other clutter in my opinion.</p>
+
+<h2>Naming and documentation</h2>
+
+<p>The naming conventions used in Python&rsquo;s standard library are a bit of a mess (even <a href="http://legacy.python.org/dev/peps/pep-0008/#naming-conventions">PEP 8</a> admits as much). Ruby&rsquo;s standard library is much more consistent in comparison.</p>
+
+<p>In terms of documentation quality, Ruby also has the edge. Descriptions are clearer and more detailed, and usage examples are almost always given. Consider the documentation for <code>str.capitalize</code> in Python:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>str.capitalize = capitalize(...)
+</span><span class='line'>    S.capitalize() -&gt; string
+</span><span class='line'>    
+</span><span class='line'>    Return a copy of the string S with only its first character
+</span><span class='line'>    capitalized.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then compare it with Ruby&rsquo;s <code>String#capitalize</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>= String#capitalize
+</span><span class='line'>
+</span><span class='line'>(from ruby core)
+</span><span class='line'>------------------------------------------------------------------------------
+</span><span class='line'>  str.capitalize   -&gt; new_str
+</span><span class='line'>
+</span><span class='line'>------------------------------------------------------------------------------
+</span><span class='line'>
+</span><span class='line'>Returns a copy of str with the first character converted to uppercase
+</span><span class='line'>and the remainder to lowercase. Note: case conversion is effective only in
+</span><span class='line'>ASCII region.
+</span><span class='line'>
+</span><span class='line'>  "hello".capitalize    #=&gt; "Hello"
+</span><span class='line'>  "HELLO".capitalize    #=&gt; "Hello"
+</span><span class='line'>  "123ABC".capitalize   #=&gt; "123abc"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Unless you were paying close attention, you might have missed the fact that <code>str.capitalize</code> converts the remainder of the string to lowercase (e.g. &ldquo;ABC&rdquo; goes to &ldquo;Abc&rdquo;). The Ruby documentation makes this behaviour much more obvious, and gives clarifying examples.</p>
+
+<p>This is just one example of course, but these kinds of differences are not atypical in my experience.</p>
+
+<h2>Conclusion</h2>
+
+<p>So those are a few of the reasons why I prefer Ruby to Python. Admittedly this was a rather one sided comparison &ndash; Ruby has plenty of downsides and Python plenty of upsides that I neglected to mention. Perhaps those will be the topic of a future post!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Implicit Futures in Ruby]]></title>

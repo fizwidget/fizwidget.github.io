@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Functional Programming | fizwidget]]></title>
-  <link href="http://fizwidget.github.io/blog/categories/functional-programming/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Pipelines | fizwidget]]></title>
+  <link href="http://fizwidget.github.io/blog/categories/pipelines/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
   <updated>2014-07-27T18:04:57+09:30</updated>
   <id>http://fizwidget.github.io/</id>
@@ -137,90 +137,6 @@ Dir.entries(dir_path)
 <h2>Conclusion</h2>
 
 <p>The next time you find yourself writing loops and if-statements, consider whether a more functional approach would be more appropriate. Once you&rsquo;re familiar with this style of programming, you&rsquo;ll notice lots of new opportunities to simplify and streamline your code.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Nothing but Functions]]></title>
-    <link href="http://fizwidget.github.io/blog/2014/07/03/nothing-but-functions/"/>
-    <updated>2014-07-03T16:59:34+09:30</updated>
-    <id>http://fizwidget.github.io/blog/2014/07/03/nothing-but-functions</id>
-    <content type="html"><![CDATA[<p>Imagine we&rsquo;re using a programming language that doesn&rsquo;t give us any way of defining data structures. No arrays, no tuples, no structs, no classes. Nothing. All we can do is define and call functions.</p>
-
-<p>Now imagine we need to work with a collection of items. Are we screwed?</p>
-
-<!-- more -->
-
-
-<h2>Building data structures out of functions</h2>
-
-<p>It turns out we can create data structures, quite literally, out of functions. Here&rsquo;s a linked list in Python:</p>
-
-<p>``` python
-def make_list(head, tail=None):
-  def node(operation):</p>
-
-<pre><code>if operation == "head":
-  return head
-elif operation == "tail":
-  return tail
-</code></pre>
-
-<p>  return node
-```</p>
-
-<p>The <code>make_list</code> function accepts a <code>head</code> (the data item we want to store), and a <code>tail</code> (the next node in the list). It returns an instance of the <code>node</code> function, which in turn accepts a single argument and returns the head or tail of the list.</p>
-
-<p>We can use <code>make_list</code> to construct the list <code>[1, 2, 3]</code> as follows:</p>
-
-<p><code>python
-numbers = make_list(1, make_list(2, make_list(3)))
-</code></p>
-
-<p>Let&rsquo;s try extracting the values from it:</p>
-
-<p><code>python
-numbers("head")                 # =&gt; 1
-numbers("tail")("head")         # =&gt; 2
-numbers("tail")("tail")("head") # =&gt; 3
-</code></p>
-
-<p>Now let&rsquo;s take a look at the nodes themselves:</p>
-
-<p><code>python
-numbers                         # =&gt; &lt;function make_list.&lt;locals&gt;.node at 0x10341d620&gt;
-numbers("tail")                 # =&gt; &lt;function make_list.&lt;locals&gt;.node at 0x10341d510&gt;
-numbers("tail")("tail")         # =&gt; &lt;function make_list.&lt;locals&gt;.node at 0x10341d488&gt;
-numbers("tail")("tail")("tail") # =&gt; None
-</code></p>
-
-<p>We do indeed have a list made of functions (an immutable, singly-linked list to be precise).</p>
-
-<p>It&rsquo;s a bit tedious to work with at the moment, but there&rsquo;s nothing stopping us from writing utility functions to work with it. Here&rsquo;s a function that prints it for example:</p>
-
-<p>``` python
-def print_list(lst):
-  if lst:</p>
-
-<pre><code>print(lst("head"))
-print_list(lst("tail"))
-</code></pre>
-
-<p>```</p>
-
-<h2>Closures</h2>
-
-<p>The <code>make_list</code> code only works because Python supports closures. A closure is, roughly speaking, a function that has access to the variables from the scope it was defined in. The <code>node</code> function is a good example of this: <code>head</code> and <code>tail</code> aren&rsquo;t explicitly passed in as arguments, but it&rsquo;s able to use them all the same. Each time we call <code>make_list</code>, a new instance of <code>node</code> is created that references the new versions of <code>head</code> and <code>tail</code>.</p>
-
-<p>Our list is nothing more than a chain of nested closures. When we call the outermost closure and pass it <code>"tail"</code>, it returns the next closure in the chain (i.e. the next node in the list).</p>
-
-<h2>Conclusion</h2>
-
-<p>We&rsquo;ve really just scratched the surface here &ndash; it&rsquo;s not hard to see that more complex data structures could be defined using similar techniques. We could even use functions to define <em>numbers</em> by representing the nth integer as a series of n nested functions.</p>
-
-<p>This is all hinting at a deeper fact: any language that allows us to define and apply functions is Turing-complete (meaning we can use it to compute <em>anything that can be computed</em>). This means that inbuilt constructs for arrays, classes, numbers, and even control structures are optional extras for a programming language!</p>
-
-<p>Check out the <a href="http://palmstroem.blogspot.com.au/2012/05/lambda-calculus-for-absolute-dummies.html">lambda calculus</a> if this is even remotely interesting. Neat, huh?</p>
 ]]></content>
   </entry>
   

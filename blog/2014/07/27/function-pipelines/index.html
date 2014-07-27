@@ -1,0 +1,412 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Function Pipelines - fizwidget</title>
+  <meta name="author" content="James Russell">
+
+  
+  <meta name="description" content="The concept of pipelining is pretty simple &ndash; components are connected in series such that the output from one flows into the input of the next &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizwidget.github.io/blog/2014/07/27/function-pipelines">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="fizwidget" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-52561227-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">fizwidget</a></h1>
+  
+    <h2>cat /dev/random</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizwidget.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Function Pipelines</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-27T12:45:10+09:30" pubdate data-updated="true">Jul 27<sup>th</sup>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>The concept of pipelining is pretty simple &ndash; components are connected in series such that the output from one flows into the input of the next. Piping data in shell scripts is an example most programmers are familiar with:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>cat logs <span class="p">|</span> grep <span class="s1">&#39;ERROR&#39;</span> <span class="p">|</span> sed <span class="s1">&#39;s/shit/darn/g&#39;</span> <span class="p">|</span> sort <span class="p">|</span> uniq &gt; bad_things
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This style of programming doesn&rsquo;t have to be relegated to shell scripts though &ndash; it&rsquo;s a universal concept that can help us write better code in many different languages. Instead of piping data from one program to another, we&rsquo;ll compose functions (or equivalently, chain methods).</p>
+
+<!-- more -->
+
+
+<p>Let&rsquo;s jump straight into some Ruby examples, then I&rsquo;ll discuss how these ideas apply to other languages.</p>
+
+<h2>Example #1</h2>
+
+<p>Say we&rsquo;ve got a list of student objects, and we want to get the email addresses of the ten youngest third-year compsci students (perhaps to send them a survey or something). Using a traditional imperative approach, we might write something along these lines:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Select all the third-year CS students.</span>
+</span><span class='line'><span class="n">third_year_cs_students</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'><span class="k">for</span> <span class="n">student</span> <span class="k">in</span> <span class="n">students</span>
+</span><span class='line'>  <span class="k">if</span> <span class="n">student</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">student</span><span class="o">.</span><span class="n">degree</span> <span class="o">==</span> <span class="s2">&quot;CS&quot;</span>
+</span><span class='line'>    <span class="n">third_year_cs_students</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">student</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Take the 10 youngest of these students.</span>
+</span><span class='line'><span class="n">third_year_cs_students</span><span class="o">.</span><span class="n">sort_by!</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:age</span><span class="p">)</span>
+</span><span class='line'><span class="n">youngest_third_year_cs_students</span> <span class="o">=</span> <span class="n">third_year_cs_students</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Collect their email addresses.</span>
+</span><span class='line'><span class="n">emails</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'><span class="k">for</span> <span class="n">student</span> <span class="k">in</span> <span class="n">youngest_third_year_cs_students</span>
+</span><span class='line'>  <span class="n">email</span> <span class="o">=</span> <span class="n">student</span><span class="o">.</span><span class="n">email_address</span>
+</span><span class='line'>  <span class="n">emails</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">email</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">return</span> <span class="n">emails</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This works, but the code is quite verbose, and it&rsquo;s not particularly easy to understand or modify.</p>
+
+<p>Let&rsquo;s instead try structuring our solution as a pipeline. We can translate the problem description almost directly into code by chaining together methods from Ruby&rsquo;s <a href="http://www.ruby-doc.org/core-2.1.1/Enumerable.html"><code>Enumerable</code></a> module:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">students</span><span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">s</span><span class="o">|</span> <span class="n">s</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="mi">3</span> <span class="p">}</span>
+</span><span class='line'>        <span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">s</span><span class="o">|</span> <span class="n">s</span><span class="o">.</span><span class="n">degree</span> <span class="o">==</span> <span class="s2">&quot;CS&quot;</span> <span class="p">}</span>
+</span><span class='line'>        <span class="o">.</span><span class="n">sort_by</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:age</span><span class="p">)</span>
+</span><span class='line'>        <span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</span><span class='line'>        <span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:email_address</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is clearly a big improvement over the previous attempt. It&rsquo;s concise, easy to understand, and easy to modify. It also has the potential to run more efficiently, as the <code>select</code> and <code>collect</code> operations could potentially be distributed over multiple cores.</p>
+
+<p>A key thing to note is that none of these methods are modifying the objects they&rsquo;re called on. They&rsquo;re instead applying some kind of filter or transformation, then outputting a new sequence to the next stage of the pipeline.</p>
+
+<h2>Example #2</h2>
+
+<p>For this example, we want to get the extensions of the smallest file and the largest file in a directory (example output might be <code>[".txt", ".mkv"]</code>). Taking an imperative approach, we might write something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">min_extension</span> <span class="o">=</span> <span class="kp">nil</span>
+</span><span class='line'><span class="n">max_extension</span> <span class="o">=</span> <span class="kp">nil</span>
+</span><span class='line'><span class="n">min_size</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'><span class="n">max_size</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Dir</span><span class="o">.</span><span class="n">foreach</span><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">path</span><span class="o">|</span>
+</span><span class='line'>  <span class="k">if</span> <span class="no">File</span><span class="o">.</span><span class="n">file?</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">size</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">size</span> <span class="o">&lt;</span> <span class="n">min_size</span> <span class="o">||</span> <span class="n">min_extension</span><span class="o">.</span><span class="n">nil?</span>
+</span><span class='line'>      <span class="n">min_extension</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">extname</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">min_size</span> <span class="o">=</span> <span class="n">size</span>
+</span><span class='line'>    <span class="k">elsif</span> <span class="n">size</span> <span class="o">&gt;</span> <span class="n">max_size</span> <span class="o">||</span> <span class="n">max_extension</span><span class="o">.</span><span class="n">nil?</span>
+</span><span class='line'>      <span class="n">max_extension</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">extname</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">max_size</span> <span class="o">=</span> <span class="n">size</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">return</span> <span class="o">[</span><span class="n">min_extension</span><span class="p">,</span> <span class="n">max_extension</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Conceptually, there are four distinct stages to the computation: list all directory entries, select the entries that correspond to files, select the smallest and largest of these files, and lastly, get their extensions. In the code above, these stages are all intermingled. This makes it harder to understand, and limits the reusability of the logic.</p>
+
+<p>Taking a pipelined approach with <code>Enumerable</code> methods, we can cleanly separate the stages and reuse existing logic:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Dir</span><span class="o">.</span><span class="n">entries</span><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span>
+</span><span class='line'>   <span class="o">.</span><span class="n">select</span>    <span class="p">{</span> <span class="o">|</span><span class="n">path</span><span class="o">|</span> <span class="no">File</span><span class="o">.</span><span class="n">file?</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>   <span class="o">.</span><span class="n">minmax_by</span> <span class="p">{</span> <span class="o">|</span><span class="n">path</span><span class="o">|</span> <span class="no">File</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>   <span class="o">.</span><span class="n">collect</span>   <span class="p">{</span> <span class="o">|</span><span class="n">path</span><span class="o">|</span> <span class="no">File</span><span class="o">.</span><span class="n">extname</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Much nicer!</p>
+
+<p>It&rsquo;s worth pointing out that we can use intermediate variables and/or helper methods if we wish &ndash; the code doesn&rsquo;t <em>have</em> to be an unbroken chain of method calls. So long as we cleanly separate the stages and avoid mutating state (reassigning variables, appending to lists, etc), we&rsquo;re still using a pipelined approach.</p>
+
+<h2>In other languages</h2>
+
+<p>The examples above are written in Ruby, but the concepts are universal. In Python, list comprehensions, generator expressions, and the <code>itertools</code> module all come in handy (plus builtins like <code>map</code> and <code>filter</code>). In Java 8, the Streams API provides a similar toolbox. In C#, check out <code>Enumerable</code> and LINQ. Your language of choice probably supports these concepts in one form or another.</p>
+
+<p>This style of coding has its roots in functional programming, and it&rsquo;s the standard way of doing things in languages like Haskell and Scheme. There are also obvious similarities to SQL &ndash; this is no coincidence, as functional languages and SQL are both <a href="http://en.wikipedia.org/wiki/Declarative_programming">declarative</a> rather than <a href="http://en.wikipedia.org/wiki/Imperative_programming">imperative</a> in nature (meaning we describe <em>what</em> we want rather than spell out exactly <em>how</em> to achieve it).</p>
+
+<h2>Conclusion</h2>
+
+<p>The next time you find yourself writing loops and if-statements, consider whether a more functional approach would be more appropriate. Once you&rsquo;re familiar with this style of programming, you&rsquo;ll notice lots of new opportunities to simplify and streamline your code.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">James Russell</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-27T12:45:10+09:30" pubdate data-updated="true">Jul 27<sup>th</sup>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/functional-programming/'>functional programming</a>, <a class='category' href='/blog/categories/pipelines/'>pipelines</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizwidget.github.io/blog/2014/07/27/function-pipelines/" data-via="" data-counturl="http://fizwidget.github.io/blog/2014/07/27/function-pipelines/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/07/25/python-or-ruby/" title="Previous Post: Python or Ruby?">&laquo; Python or Ruby?</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/07/27/function-pipelines/">Function Pipelines</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/25/python-or-ruby/">Python or Ruby?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/06/implicit-futures-in-ruby/">Implicit Futures in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/03/nothing-but-functions/">Nothing but Functions</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - James Russell -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'fizwidget';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://fizwidget.github.io/blog/2014/07/27/function-pipelines/';
+        var disqus_url = 'http://fizwidget.github.io/blog/2014/07/27/function-pipelines/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

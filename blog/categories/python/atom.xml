@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Python | fizwidget]]></title>
+  <link href="http://fizwidget.github.io/blog/categories/python/atom.xml" rel="self"/>
+  <link href="http://fizwidget.github.io/"/>
+  <updated>2014-07-27T18:04:57+09:30</updated>
+  <id>http://fizwidget.github.io/</id>
+  <author>
+    <name><![CDATA[James Russell]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Python or Ruby?]]></title>
+    <link href="http://fizwidget.github.io/blog/2014/07/25/python-or-ruby/"/>
+    <updated>2014-07-25T22:10:23+09:30</updated>
+    <id>http://fizwidget.github.io/blog/2014/07/25/python-or-ruby</id>
+    <content type="html"><![CDATA[<p>Python and Ruby are the two heavyweights in the general-purpose, high-level, dynamic language category. They&rsquo;re both awesome, but given the choice, I&rsquo;ll generally go with Ruby. This is my attempt at explaining why&hellip;</p>
+
+<!-- more -->
+
+
+<h2>Ruby is consistently object-oriented</h2>
+
+<p>Pretty much everything we do in Ruby involves calling methods on objects:</p>
+
+<p><code>ruby
+-42.abs               # =&gt; 42
+[1, 2, 3].length      # =&gt; 3
+[1, 2, 3].reverse     # =&gt; [3, 2, 1]
+[1, 2, 3].reverse!    # Reverses list in-place.
+[1, 2, 3].min         # =&gt; 1
+"foo".capitalize      # =&gt; "Foo"
+File.new("bar")       # =&gt; File object
+file.close            # Closes file object.
+</code></p>
+
+<p>In Python though, a mixture of functions and methods are typically used:</p>
+
+<p><code>python
+abs(-42)              # =&gt; 42
+len([1, 2, 3])        # =&gt; 3
+reversed([1, 2, 3])   # =&gt; [3, 2, 1]
+[1, 2, 3].reverse()   # Reverses list in-place.
+min([1, 2, 3])        # =&gt; 1
+"foo".capitalize()    # =&gt; "Foo"
+open("bar")           # =&gt; File object
+file.close()          # Closes file object.
+</code></p>
+
+<p>One of the benefits of Ruby&rsquo;s consistency is that we can always read code left-to-right. This makes functional-style pipelines much easier to read and write:</p>
+
+<p><code>ruby
+"world hello".split.reverse.join(" ") # =&gt; "hello world"
+</code></p>
+
+<p>The equivalent Python code is much harder to make sense of. We have to read some parts left-to-right and other parts inside-out. Yuk!</p>
+
+<p><code>python
+" ".join(reversed("world hello".split())) # =&gt; "hello world"
+</code></p>
+
+<h2>Blocks are awesome</h2>
+
+<p>One of Ruby&rsquo;s best features is the elegant syntax it has for passing anonymous functions (&ldquo;blocks&rdquo;) as arguments to methods. Blocks are like Python&rsquo;s lambda expressions, only more powerful, more widely used, and visually cleaner.</p>
+
+<p>Blocks allow us to perform many different tasks using a single uniform syntax. For example:</p>
+
+<p><code>ruby
+[1, 2, 3].each   { |x| puts x }         # Iteration using blocks.
+File.open('a')   { |f| puts f.read }    # Automatic resource management using blocks.
+[1, 2, 3].select { |x| x &gt; 2 }          # List processing using blocks.
+data.sort_by     { |x| foo.bar(x) }     # Sorting using blocks.
+urls.lazy.map    { |u| download(u) }    # Lazy evaluation using blocks.
+</code></p>
+
+<p>In Python, we&rsquo;d typically use no fewer than <em>five</em> language constructs to perform the same tasks:</p>
+
+<p><code>python
+for x in [1, 2, 3]: print(x)            # Iteration using 'for'.
+with f as open('a'): print(f.read())    # Automatic resource management using 'with'.
+[x for x in [1, 2, 3] if x &gt; 2]         # List processing using list comprehensions.
+sorted(data, key=lambda x: foo.bar(x))  # Sorting using 'lambda'.
+(download(u) for u in urls)             # Lazy evaluation using generator expressions.
+</code></p>
+
+<p>One flexible construct > multiple rigid ones in my book.</p>
+
+<h2>Clear conditionals</h2>
+
+<p>In Python, empty collections, empty strings, and certain other objects are logically false. This isn&rsquo;t just a quirk of the language, it&rsquo;s promoted in <a href="http://legacy.python.org/dev/peps/pep-0008/#programming-recommendations">PEP 8</a> as the Pythonic way of checking for empty sequences. In addition to this, the number zero is logically false, and non-zero numbers are logically true.</p>
+
+<p>``` python
+if not some_sequence:</p>
+
+<pre><code># Whatever happened to "explicit is better than implicit"??
+</code></pre>
+
+<p>if some_number:</p>
+
+<pre><code># Admittedly this one isn't very Pythonic, but it does work.
+</code></pre>
+
+<p>```</p>
+
+<p>Ruby doesn&rsquo;t allow these shenanigans, so the equivalent code is much more explicit:</p>
+
+<p>``` ruby
+if some_sequence.empty?
+  # Obvious meaning is obvious.
+end</p>
+
+<p>unless some_number.zero?
+  # Could use &lsquo;if some_number != 0&rsquo;, but this is nicer ;)
+end
+```</p>
+
+<p>It&rsquo;s also worth noting that we can use <code>unless</code> and <code>until</code> in Ruby instead of <code>if not</code> and <code>while not</code> in Python. Method names can also include the &lsquo;?&rsquo; character, further improving readability. Compare this Python snippet:</p>
+
+<p>``` python
+while not buffer.is_full():</p>
+
+<pre><code># Add data to buffer.
+</code></pre>
+
+<p>```</p>
+
+<p>With this Ruby one:</p>
+
+<p><code>ruby
+until buffer.full?
+  # Add data to buffer.
+end
+</code></p>
+
+<h2>Private parts</h2>
+
+<p>Instance variables are private by default in Ruby, which encourages proper encapsulation of implementation details.</p>
+
+<p>``` ruby
+class Foo
+  def initialize</p>
+
+<pre><code>@secret = 42
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>Foo.new.secret # => Error!
+```</p>
+
+<p>Everything defaults to public in Python, and privacy can only be suggested a naming convention. This means we&rsquo;re more likely to end up with inappropriate dependencies on implementation details.</p>
+
+<p>``` python
+class Foo:</p>
+
+<pre><code>def __init__(self):
+    self.not_so_secret = 42
+</code></pre>
+
+<p>Foo().not_so_secret # => 42
+```</p>
+
+<p>Ruby&rsquo;s approach seems the wiser one to me. Encapsulation is a Good Idea™, so why shouldn&rsquo;t the language support and encourage it?</p>
+
+<p><em>(By the way, Ruby&rsquo;s approach doesn&rsquo;t result in C++/Java-style boilerplate. We can generate default getters/setters by placing <code>attr_accessor :property_name</code> in the class body, and override them later if need be.)</em></p>
+
+<h2>Ruby&rsquo;s pretty!</h2>
+
+<p>OK, I&rsquo;ll admit this one is ever so slightly subjective. Having said that, compare this:</p>
+
+<p>``` ruby
+class Person
+  def initialize(age)</p>
+
+<pre><code>@age = age
+</code></pre>
+
+<p>  end</p>
+
+<p>  def to_s</p>
+
+<pre><code>"Person is #{@age} years old."
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>person = Person.new(34)
+puts person
+```</p>
+
+<p>To this:</p>
+
+<p>``` python
+class Person(object):</p>
+
+<pre><code>def __init__(self, age):
+    self.age = age
+
+def __str__(self):
+    return "Person is {} years old.".format(self.age)
+</code></pre>
+
+<p>person = Person(34)
+print(person)
+```</p>
+
+<p>The Ruby code has fewer parentheses, colons, and underscores, and doesn&rsquo;t need to specify <code>object</code>, <code>self</code>, or <code>return</code>. Python&rsquo;s whitespace sensitivity does allow it to omit <code>end</code>, but this doesn&rsquo;t make up for all the other clutter in my opinion.</p>
+
+<h2>Naming and documentation</h2>
+
+<p>The naming conventions used in Python&rsquo;s standard library are a bit of a mess (even <a href="http://legacy.python.org/dev/peps/pep-0008/#naming-conventions">PEP 8</a> admits as much). Ruby&rsquo;s standard library is much more consistent in comparison.</p>
+
+<p>In terms of documentation quality, Ruby also has the edge. Descriptions are clearer and more detailed, and usage examples are almost always given. Consider the documentation for <code>str.capitalize</code> in Python:</p>
+
+<p>``` plain
+str.capitalize = capitalize(&hellip;)</p>
+
+<pre><code>S.capitalize() -&gt; string
+
+Return a copy of the string S with only its first character
+capitalized.
+</code></pre>
+
+<p>```</p>
+
+<p>Then compare it with Ruby&rsquo;s <code>String#capitalize</code>:</p>
+
+<p>``` plain
+= String#capitalize</p>
+
+<h2>(from ruby core)</h2>
+
+<p>  str.capitalize   &ndash;> new_str</p>
+
+<hr />
+
+<p>Returns a copy of str with the first character converted to uppercase
+and the remainder to lowercase. Note: case conversion is effective only in
+ASCII region.</p>
+
+<p>  &ldquo;hello&rdquo;.capitalize    #=> &ldquo;Hello&rdquo;
+  &ldquo;HELLO&rdquo;.capitalize    #=> &ldquo;Hello&rdquo;
+  &ldquo;123ABC&rdquo;.capitalize   #=> &ldquo;123abc&rdquo;
+```</p>
+
+<p>Unless you were paying close attention, you might have missed the fact that <code>str.capitalize</code> converts the remainder of the string to lowercase (e.g. &ldquo;ABC&rdquo; goes to &ldquo;Abc&rdquo;). The Ruby documentation makes this behaviour much more obvious, and gives clarifying examples.</p>
+
+<p>This is just one example of course, but these kinds of differences are not atypical in my experience.</p>
+
+<h2>Conclusion</h2>
+
+<p>So those are a few of the reasons why I prefer Ruby to Python. Admittedly this was a rather one sided comparison &ndash; Ruby has plenty of downsides and Python plenty of upsides that I neglected to mention. Perhaps those will be the topic of a future post!</p>
+]]></content>
+  </entry>
+  
+</feed>

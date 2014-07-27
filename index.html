@@ -9,7 +9,7 @@
   <meta name="author" content="James Russell">
 
   
-  <meta name="description" content="Say we&rsquo;re writing a program that performs several time-consuming operations, like network requests, disk accesses, or complex calculations. We &hellip;">
+  <meta name="description" content="The concept of pipelining is pretty simple &ndash; components are connected in series such that the output from one flows into the input of the next &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +77,95 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/07/27/function-pipelines/">Function Pipelines</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-27T12:45:10+09:30" pubdate data-updated="true">Jul 27<sup>th</sup>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The concept of pipelining is pretty simple &ndash; components are connected in series such that the output from one flows into the input of the next. Piping data in shell scripts is an example most programmers are familiar with:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>cat logs <span class="p">|</span> grep <span class="s1">&#39;ERROR&#39;</span> <span class="p">|</span> sed <span class="s1">&#39;s/shit/darn/g&#39;</span> <span class="p">|</span> sort <span class="p">|</span> uniq &gt; bad_things
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This style of programming doesn&rsquo;t have to be relegated to shell scripts though &ndash; it&rsquo;s a universal concept that can help us write better code in many different languages. Instead of piping data from one program to another, we&rsquo;ll compose functions (or equivalently, chain methods).</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/07/27/function-pipelines/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/07/25/python-or-ruby/">Python or Ruby?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-25T22:10:23+09:30" pubdate data-updated="true">Jul 25<sup>th</sup>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Python and Ruby are the two heavyweights in the general-purpose, high-level, dynamic language category. They&rsquo;re both awesome, but given the choice, I&rsquo;ll generally go with Ruby. This is my attempt at explaining why&hellip;</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/07/25/python-or-ruby/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -173,6 +262,14 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/07/27/function-pipelines/">Function Pipelines</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/25/python-or-ruby/">Python or Ruby?</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/07/06/implicit-futures-in-ruby/">Implicit Futures in Ruby</a>
