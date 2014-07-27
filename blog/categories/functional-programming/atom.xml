@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Functional Programming | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/functional-programming/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-27T18:04:57+09:30</updated>
+  <updated>2014-07-27T18:17:43+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -84,6 +84,8 @@ students.select { |s| s.level == 3 }</p>
 
 <p>A key thing to note is that none of these methods are modifying the objects they&rsquo;re called on. They&rsquo;re instead applying some kind of filter or transformation, then outputting a new sequence to the next stage of the pipeline.</p>
 
+<p>It&rsquo;s also worth pointing out that we can use intermediate variables and/or helper methods if we wish &ndash; the code doesn&rsquo;t <em>have</em> to be an unbroken chain of method calls. So long as we cleanly separate the stages and avoid mutating state (reassigning variables, appending to lists, etc), we&rsquo;re still using a pipelined approach.</p>
+
 <h2>Example #2</h2>
 
 <p>For this example, we want to get the extensions of the smallest file and the largest file in a directory (example output might be <code>[".txt", ".mkv"]</code>). Taking an imperative approach, we might write something like this:</p>
@@ -125,8 +127,6 @@ Dir.entries(dir_path)
 </code></p>
 
 <p>Much nicer!</p>
-
-<p>It&rsquo;s worth pointing out that we can use intermediate variables and/or helper methods if we wish &ndash; the code doesn&rsquo;t <em>have</em> to be an unbroken chain of method calls. So long as we cleanly separate the stages and avoid mutating state (reassigning variables, appending to lists, etc), we&rsquo;re still using a pipelined approach.</p>
 
 <h2>In other languages</h2>
 
