@@ -76,12 +76,23 @@ sorted(data, key=lambda x: foo.bar(x))  # Sorting using 'lambda'.
 (download(u) for u in urls)             # Lazy evaluation using generator expressions.
 ```
 
-One flexible construct > multiple rigid ones in my book.
+Another thing to note is that Python's lambdas are restricted to a single expression, whereas blocks can be as large as we need them to be:
+
+``` ruby
+10.times do
+  puts "Hello"
+  puts "World"
+  puts "..."
+  puts "Bye!"
+end
+```
+
+One flexible construct > multiple rigid constructs in my book!
 
 Clear conditionals
 ------------------
 
-In Python, empty collections, empty strings, and certain other objects are logically false. This isn't just a quirk of the language, it's promoted in [PEP 8](http://legacy.python.org/dev/peps/pep-0008/#programming-recommendations) as the Pythonic way of checking for empty sequences. In addition to this, the number zero is logically false, and non-zero numbers are logically true.
+In Python, empty collections, empty strings, and certain other objects are treated as being logically false. This isn't just a quirk of the language, it's promoted in [PEP 8](http://legacy.python.org/dev/peps/pep-0008/#programming-recommendations) as the Pythonic way of checking for empty sequences. In addition to this, zero is treated false and non-zero numbers as true.
 
 ``` python
 if not some_sequence:
@@ -91,7 +102,7 @@ if some_number:
     # Admittedly this one isn't very Pythonic, but it does work.
 ```
 
-Ruby doesn't allow these shenanigans, so the equivalent code is much more explicit:
+Ruby doesn't allow these shenanigans, so the equivalent code has to be much more explicit:
 
 ``` ruby
 if some_sequence.empty?
@@ -117,6 +128,8 @@ until buffer.full?
   # Add data to buffer.
 end
 ```
+
+The former is quite clunky, but the latter almost reads as English prose!
 
 Private parts
 -------------
