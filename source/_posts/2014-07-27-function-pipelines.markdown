@@ -67,7 +67,7 @@ It's also worth pointing out that we can use intermediate variables and/or helpe
 Example #2
 ----------
 
-For this example, we want to get the extensions of the smallest file and the largest file in a directory (example output might be `[".txt", ".mkv"]`). Taking an imperative approach, we might write something like this:
+For this example, we want to get the extensions of the smallest file and the largest file in a directory. If our directory contained a small text file and a large video file, example output might be `[".txt", ".mkv"]`. Taking an imperative approach, we might write something like this:
 
 ``` ruby
 min_extension = nil
