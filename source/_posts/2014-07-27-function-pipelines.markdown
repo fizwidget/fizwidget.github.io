@@ -62,6 +62,8 @@ This is clearly a big improvement over the previous attempt. It's concise, easy 
 
 A key thing to note is that none of these methods are modifying the objects they're called on. They're instead applying some kind of filter or transformation, then outputting a new sequence to the next stage of the pipeline.
 
+It's also worth pointing out that we can use intermediate variables and/or helper methods if we wish - the code doesn't *have* to be an unbroken chain of method calls. So long as we cleanly separate the stages and avoid mutating state (reassigning variables, appending to lists, etc), we're still using a pipelined approach.
+
 Example #2
 ----------
 
@@ -101,8 +103,6 @@ Dir.entries(dir_path)
 ```
 
 Much nicer!
-
-It's worth pointing out that we can use intermediate variables and/or helper methods if we wish - the code doesn't *have* to be an unbroken chain of method calls. So long as we cleanly separate the stages and avoid mutating state (reassigning variables, appending to lists, etc), we're still using a pipelined approach.
 
 In other languages
 ------------------
