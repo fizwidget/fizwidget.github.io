@@ -107,11 +107,11 @@ Much nicer!
 In other languages
 ------------------
 
-The examples above are written in Ruby, but the concepts are universal. In Python, list comprehensions, generator expressions, and the `itertools` module all come in handy (plus builtins like `map` and `filter`). In Java 8, the Streams API provides a similar toolbox. In C#, check out `Enumerable` and LINQ. Your language of choice probably supports these concepts in one form or another.
+The examples above are written in Ruby, but the concepts are universal. In Python, list comprehensions, generator expressions, the `itertools` module, and built-in functions like `map` and `filter` all come in handy. In Java 8, the Streams API provides the equivalent toolset. In C#, check out `Enumerable` and LINQ. Odds are, your language of choice supports these concepts in one form or another. In some cases, cool things like parallel execution or lazy evaluation of pipelines are also supported.
 
-This style of coding has its roots in functional programming, and it's the standard way of doing things in languages like Haskell and Scheme. There are also obvious similarities to SQL - this is no coincidence, as functional languages and SQL are both [declarative](http://en.wikipedia.org/wiki/Declarative_programming) rather than [imperative](http://en.wikipedia.org/wiki/Imperative_programming) in nature (meaning we describe *what* we want rather than spell out exactly *how* to achieve it).
+This style of coding has its roots in functional programming, and it's the standard way of doing things in languages like Haskell and Scheme. There are also obvious similarities to SQL. This is no coincidence, as functional languages and SQL are both [declarative](http://en.wikipedia.org/wiki/Declarative_programming) rather than [imperative](http://en.wikipedia.org/wiki/Imperative_programming) in nature (meaning we describe *what* we want rather than spell out exactly *how* to achieve it).
 
 Conclusion
 ----------
 
-The next time you find yourself writing loops and if-statements, consider whether a more functional approach would be more appropriate. Once you're familiar with this style of programming, you'll notice lots of new opportunities to simplify and streamline your code.
+The next time you find yourself writing loops and if-statements, consider whether a functional pipelined approach would be more appropriate. Once you're familiar with this style of programming, you'll see lots of opportunities to make your code simpler and more robust.
