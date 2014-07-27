@@ -83,7 +83,8 @@ Dir.foreach(dir_path) do |path|
     if size < min_size || min_extension.nil?
       min_extension = File.extname(path)
       min_size = size
-    elsif size > max_size || max_extension.nil?
+    end
+    if size > max_size || max_extension.nil?
       max_extension = File.extname(path)
       max_size = size
     end
