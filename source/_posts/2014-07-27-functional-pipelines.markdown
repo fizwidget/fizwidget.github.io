@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Function Pipelines"
+title: "Functional Pipelines"
 date: 2014-07-27 12:45:10 +0930
 comments: true
 categories: [functional programming, pipelines]
