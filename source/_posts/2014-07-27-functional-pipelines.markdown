@@ -9,7 +9,7 @@ categories: [functional programming, pipelines]
 The concept of pipelining is pretty simple - components are connected in series such that the output from one flows into the input of the next. Piping data in shell scripts is an example most programmers are familiar with:
 
 ``` bash
-cat logs | grep 'ERROR' | sed 's/color/colour/g' | sort | uniq > bad_things
+cat logs | grep 'ERROR' | sed 's/color/colour/g' | sort | uniq
 ```
 
 This style of programming doesn't have to be relegated to shell scripts though - it's a universal concept that can help us write better code in many different languages. Instead of piping data from one program to another, we'll compose functions (or equivalently, chain methods).
