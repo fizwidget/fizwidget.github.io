@@ -67,7 +67,7 @@ It's also worth pointing out that we can use intermediate variables and/or helpe
 Example 2
 ---------
 
-In this example, we want to get the extensions of the smallest file and the largest file in a directory. If the smallest file was a text document and the largest file a video, `[".txt", ".mkv"]` might be the output.
+In this example, we want to get the extensions of the smallest file and the largest file in a directory. If the smallest file was a text document and the largest a video, `[".txt", ".mkv"]` might be the output.
 
 Here's our first implementation attempt:
 
