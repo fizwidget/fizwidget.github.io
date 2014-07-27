@@ -4,7 +4,7 @@
   <title><![CDATA[fizwidget]]></title>
   <link href="http://fizwidget.github.io/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-27T20:42:59+09:30</updated>
+  <updated>2014-07-27T20:59:20+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -32,7 +32,7 @@
 
 <p>Let&rsquo;s jump straight into some Ruby examples, then I&rsquo;ll discuss how these ideas apply to other languages.</p>
 
-<h2>Example #1</h2>
+<h2>Example 1</h2>
 
 <p>Say we&rsquo;ve got a list of student objects, and we want to get the email addresses of the ten youngest third-year compsci students (perhaps to send them a survey or something). Using a traditional imperative approach, we might write something along these lines:</p>
 
@@ -79,7 +79,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>This works, but the code is quite verbose, and it&rsquo;s not particularly easy to understand or modify.</p>
+<p>This works, but it&rsquo;s quite verbose, and it&rsquo;s not particularly easy to understand or modify.</p>
 
 <p>Let&rsquo;s instead try structuring our solution as a pipeline. We can translate the problem description almost directly into code by chaining together methods from Ruby&rsquo;s <a href="http://www.ruby-doc.org/core-2.1.1/Enumerable.html"><code>Enumerable</code></a> module:</p>
 
@@ -96,15 +96,17 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>This is clearly a big improvement over the previous attempt. It&rsquo;s concise, easy to understand, and easy to modify. It also has the potential to run more efficiently, as the <code>select</code> and <code>collect</code> operations could potentially be distributed over multiple cores.</p>
+<p>This is clearly a big improvement. It&rsquo;s concise, easy to understand, and easy to modify. It also has the potential to run more efficiently, as the <code>select</code> and <code>collect</code> operations could potentially be distributed over multiple cores.</p>
 
 <p>A key thing to note is that none of these methods are modifying the objects they&rsquo;re called on. They&rsquo;re instead applying some kind of filter or transformation, then outputting a new sequence to the next stage of the pipeline.</p>
 
 <p>It&rsquo;s also worth pointing out that we can use intermediate variables and/or helper methods if we wish &ndash; the code doesn&rsquo;t <em>have</em> to be an unbroken chain of method calls. So long as we cleanly separate the stages and avoid mutating state (reassigning variables, appending to lists, etc), we&rsquo;re still using a pipelined approach.</p>
 
-<h2>Example #2</h2>
+<h2>Example 2</h2>
 
-<p>For this example, we want to get the extensions of the smallest file and the largest file in a directory. If our directory contained a small text file and a large video file, example output might be <code>[".txt", ".mkv"]</code>. Taking an imperative approach, we might write something like this:</p>
+<p>In this example, we want to get the extensions of the smallest file and the largest file in a directory. If the smallest file was a text document and the largest file a video, <code>[".txt", ".mkv"]</code> might be the output.</p>
+
+<p>Here&rsquo;s our first implementation attempt:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -147,7 +149,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Conceptually, there are four distinct stages to the computation: list all directory entries, select the entries that correspond to files, select the smallest and largest of these files, and lastly, get their extensions. In the code above, these stages are all intermingled. This makes it harder to understand, and limits the reusability of the logic.</p>
+<p>Conceptually, there are four stages to the computation: list all directory entries, select the entries that correspond to files, select the smallest and largest of these files, and lastly, get their extensions. In the code above, these stages are all intermingled. This makes it hard to understand and limits the reusability of the logic.</p>
 
 <p>Taking a pipelined approach with <code>Enumerable</code> methods, we can cleanly separate the stages and reuse existing logic:</p>
 
