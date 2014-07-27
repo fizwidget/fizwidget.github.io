@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-27T21:32:14+09:30</updated>
+  <updated>2014-07-28T07:57:46+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -153,7 +153,7 @@ end</p>
 <p>Foo.new.secret # => Error!
 ```</p>
 
-<p>Everything defaults to public in Python, and privacy can only be suggested a naming convention. This means we&rsquo;re more likely to end up with inappropriate dependencies on implementation details.</p>
+<p>Everything defaults to public in Python, and privacy can only be suggested by naming conventions. This means we&rsquo;re more likely to end up with inappropriate dependencies on implementation details.</p>
 
 <p>``` python
 class Foo:</p>
