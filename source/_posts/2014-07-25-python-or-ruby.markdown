@@ -133,7 +133,7 @@ end
 Foo.new.secret # => Error!
 ```
 
-Everything defaults to public in Python, and privacy can only be suggested a naming convention. This means we're more likely to end up with inappropriate dependencies on implementation details.
+Everything defaults to public in Python, and privacy can only be suggested by naming conventions. This means we're more likely to end up with inappropriate dependencies on implementation details.
 
 ``` python
 class Foo:
