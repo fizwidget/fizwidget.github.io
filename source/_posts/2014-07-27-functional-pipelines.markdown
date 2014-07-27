@@ -27,7 +27,7 @@ Say we've got a list of student objects, and we want to get the email addresses 
 # Select all the third-year CS students.
 third_year_cs_students = []
 for student in students
-  if student.level == 3 && student.degree == "CS"
+  if student.level == 3 && student.degree == :comp_sci
     third_year_cs_students.push(student)
   end
 end
@@ -52,7 +52,7 @@ Let's instead try structuring our solution as a pipeline. We can translate the p
 
 ``` ruby
 students.select { |s| s.level == 3 }
-        .select { |s| s.degree == "CS" }
+        .select { |s| s.degree == :comp_sci }
         .sort_by(&:age)
         .take(10)
         .collect(&:email_address)
