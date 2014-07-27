@@ -200,11 +200,28 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>One flexible construct > multiple rigid ones in my book.</p>
+<p>Another thing to note is that Python&rsquo;s lambdas are restricted to a single expression, whereas blocks can be as large as we need them to be:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="mi">10</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;Hello&quot;</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;World&quot;</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;...&quot;</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;Bye!&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>One flexible construct > multiple rigid constructs in my book!</p>
 
 <h2>Clear conditionals</h2>
 
-<p>In Python, empty collections, empty strings, and certain other objects are logically false. This isn&rsquo;t just a quirk of the language, it&rsquo;s promoted in <a href="http://legacy.python.org/dev/peps/pep-0008/#programming-recommendations">PEP 8</a> as the Pythonic way of checking for empty sequences. In addition to this, the number zero is logically false, and non-zero numbers are logically true.</p>
+<p>In Python, empty collections, empty strings, and certain other objects are treated as being logically false. This isn&rsquo;t just a quirk of the language, it&rsquo;s promoted in <a href="http://legacy.python.org/dev/peps/pep-0008/#programming-recommendations">PEP 8</a> as the Pythonic way of checking for empty sequences. In addition to this, zero is treated false and non-zero numbers as true.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -219,7 +236,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Ruby doesn&rsquo;t allow these shenanigans, so the equivalent code is much more explicit:</p>
+<p>Ruby doesn&rsquo;t allow these shenanigans, so the equivalent code has to be much more explicit:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -257,6 +274,8 @@
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
+
+<p>The former is quite clunky, but the latter almost reads as English prose!</p>
 
 <h2>Private parts</h2>
 
