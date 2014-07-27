@@ -144,7 +144,7 @@
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Select all the third-year CS students.</span>
 </span><span class='line'><span class="n">third_year_cs_students</span> <span class="o">=</span> <span class="o">[]</span>
 </span><span class='line'><span class="k">for</span> <span class="n">student</span> <span class="k">in</span> <span class="n">students</span>
-</span><span class='line'>  <span class="k">if</span> <span class="n">student</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">student</span><span class="o">.</span><span class="n">degree</span> <span class="o">==</span> <span class="s2">&quot;CS&quot;</span>
+</span><span class='line'>  <span class="k">if</span> <span class="n">student</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">student</span><span class="o">.</span><span class="n">degree</span> <span class="o">==</span> <span class="ss">:comp_sci</span>
 </span><span class='line'>    <span class="n">third_year_cs_students</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">student</span><span class="p">)</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
@@ -174,7 +174,7 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">students</span><span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">s</span><span class="o">|</span> <span class="n">s</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="mi">3</span> <span class="p">}</span>
-</span><span class='line'>        <span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">s</span><span class="o">|</span> <span class="n">s</span><span class="o">.</span><span class="n">degree</span> <span class="o">==</span> <span class="s2">&quot;CS&quot;</span> <span class="p">}</span>
+</span><span class='line'>        <span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">s</span><span class="o">|</span> <span class="n">s</span><span class="o">.</span><span class="n">degree</span> <span class="o">==</span> <span class="ss">:comp_sci</span> <span class="p">}</span>
 </span><span class='line'>        <span class="o">.</span><span class="n">sort_by</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:age</span><span class="p">)</span>
 </span><span class='line'>        <span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </span><span class='line'>        <span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:email_address</span><span class="p">)</span>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Pipelines | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/pipelines/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-27T20:59:20+09:30</updated>
+  <updated>2014-07-27T21:24:31+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -41,7 +41,7 @@ cat logs | grep 'ERROR' | sed 's/color/colour/g' | sort | uniq &gt; bad_things
 
 <p>third_year_cs_students = []
 for student in students
-  if student.level == 3 &amp;&amp; student.degree == &ldquo;CS&rdquo;</p>
+  if student.level == 3 &amp;&amp; student.degree == :comp_sci</p>
 
 <pre><code>third_year_cs_students.push(student)
 </code></pre>
@@ -72,7 +72,7 @@ end</p>
 <p>``` ruby
 students.select { |s| s.level == 3 }</p>
 
-<pre><code>    .select { |s| s.degree == "CS" }
+<pre><code>    .select { |s| s.degree == :comp_sci }
     .sort_by(&amp;:age)
     .take(10)
     .collect(&amp;:email_address)
