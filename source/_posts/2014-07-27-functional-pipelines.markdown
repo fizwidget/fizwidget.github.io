@@ -18,8 +18,8 @@ This style of programming doesn't have to be relegated to shell scripts though -
 
 Let's jump straight into some Ruby examples, then I'll discuss how these ideas apply to other languages.
 
-Example #1
-----------
+Example 1
+---------
 
 Say we've got a list of student objects, and we want to get the email addresses of the ten youngest third-year compsci students (perhaps to send them a survey or something). Using a traditional imperative approach, we might write something along these lines:
 
@@ -46,7 +46,7 @@ end
 return emails
 ```
 
-This works, but the code is quite verbose, and it's not particularly easy to understand or modify.
+This works, but it's quite verbose, and it's not particularly easy to understand or modify.
 
 Let's instead try structuring our solution as a pipeline. We can translate the problem description almost directly into code by chaining together methods from Ruby's [`Enumerable`](http://www.ruby-doc.org/core-2.1.1/Enumerable.html) module:
 
@@ -58,16 +58,18 @@ students.select { |s| s.level == 3 }
         .collect(&:email_address)
 ```
 
-This is clearly a big improvement over the previous attempt. It's concise, easy to understand, and easy to modify. It also has the potential to run more efficiently, as the `select` and `collect` operations could potentially be distributed over multiple cores.
+This is clearly a big improvement. It's concise, easy to understand, and easy to modify. It also has the potential to run more efficiently, as the `select` and `collect` operations could potentially be distributed over multiple cores.
 
 A key thing to note is that none of these methods are modifying the objects they're called on. They're instead applying some kind of filter or transformation, then outputting a new sequence to the next stage of the pipeline.
 
 It's also worth pointing out that we can use intermediate variables and/or helper methods if we wish - the code doesn't *have* to be an unbroken chain of method calls. So long as we cleanly separate the stages and avoid mutating state (reassigning variables, appending to lists, etc), we're still using a pipelined approach.
 
-Example #2
-----------
+Example 2
+---------
 
-For this example, we want to get the extensions of the smallest file and the largest file in a directory. If our directory contained a small text file and a large video file, example output might be `[".txt", ".mkv"]`. Taking an imperative approach, we might write something like this:
+In this example, we want to get the extensions of the smallest file and the largest file in a directory. If the smallest file was a text document and the largest file a video, `[".txt", ".mkv"]` might be the output.
+
+Here's our first implementation attempt:
 
 ``` ruby
 min_extension = nil
@@ -91,7 +93,7 @@ end
 return [min_extension, max_extension]
 ```
 
-Conceptually, there are four distinct stages to the computation: list all directory entries, select the entries that correspond to files, select the smallest and largest of these files, and lastly, get their extensions. In the code above, these stages are all intermingled. This makes it harder to understand, and limits the reusability of the logic.
+Conceptually, there are four stages to the computation: list all directory entries, select the entries that correspond to files, select the smallest and largest of these files, and lastly, get their extensions. In the code above, these stages are all intermingled. This makes it hard to understand and limits the reusability of the logic.
 
 Taking a pipelined approach with `Enumerable` methods, we can cleanly separate the stages and reuse existing logic:
 
