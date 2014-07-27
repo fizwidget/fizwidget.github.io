@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Functional Programming | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/functional-programming/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-27T18:33:38+09:30</updated>
+  <updated>2014-07-27T20:38:50+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -130,13 +130,13 @@ Dir.entries(dir_path)
 
 <h2>In other languages</h2>
 
-<p>The examples above are written in Ruby, but the concepts are universal. In Python, list comprehensions, generator expressions, and the <code>itertools</code> module all come in handy (plus builtins like <code>map</code> and <code>filter</code>). In Java 8, the Streams API provides a similar toolbox. In C#, check out <code>Enumerable</code> and LINQ. Your language of choice probably supports these concepts in one form or another.</p>
+<p>The examples above are written in Ruby, but the concepts are universal. In Python, list comprehensions, generator expressions, the <code>itertools</code> module, and built-in functions like <code>map</code> and <code>filter</code> all come in handy. In Java 8, the Streams API provides the equivalent toolset. In C#, check out <code>Enumerable</code> and LINQ. Odds are, your language of choice supports these concepts in one form or another. In some cases, cool things like parallel execution or lazy evaluation of pipelines are also supported.</p>
 
-<p>This style of coding has its roots in functional programming, and it&rsquo;s the standard way of doing things in languages like Haskell and Scheme. There are also obvious similarities to SQL &ndash; this is no coincidence, as functional languages and SQL are both <a href="http://en.wikipedia.org/wiki/Declarative_programming">declarative</a> rather than <a href="http://en.wikipedia.org/wiki/Imperative_programming">imperative</a> in nature (meaning we describe <em>what</em> we want rather than spell out exactly <em>how</em> to achieve it).</p>
+<p>This style of coding has its roots in functional programming, and it&rsquo;s the standard way of doing things in languages like Haskell and Scheme. There are also obvious similarities to SQL. This is no coincidence, as functional languages and SQL are both <a href="http://en.wikipedia.org/wiki/Declarative_programming">declarative</a> rather than <a href="http://en.wikipedia.org/wiki/Imperative_programming">imperative</a> in nature (meaning we describe <em>what</em> we want rather than spell out exactly <em>how</em> to achieve it).</p>
 
 <h2>Conclusion</h2>
 
-<p>The next time you find yourself writing loops and if-statements, consider whether a more functional approach would be more appropriate. Once you&rsquo;re familiar with this style of programming, you&rsquo;ll notice lots of new opportunities to simplify and streamline your code.</p>
+<p>The next time you find yourself writing loops and if-statements, consider whether a functional pipelined approach would be more appropriate. Once you&rsquo;re familiar with this style of programming, you&rsquo;ll see lots of opportunities to make your code simpler and more robust.</p>
 ]]></content>
   </entry>
   
