@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Pipelines | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/pipelines/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-28T08:21:15+09:30</updated>
+  <updated>2014-07-28T09:16:47+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -105,7 +105,8 @@ max_size = 0</p>
 if size &lt; min_size || min_extension.nil?
   min_extension = File.extname(path)
   min_size = size
-elsif size &gt; max_size || max_extension.nil?
+end
+if size &gt; max_size || max_extension.nil?
   max_extension = File.extname(path)
   max_size = size
 end

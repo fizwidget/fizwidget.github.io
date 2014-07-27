@@ -4,7 +4,7 @@
   <title><![CDATA[fizwidget]]></title>
   <link href="http://fizwidget.github.io/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-28T08:21:15+09:30</updated>
+  <updated>2014-07-28T09:16:47+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -127,6 +127,7 @@
 <span class='line-number'>17</span>
 <span class='line-number'>18</span>
 <span class='line-number'>19</span>
+<span class='line-number'>20</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">min_extension</span> <span class="o">=</span> <span class="kp">nil</span>
 </span><span class='line'><span class="n">max_extension</span> <span class="o">=</span> <span class="kp">nil</span>
 </span><span class='line'><span class="n">min_size</span> <span class="o">=</span> <span class="mi">0</span>
@@ -138,7 +139,8 @@
 </span><span class='line'>    <span class="k">if</span> <span class="n">size</span> <span class="o">&lt;</span> <span class="n">min_size</span> <span class="o">||</span> <span class="n">min_extension</span><span class="o">.</span><span class="n">nil?</span>
 </span><span class='line'>      <span class="n">min_extension</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">extname</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 </span><span class='line'>      <span class="n">min_size</span> <span class="o">=</span> <span class="n">size</span>
-</span><span class='line'>    <span class="k">elsif</span> <span class="n">size</span> <span class="o">&gt;</span> <span class="n">max_size</span> <span class="o">||</span> <span class="n">max_extension</span><span class="o">.</span><span class="n">nil?</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">size</span> <span class="o">&gt;</span> <span class="n">max_size</span> <span class="o">||</span> <span class="n">max_extension</span><span class="o">.</span><span class="n">nil?</span>
 </span><span class='line'>      <span class="n">max_extension</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">extname</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 </span><span class='line'>      <span class="n">max_size</span> <span class="o">=</span> <span class="n">size</span>
 </span><span class='line'>    <span class="k">end</span>
