@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Pipelines | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/pipelines/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-27T18:17:43+09:30</updated>
+  <updated>2014-07-27T18:21:14+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -88,7 +88,7 @@ students.select { |s| s.level == 3 }</p>
 
 <h2>Example #2</h2>
 
-<p>For this example, we want to get the extensions of the smallest file and the largest file in a directory (example output might be <code>[".txt", ".mkv"]</code>). Taking an imperative approach, we might write something like this:</p>
+<p>For this example, we want to get the extensions of the smallest file and the largest file in a directory. If our directory contained a small text file and a large video file, example output might be <code>[".txt", ".mkv"]</code>. Taking an imperative approach, we might write something like this:</p>
 
 <p>``` ruby
 min_extension = nil

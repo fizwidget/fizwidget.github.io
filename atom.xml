@@ -4,7 +4,7 @@
   <title><![CDATA[fizwidget]]></title>
   <link href="http://fizwidget.github.io/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-27T18:17:43+09:30</updated>
+  <updated>2014-07-27T18:21:14+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -104,7 +104,7 @@
 
 <h2>Example #2</h2>
 
-<p>For this example, we want to get the extensions of the smallest file and the largest file in a directory (example output might be <code>[".txt", ".mkv"]</code>). Taking an imperative approach, we might write something like this:</p>
+<p>For this example, we want to get the extensions of the smallest file and the largest file in a directory. If our directory contained a small text file and a large video file, example output might be <code>[".txt", ".mkv"]</code>. Taking an imperative approach, we might write something like this:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
