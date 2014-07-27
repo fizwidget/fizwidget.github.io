@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Functional Programming | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/functional-programming/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-27T21:24:31+09:30</updated>
+  <updated>2014-07-27T21:29:47+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -21,7 +21,7 @@
     <content type="html"><![CDATA[<p>The concept of pipelining is pretty simple &ndash; components are connected in series such that the output from one flows into the input of the next. Piping data in shell scripts is an example most programmers are familiar with:</p>
 
 <p><code>bash
-cat logs | grep 'ERROR' | sed 's/color/colour/g' | sort | uniq &gt; bad_things
+cat logs | grep 'ERROR' | sed 's/color/colour/g' | sort | uniq
 </code></p>
 
 <p>This style of programming doesn&rsquo;t have to be relegated to shell scripts though &ndash; it&rsquo;s a universal concept that can help us write better code in many different languages. Instead of piping data from one program to another, we&rsquo;ll compose functions (or equivalently, chain methods).</p>

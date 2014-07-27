@@ -4,7 +4,7 @@
   <title><![CDATA[fizwidget]]></title>
   <link href="http://fizwidget.github.io/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-27T21:24:31+09:30</updated>
+  <updated>2014-07-27T21:29:47+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -21,7 +21,7 @@
     <content type="html"><![CDATA[<p>The concept of pipelining is pretty simple &ndash; components are connected in series such that the output from one flows into the input of the next. Piping data in shell scripts is an example most programmers are familiar with:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>cat logs <span class="p">|</span> grep <span class="s1">&#39;ERROR&#39;</span> <span class="p">|</span> sed <span class="s1">&#39;s/color/colour/g&#39;</span> <span class="p">|</span> sort <span class="p">|</span> uniq &gt; bad_things
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>cat logs <span class="p">|</span> grep <span class="s1">&#39;ERROR&#39;</span> <span class="p">|</span> sed <span class="s1">&#39;s/color/colour/g&#39;</span> <span class="p">|</span> sort <span class="p">|</span> uniq
 </span></code></pre></td></tr></table></div></figure>
 
 
