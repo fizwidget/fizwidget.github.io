@@ -6,37 +6,39 @@ comments: true
 categories: [functional programming, pipelines]
 ---
 
-The concept of pipelining is pretty simple - components are connected in series such that the output from one flows into the input of the next. Piping data between programs in shell scripts is an example everyone's familiar with:
+The concept of pipelining is pretty simple - components are connected in series such that the output from one flows into the input of the next. Piping data in shell scripts is an example most programmers are familiar with:
 
 ``` bash
-cat names | grep "Snow" | sort | uniq
+cat logs | grep 'ERROR' | sed 's/shit/darn/g' | sort | uniq > bad_things
 ```
 
-This style of programming doesn't have to be relegated to shell scripts though - it's a universal concept that can help us write better code in a wide variety of languages. Instead of piping data from one program to another, we'll compose functions (or equivalently, chain method calls).
+This style of programming doesn't have to be relegated to shell scripts though - it's a universal concept that can help us write better code in many different languages. Instead of piping data from one program to another, we'll compose functions (or equivalently, chain methods).
 
 <!-- more -->
+
+Let's jump straight into some Ruby examples, then I'll discuss how these ideas apply to other languages.
 
 Example #1
 ----------
 
-Say we've got a list of student objects, and we want to retrieve the email addresses of the ten youngest first-year compsci students (perhaps to send them a survey or something). Using a traditional imperative approach, we might write something along these lines:
+Say we've got a list of student objects, and we want to get the email addresses of the ten youngest third-year compsci students (perhaps to send them a survey or something). Using a traditional imperative approach, we might write something along these lines:
 
 ``` ruby
-# Select all the first-year CS students.
-first_year_cs_students = []
+# Select all the third-year CS students.
+third_year_cs_students = []
 for student in students
-  if student.level == 1 && student.degree == "CS"
-    first_year_cs_students.push(student)
+  if student.level == 3 && student.degree == "CS"
+    third_year_cs_students.push(student)
   end
 end
 
 # Take the 10 youngest of these students.
-first_year_cs_students.sort_by!(&:age)
-youngest_first_year_cs_students = first_year_cs_students[0, 10]
+third_year_cs_students.sort_by!(&:age)
+youngest_third_year_cs_students = third_year_cs_students.slice(0, 10)
 
 # Collect their email addresses.
 emails = []
-for student in youngest_first_year_cs_students
+for student in youngest_third_year_cs_students
   email = student.email_address
   emails.push(email)
 end
@@ -49,26 +51,27 @@ This works, but the code is quite verbose, and it's not particularly easy to und
 Let's instead try structuring our solution as a pipeline. We can translate the problem description almost directly into code by chaining together methods from Ruby's [`Enumerable`](http://www.ruby-doc.org/core-2.1.1/Enumerable.html) module:
 
 ``` ruby
-students.select { |s| s.degree == "CS" }
-        .select { |s| s.level == 1 }
+students.select { |s| s.level == 3 }
+        .select { |s| s.degree == "CS" }
         .sort_by(&:age)
         .take(10)
         .collect(&:email_address)
 ```
 
-This is clearly a big improvement over our previous attempt. It's concise, easy to understand, and easy to modify. It also has the potential to run more efficiently, as the `select` and `collect` operations could potentially be distributed over multiple cores.
+This is clearly a big improvement over the previous attempt. It's concise, easy to understand, and easy to modify. It also has the potential to run more efficiently, as the `select` and `collect` operations could potentially be distributed over multiple cores.
+
+A key thing to note is that none of these methods are modifying the objects they're called on. They're instead applying some kind of filter or transformation, then outputting a new sequence to the next stage of the pipeline.
 
 Example #2
 ----------
 
-Let's say we want to get the extensions of the smallest file and the largest file in a particular directory. Taking an imperative approach, we might write something like this:
+For this example, we want to get the extensions of the smallest file and the largest file in a directory (example output might be `[".txt", ".mkv"]`). Taking an imperative approach, we might write something like this:
 
 ``` ruby
 min_extension = nil
 max_extension = nil
 min_size = 0
 max_size = 0
-
 
 Dir.foreach(dir_path) do |path|
   if File.file?(path)
@@ -86,9 +89,9 @@ end
 return [min_extension, max_extension]
 ```
 
-Needless to say, this code is a bit nasty. Conceptually, there are four distinct steps we want to perform: list all directory entries, select the entries that correspond to files, select the smallest and largest of these files, then get their extensions. These stages are all intermingled in the code above.
+Conceptually, there are four distinct stages to the computation: list all directory entries, select the entries that correspond to files, select the smallest and largest of these files, and lastly, get their extensions. In the code above, these stages are all intermingled. This makes it harder to understand, and limits the reusability of the logic.
 
-Taking a pipelined approach with `Enumerable` methods, we can cleanly separate the stages:
+Taking a pipelined approach with `Enumerable` methods, we can cleanly separate the stages and reuse existing logic:
 
 ``` ruby
 Dir.entries(dir_path)
@@ -97,18 +100,18 @@ Dir.entries(dir_path)
    .collect   { |path| File.extname(path) }
 ```
 
-Such elegance. Much conciseness. Wow.
+Much nicer!
 
-I should also point out that we're free to introduce intermediate variables and helper methods as needed - we don't need to have a single unbroken chain of method calls. So long as we cleanly separate the stages and avoid mutating state (appending to lists, re-assigning variables, etc), we're still using a pipelined, functional approach.
+It's worth pointing out that we can use intermediate variables and/or helper methods if we wish - the code doesn't *have* to be an unbroken chain of method calls. So long as we cleanly separate the stages and avoid mutating state (reassigning variables, appending to lists, etc), we're still using a pipelined approach.
 
 In other languages
 ------------------
 
-The examples above are written in Ruby, but the concepts are universal. In Python, list comprehensions, generator expressions, and the [`itertools`](http://jmduke.com/posts/a-gentle-introduction-to-itertools/) module come in handy. In Java 8, the [Streams API](http://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html) is what we're after. In C#, check out [`Enumerable`](http://msdn.microsoft.com/en-us/library/system.linq.enumerable.ASPX) and LINQ. Odds are, your favourite language supports these concepts in one form or another.
+The examples above are written in Ruby, but the concepts are universal. In Python, list comprehensions, generator expressions, and the `itertools` module all come in handy (plus builtins like `map` and `filter`). In Java 8, the Streams API provides a similar toolbox. In C#, check out `Enumerable` and LINQ. Your language of choice probably supports these concepts in one form or another.
 
-This style of coding has its roots in functional programming, and it's the standard way of doing things in languages like Haskell and Scheme. There are also obvious similarities to SQL - this is no coincidence, as functional languages and SQL are both [declarative](http://en.wikipedia.org/wiki/Declarative_programming) rather than [imperative](http://en.wikipedia.org/wiki/Imperative_programming) (meaning we describe *what* we want rather than having spell out exactly *how* to achieve it).
+This style of coding has its roots in functional programming, and it's the standard way of doing things in languages like Haskell and Scheme. There are also obvious similarities to SQL - this is no coincidence, as functional languages and SQL are both [declarative](http://en.wikipedia.org/wiki/Declarative_programming) rather than [imperative](http://en.wikipedia.org/wiki/Imperative_programming) in nature (meaning we describe *what* we want rather than spell out exactly *how* to achieve it).
 
 Conclusion
 ----------
 
-The next time you find yourself writing loops and if-statements, consider whether you'd be better off with a more functional approach. Once you become familiar with this style of programming, you'll realise that opportunities to simplify imperative code are everywhere!
+The next time you find yourself writing loops and if-statements, consider whether a more functional approach would be more appropriate. Once you're familiar with this style of programming, you'll notice lots of new opportunities to simplify and streamline your code.

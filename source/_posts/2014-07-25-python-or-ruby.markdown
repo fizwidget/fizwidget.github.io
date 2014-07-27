@@ -22,7 +22,6 @@ Pretty much everything we do in Ruby involves calling methods on objects:
 [1, 2, 3].reverse!    # Reverses list in-place.
 [1, 2, 3].min         # => 1
 "foo".capitalize      # => "Foo"
-"foo".reverse         # => "oof"
 File.new("bar")       # => File object
 file.close            # Closes file object.
 ```
@@ -36,7 +35,6 @@ reversed([1, 2, 3])   # => [3, 2, 1]
 [1, 2, 3].reverse()   # Reverses list in-place.
 min([1, 2, 3])        # => 1
 "foo".capitalize()    # => "Foo"
-"foo"[::-1]           # => "oof"
 open("bar")           # => File object
 file.close()          # Closes file object.
 ```
@@ -68,7 +66,7 @@ data.sort_by     { |x| foo.bar(x) }     # Sorting using blocks.
 urls.lazy.map    { |u| download(u) }    # Lazy evaluation using blocks.
 ```
 
-In Python, we'd typically use no fewer than *five* different language constructs to perform the same tasks:
+In Python, we'd typically use no fewer than *five* language constructs to perform the same tasks:
 
 ``` python
 for x in [1, 2, 3]: print(x)            # Iteration using 'for'.
@@ -78,23 +76,45 @@ sorted(data, key=lambda x: foo.bar(x))  # Sorting using 'lambda'.
 (download(u) for u in urls)             # Lazy evaluation using generator expressions.
 ```
 
-One flexible construct seems preferable to multiple rigid ones.
+One flexible construct > multiple rigid ones in my book.
 
 Clear conditionals
 ------------------
 
-Pretty much everything with a length/size/magnitude of zero evaluates to 'false' in Python. This isn't just a quirk of the language, it's promoted in [PEP 8](http://legacy.python.org/dev/peps/pep-0008/#programming-recommendations) as the Pythonic way of checking for empty sequences:
+In Python, empty collections, empty strings, and certain other objects are logically false. This isn't just a quirk of the language, it's promoted in [PEP 8](http://legacy.python.org/dev/peps/pep-0008/#programming-recommendations) as the Pythonic way of checking for empty sequences. In addition to this, the number zero is logically false, and non-zero numbers are logically true.
 
 ``` python
 if not some_sequence:
     # Whatever happened to "explicit is better than implicit"??
+
+if some_number:
+    # Admittedly this one isn't very Pythonic, but it does work.
 ```
 
-In Ruby, `false` and `nil` are the only values that evaluate to 'false'. This means we must explicitly ask objects questions, which is both more readable and less error-prone:
+Ruby doesn't allow these shenanigans, so the equivalent code is much more explicit:
 
 ``` ruby
 if some_sequence.empty?
   # Obvious meaning is obvious.
+end
+
+unless some_number.zero?
+  # Could use 'if some_number != 0', but this is nicer ;)
+end
+```
+
+It's also worth noting that we can use `unless` and `until` in Ruby instead of `if not` and `while not` in Python. Method names can also include the '?' character, further improving readability. Compare this Python snippet:
+
+``` python
+while not buffer.is_full():
+    # Add data to buffer.
+```
+
+With this Ruby one:
+
+``` ruby
+until buffer.full?
+  # Add data to buffer.
 end
 ```
 
@@ -113,7 +133,7 @@ end
 Foo.new.secret # => Error!
 ```
 
-In Python though, everything defaults to public. This means we're much more likely to end up with dependencies on implementation details.
+Everything defaults to public in Python, and privacy can only be suggested a naming convention. This means we're more likely to end up with inappropriate dependencies on implementation details.
 
 ``` python
 class Foo:
@@ -123,10 +143,14 @@ class Foo:
 Foo().not_so_secret # => 42
 ```
 
+Ruby's approach seems the wiser one to me. Encapsulation is a Good Idea™, so why shouldn't the language support and encourage it?
+
+*(By the way, Ruby's approach doesn't result in C++/Java-style boilerplate. We can generate default getters/setters by placing `attr_accessor :property_name` in the class body, and override them later if need be.)*
+
 Ruby's pretty!
 --------------
 
-OK, I'll admit this is ever so slightly subjective. Having said that, compare this:
+OK, I'll admit this one is ever so slightly subjective. Having said that, compare this:
 
 ``` ruby
 class Person
@@ -162,11 +186,9 @@ The Ruby code has fewer parentheses, colons, and underscores, and doesn't need t
 Naming and documentation
 ------------------------
 
-The nameing conventions used in Python's standard library are a bit of a mess (even [PEP 8](http://legacy.python.org/dev/peps/pep-0008/#naming-conventions) admits as much). Ruby's standard library is much more consistent in comparison.
+The naming conventions used in Python's standard library are a bit of a mess (even [PEP 8](http://legacy.python.org/dev/peps/pep-0008/#naming-conventions) admits as much). Ruby's standard library is much more consistent in comparison.
 
-In terms of documentation quality, Ruby also has the edge. Descriptions are clearer and more detailed, and usage examples are almost always given.
-
-Consider the documentation for `str.capitalize` in Python:
+In terms of documentation quality, Ruby also has the edge. Descriptions are clearer and more detailed, and usage examples are almost always given. Consider the documentation for `str.capitalize` in Python:
 
 ``` plain
 str.capitalize = capitalize(...)
@@ -176,7 +198,7 @@ str.capitalize = capitalize(...)
     capitalized.
 ```
 
-Then compare it with Ruby's `String#capitalize` documentation:
+Then compare it with Ruby's `String#capitalize`:
 
 ``` plain
 = String#capitalize
@@ -196,7 +218,7 @@ ASCII region.
   "123ABC".capitalize   #=> "123abc"
 ```
 
-Unless you were paying close attention, you might have missed the fact that `str.capitalize` converts the remainder of the string to lowercase (e.g. "ABC" goes to "Abc"). The Ruby documentation makes this behaviour much clearer, and clarifying examples are also given.
+Unless you were paying close attention, you might have missed the fact that `str.capitalize` converts the remainder of the string to lowercase (e.g. "ABC" goes to "Abc"). The Ruby documentation makes this behaviour much more obvious, and gives clarifying examples.
 
 This is just one example of course, but these kinds of differences are not atypical in my experience.
 
