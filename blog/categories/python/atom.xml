@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Python | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-28T09:16:47+09:30</updated>
+  <updated>2014-07-28T18:36:21+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -87,16 +87,7 @@ sorted(data, key=lambda x: foo.bar(x))  # Sorting using 'lambda'.
 (download(u) for u in urls)             # Lazy evaluation using generator expressions.
 </code></p>
 
-<p>Another thing to note is that Python&rsquo;s lambdas are restricted to a single expression, whereas blocks can be as large as we need them to be:</p>
-
-<p><code>ruby
-10.times do
-  puts "Hello"
-  puts "World"
-  puts "..."
-  puts "Bye!"
-end
-</code></p>
+<p>Another thing to note is that Python&rsquo;s lambdas are restricted to a single expression, whereas blocks can be as large as we need them to be.</p>
 
 <p>One flexible construct > multiple rigid constructs in my book!</p>
 
