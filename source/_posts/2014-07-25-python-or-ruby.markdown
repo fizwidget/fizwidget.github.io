@@ -76,16 +76,7 @@ sorted(data, key=lambda x: foo.bar(x))  # Sorting using 'lambda'.
 (download(u) for u in urls)             # Lazy evaluation using generator expressions.
 ```
 
-Another thing to note is that Python's lambdas are restricted to a single expression, whereas blocks can be as large as we need them to be:
-
-``` ruby
-10.times do
-  puts "Hello"
-  puts "World"
-  puts "..."
-  puts "Bye!"
-end
-```
+Another thing to note is that Python's lambdas are restricted to a single expression, whereas blocks can be as large as we need them to be.
 
 One flexible construct > multiple rigid constructs in my book!
 
