@@ -80,10 +80,10 @@ Another thing to note is that Python's lambdas are restricted to a single expres
 
 One flexible construct > multiple rigid constructs in my book!
 
-Clear conditionals
-------------------
+Clarity
+-------
 
-In Python, empty collections, empty strings, and certain other objects are treated as being logically false. This isn't just a quirk of the language, it's promoted in [PEP 8](http://legacy.python.org/dev/peps/pep-0008/#programming-recommendations) as the Pythonic way of checking for empty sequences. In addition to this, zero is treated false and non-zero numbers as true.
+In Python, empty collections, empty strings, and certain other objects evaluate to `False` in a boolean context. This isn't just a quirk of the language, it's promoted in [PEP 8](http://legacy.python.org/dev/peps/pep-0008/#programming-recommendations) as the Pythonic way of checking for empty sequences. Also, non-zero numbers evaluate to `True`, while zero evaluates to `False`.
 
 ``` python
 if not some_sequence:
@@ -105,14 +105,14 @@ unless some_number.zero?
 end
 ```
 
-It's also worth noting that we can use `unless` and `until` in Ruby instead of `if not` and `while not` in Python. Method names can also include the '?' character, further improving readability. Compare this Python snippet:
+Ruby also supports `unless` and `until` (the logical opposites of `if` and `while`), and allows '?' to appear in method names. The net result is that selection and iteration code can be very clear and readable in Ruby. Compare this Python snippet:
 
 ``` python
 while not buffer.is_full():
     # Add data to buffer.
 ```
 
-With this Ruby one:
+To this Ruby one:
 
 ``` ruby
 until buffer.full?
@@ -120,7 +120,7 @@ until buffer.full?
 end
 ```
 
-The former is quite clunky, but the latter almost reads as English prose!
+The former is rather clunky, but the latter almost reads as English prose!
 
 Private parts
 -------------
