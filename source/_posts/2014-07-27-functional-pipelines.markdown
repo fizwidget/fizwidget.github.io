@@ -58,7 +58,7 @@ students.select { |s| s.level == 3 }
         .collect(&:email_address)
 ```
 
-This is clearly a big improvement. It's concise, easy to understand, and easy to modify. It also has the potential to run more efficiently, as the `select` and `collect` operations could potentially be distributed over multiple cores.
+This is clearly a big improvement. It's concise, easy to understand, and easy to modify. It also has the potential to run more efficiently, as the `select` and `collect` operations could theoretically be distributed over multiple cores.
 
 A key thing to note is that none of these methods are modifying the objects they're called on. They're instead applying some kind of filter or transformation, then outputting a new sequence to the next stage of the pipeline.
 

@@ -51,12 +51,12 @@ The equivalent Python code is much harder to make sense of. We have to read some
 " ".join(reversed("world hello".split())) # => "hello world"
 ```
 
-Blocks are awesome
-------------------
+Blocks == awesome
+-----------------
 
-One of Ruby's best features is the elegant syntax it has for passing anonymous functions ("blocks") as arguments to methods. Blocks are like Python's lambda expressions, only more powerful, more widely used, and visually cleaner.
+One of Ruby's best features is the elegant syntax it has for passing anonymous functions ("blocks") as arguments to methods. Blocks are like Python's lambda expressions, only more powerful, more elegant, and more widely used.
 
-Blocks allow us to perform many different tasks using a single uniform syntax. For example:
+Blocks allow us to perform many different tasks using a single uniform syntax. A few examples:
 
 ``` ruby
 [1, 2, 3].each   { |x| puts x }         # Iteration using blocks.
@@ -76,51 +76,9 @@ sorted(data, key=lambda x: foo.bar(x))  # Sorting using 'lambda'.
 (download(u) for u in urls)             # Lazy evaluation using generator expressions.
 ```
 
-Another thing to note is that Python's lambdas are restricted to a single expression, whereas blocks can be as large as we need them to be.
+Another thing to note is that Python's lambda expressions are, as the name suggests, restricted to containing a single expression. Ruby's blocks have no such restriction, which can be very convenient at times.
 
 One flexible construct > multiple rigid constructs in my book!
-
-Clarity
--------
-
-In Python, empty collections, empty strings, and certain other objects evaluate to `False` in a boolean context. This isn't just a quirk of the language, it's promoted in [PEP 8](http://legacy.python.org/dev/peps/pep-0008/#programming-recommendations) as the Pythonic way of checking for empty sequences. Also, non-zero numbers evaluate to `True`, while zero evaluates to `False`.
-
-``` python
-if not some_sequence:
-    # Whatever happened to "explicit is better than implicit"??
-
-if some_number:
-    # Admittedly this one isn't very Pythonic, but it does work.
-```
-
-Ruby doesn't allow these shenanigans, so the equivalent code has to be much more explicit:
-
-``` ruby
-if some_sequence.empty?
-  # Obvious meaning is obvious.
-end
-
-unless some_number.zero?
-  # Could use 'if some_number != 0', but this is nicer ;)
-end
-```
-
-Ruby also supports `unless` and `until` (the logical opposites of `if` and `while`), and allows '?' to appear in method names. The net result is that selection and iteration code can be very clear and readable in Ruby. Compare this Python snippet:
-
-``` python
-while not buffer.is_full():
-    # Add data to buffer.
-```
-
-To this Ruby one:
-
-``` ruby
-until buffer.full?
-  # Add data to buffer.
-end
-```
-
-The former is rather clunky, but the latter almost reads as English prose!
 
 Private parts
 -------------
@@ -151,8 +109,8 @@ Ruby's approach seems the wiser one to me. Encapsulation is a Good Idea™, so w
 
 *(By the way, Ruby's approach doesn't result in C++/Java-style boilerplate. We can generate default getters/setters by placing `attr_accessor :property_name` in the class body, and override them later if need be.)*
 
-Ruby's pretty!
---------------
+Readability
+-----------
 
 OK, I'll admit this one is ever so slightly subjective. Having said that, compare this:
 
@@ -185,7 +143,43 @@ person = Person(34)
 print(person)
 ```
 
-The Ruby code has fewer parentheses, colons, and underscores, and doesn't need to specify `object`, `self`, or `return`. Python's whitespace sensitivity does allow it to omit `end`, but this doesn't make up for all the other clutter in my opinion.
+The Ruby code has fewer parentheses, colons, and underscores, and doesn't need to specify `object`, `self`, or `return`. Python's whitespace sensitivity does allow it to omit `end`, but this doesn't make up for the other clutter in my opinion.
+
+Loops and if-statements can also be more readable in Ruby. Compare these Python snippets:
+
+``` python
+if not some_sequence:
+    # PEP 8 promotes this as the Pythonic way of checking for an empty sequence.
+    # Whatever happened to "explicit is better than implicit"??
+
+if some_number:
+    # This checks for a non-zero number.
+    # Admittedly it's not very Pythonic, but the language does support it.
+
+while not buffer.is_full():
+    # This doesn't exactly read very well...
+```
+
+To these Ruby ones:
+
+``` ruby
+if some_sequence.empty?
+  # Such clarity, much obviousness.
+end
+
+if some_number.zero?
+  # Ruby forces us to be much more explicit when checking for zero.
+  # We could also use 'some_number == 0', but this nicer IMO.
+end
+
+until buffer.full?
+  # Relative to the Python snippet, this reads like English prose!
+end
+```
+
+Ruby supports `unless` and `until` (logical negations of `if` and `while`), allows question marks to appear in method names, and allows parentheses to be omitted when calling methods. Neat!
+
+As mentioned in previous sections, consistent object-orientation and elegant block syntax also aid Ruby's readability. 
 
 Naming and documentation
 ------------------------
