@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-28T18:36:21+09:30</updated>
+  <updated>2014-07-29T12:11:47+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -91,9 +91,9 @@ sorted(data, key=lambda x: foo.bar(x))  # Sorting using 'lambda'.
 
 <p>One flexible construct > multiple rigid constructs in my book!</p>
 
-<h2>Clear conditionals</h2>
+<h2>Clarity</h2>
 
-<p>In Python, empty collections, empty strings, and certain other objects are treated as being logically false. This isn&rsquo;t just a quirk of the language, it&rsquo;s promoted in <a href="http://legacy.python.org/dev/peps/pep-0008/#programming-recommendations">PEP 8</a> as the Pythonic way of checking for empty sequences. In addition to this, zero is treated false and non-zero numbers as true.</p>
+<p>In Python, empty collections, empty strings, and certain other objects evaluate to <code>False</code> in a boolean context. This isn&rsquo;t just a quirk of the language, it&rsquo;s promoted in <a href="http://legacy.python.org/dev/peps/pep-0008/#programming-recommendations">PEP 8</a> as the Pythonic way of checking for empty sequences. Also, non-zero numbers evaluate to <code>True</code>, while zero evaluates to <code>False</code>.</p>
 
 <p>``` python
 if not some_sequence:</p>
@@ -120,7 +120,7 @@ end</p>
 end
 ```</p>
 
-<p>It&rsquo;s also worth noting that we can use <code>unless</code> and <code>until</code> in Ruby instead of <code>if not</code> and <code>while not</code> in Python. Method names can also include the &lsquo;?&rsquo; character, further improving readability. Compare this Python snippet:</p>
+<p>Ruby also supports <code>unless</code> and <code>until</code> (the logical opposites of <code>if</code> and <code>while</code>), and allows &lsquo;?&rsquo; to appear in method names. The net result is that selection and iteration code can be very clear and readable in Ruby. Compare this Python snippet:</p>
 
 <p>``` python
 while not buffer.is_full():</p>
@@ -130,7 +130,7 @@ while not buffer.is_full():</p>
 
 <p>```</p>
 
-<p>With this Ruby one:</p>
+<p>To this Ruby one:</p>
 
 <p><code>ruby
 until buffer.full?
@@ -138,7 +138,7 @@ until buffer.full?
 end
 </code></p>
 
-<p>The former is quite clunky, but the latter almost reads as English prose!</p>
+<p>The former is rather clunky, but the latter almost reads as English prose!</p>
 
 <h2>Private parts</h2>
 
