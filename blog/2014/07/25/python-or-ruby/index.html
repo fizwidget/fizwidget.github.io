@@ -166,11 +166,11 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h2>Blocks are awesome</h2>
+<h2>Blocks == awesome</h2>
 
-<p>One of Ruby&rsquo;s best features is the elegant syntax it has for passing anonymous functions (&ldquo;blocks&rdquo;) as arguments to methods. Blocks are like Python&rsquo;s lambda expressions, only more powerful, more widely used, and visually cleaner.</p>
+<p>One of Ruby&rsquo;s best features is the elegant syntax it has for passing anonymous functions (&ldquo;blocks&rdquo;) as arguments to methods. Blocks are like Python&rsquo;s lambda expressions, only more powerful, more elegant, and more widely used.</p>
 
-<p>Blocks allow us to perform many different tasks using a single uniform syntax. For example:</p>
+<p>Blocks allow us to perform many different tasks using a single uniform syntax. A few examples:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -200,67 +200,9 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Another thing to note is that Python&rsquo;s lambdas are restricted to a single expression, whereas blocks can be as large as we need them to be.</p>
+<p>Another thing to note is that Python&rsquo;s lambda expressions are, as the name suggests, restricted to containing a single expression. Ruby&rsquo;s blocks have no such restriction, which can be very convenient at times.</p>
 
 <p>One flexible construct > multiple rigid constructs in my book!</p>
-
-<h2>Clarity</h2>
-
-<p>In Python, empty collections, empty strings, and certain other objects evaluate to <code>False</code> in a boolean context. This isn&rsquo;t just a quirk of the language, it&rsquo;s promoted in <a href="http://legacy.python.org/dev/peps/pep-0008/#programming-recommendations">PEP 8</a> as the Pythonic way of checking for empty sequences. Also, non-zero numbers evaluate to <code>True</code>, while zero evaluates to <code>False</code>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">if</span> <span class="ow">not</span> <span class="n">some_sequence</span><span class="p">:</span>
-</span><span class='line'>    <span class="c"># Whatever happened to &quot;explicit is better than implicit&quot;??</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="n">some_number</span><span class="p">:</span>
-</span><span class='line'>    <span class="c"># Admittedly this one isn&#39;t very Pythonic, but it does work.</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Ruby doesn&rsquo;t allow these shenanigans, so the equivalent code has to be much more explicit:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">if</span> <span class="n">some_sequence</span><span class="o">.</span><span class="n">empty?</span>
-</span><span class='line'>  <span class="c1"># Obvious meaning is obvious.</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">unless</span> <span class="n">some_number</span><span class="o">.</span><span class="n">zero?</span>
-</span><span class='line'>  <span class="c1"># Could use &#39;if some_number != 0&#39;, but this is nicer ;)</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Ruby also supports <code>unless</code> and <code>until</code> (the logical opposites of <code>if</code> and <code>while</code>), and allows &lsquo;?&rsquo; to appear in method names. The net result is that selection and iteration code can be very clear and readable in Ruby. Compare this Python snippet:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">while</span> <span class="ow">not</span> <span class="nb">buffer</span><span class="o">.</span><span class="n">is_full</span><span class="p">():</span>
-</span><span class='line'>    <span class="c"># Add data to buffer.</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To this Ruby one:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">until</span> <span class="n">buffer</span><span class="o">.</span><span class="n">full?</span>
-</span><span class='line'>  <span class="c1"># Add data to buffer.</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The former is rather clunky, but the latter almost reads as English prose!</p>
 
 <h2>Private parts</h2>
 
@@ -302,7 +244,7 @@
 
 <p><em>(By the way, Ruby&rsquo;s approach doesn&rsquo;t result in C++/Java-style boilerplate. We can generate default getters/setters by placing <code>attr_accessor :property_name</code> in the class body, and override them later if need be.)</em></p>
 
-<h2>Ruby&rsquo;s pretty!</h2>
+<h2>Readability</h2>
 
 <p>OK, I&rsquo;ll admit this one is ever so slightly subjective. Having said that, compare this:</p>
 
@@ -356,7 +298,65 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The Ruby code has fewer parentheses, colons, and underscores, and doesn&rsquo;t need to specify <code>object</code>, <code>self</code>, or <code>return</code>. Python&rsquo;s whitespace sensitivity does allow it to omit <code>end</code>, but this doesn&rsquo;t make up for all the other clutter in my opinion.</p>
+<p>The Ruby code has fewer parentheses, colons, and underscores, and doesn&rsquo;t need to specify <code>object</code>, <code>self</code>, or <code>return</code>. Python&rsquo;s whitespace sensitivity does allow it to omit <code>end</code>, but this doesn&rsquo;t make up for the other clutter in my opinion.</p>
+
+<p>Loops and if-statements can also be more readable in Ruby. Compare these Python snippets:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">if</span> <span class="ow">not</span> <span class="n">some_sequence</span><span class="p">:</span>
+</span><span class='line'>    <span class="c"># PEP 8 promotes this as the Pythonic way of checking for an empty sequence.</span>
+</span><span class='line'>    <span class="c"># Whatever happened to &quot;explicit is better than implicit&quot;??</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">some_number</span><span class="p">:</span>
+</span><span class='line'>    <span class="c"># This checks for a non-zero number.</span>
+</span><span class='line'>    <span class="c"># Admittedly it&#39;s not very Pythonic, but the language does support it.</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">while</span> <span class="ow">not</span> <span class="nb">buffer</span><span class="o">.</span><span class="n">is_full</span><span class="p">():</span>
+</span><span class='line'>    <span class="c"># This doesn&#39;t exactly read very well...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To these Ruby ones:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">if</span> <span class="n">some_sequence</span><span class="o">.</span><span class="n">empty?</span>
+</span><span class='line'>  <span class="c1"># Such clarity, much obviousness.</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">some_number</span><span class="o">.</span><span class="n">zero?</span>
+</span><span class='line'>  <span class="c1"># Ruby forces us to be much more explicit when checking for zero.</span>
+</span><span class='line'>  <span class="c1"># We could also use &#39;some_number == 0&#39;, but this nicer IMO.</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">until</span> <span class="n">buffer</span><span class="o">.</span><span class="n">full?</span>
+</span><span class='line'>  <span class="c1"># Relative to the Python snippet, this reads like English prose!</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ruby supports <code>unless</code> and <code>until</code> (logical negations of <code>if</code> and <code>while</code>), allows question marks to appear in method names, and allows parentheses to be omitted when calling methods. Neat!</p>
+
+<p>As mentioned in previous sections, consistent object-orientation and elegant block syntax also aid Ruby&rsquo;s readability.</p>
 
 <h2>Naming and documentation</h2>
 

@@ -181,7 +181,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>This is clearly a big improvement. It&rsquo;s concise, easy to understand, and easy to modify. It also has the potential to run more efficiently, as the <code>select</code> and <code>collect</code> operations could potentially be distributed over multiple cores.</p>
+<p>This is clearly a big improvement. It&rsquo;s concise, easy to understand, and easy to modify. It also has the potential to run more efficiently, as the <code>select</code> and <code>collect</code> operations could theoretically be distributed over multiple cores.</p>
 
 <p>A key thing to note is that none of these methods are modifying the objects they&rsquo;re called on. They&rsquo;re instead applying some kind of filter or transformation, then outputting a new sequence to the next stage of the pipeline.</p>
 
