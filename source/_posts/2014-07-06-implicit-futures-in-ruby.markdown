@@ -256,4 +256,4 @@ A basic implementation in 9 lines of code isn't too shabby though!
 Conclusion
 ----------
 
-Futures are awesome. Ruby is awesome. That is all.
+Futures are awesome. Ruby is awesome. The next time you need to deal with concurrency, consider whether this kind of approach could be beneficial.
