@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Functional Programming | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/functional-programming/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-29T13:14:10+09:30</updated>
+  <updated>2014-07-30T13:11:07+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -99,17 +99,21 @@ min_size = 0
 max_size = 0</p>
 
 <p>Dir.foreach(dir_path) do |path|
-  if File.file?(path)</p>
+  next unless File.file?(path)
+  size = File.size(path)</p>
 
-<pre><code>size = File.size(path)
-if size &lt; min_size || min_extension.nil?
-  min_extension = File.extname(path)
-  min_size = size
-end
-if size &gt; max_size || max_extension.nil?
-  max_extension = File.extname(path)
-  max_size = size
-end
+<p>  if size &lt; min_size || min_extension.nil?</p>
+
+<pre><code>min_extension = File.extname(path)
+min_size = size
+</code></pre>
+
+<p>  end</p>
+
+<p>  if size > max_size || max_extension.nil?</p>
+
+<pre><code>max_extension = File.extname(path)
+max_size = size
 </code></pre>
 
 <p>  end
