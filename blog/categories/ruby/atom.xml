@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | fizwidget]]></title>
   <link href="http://fizwidget.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://fizwidget.github.io/"/>
-  <updated>2014-07-30T13:11:07+09:30</updated>
+  <updated>2014-07-31T08:25:41+09:30</updated>
   <id>http://fizwidget.github.io/</id>
   <author>
     <name><![CDATA[James Russell]]></name>
@@ -537,7 +537,7 @@ end
 
 <h2>Conclusion</h2>
 
-<p>Futures are awesome. Ruby is awesome. That is all.</p>
+<p>Futures are awesome. Ruby is awesome. The next time you need to deal with concurrency, consider whether this kind of approach could be beneficial.</p>
 ]]></content>
   </entry>
   
